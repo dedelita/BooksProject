@@ -1,0 +1,41 @@
+login: Login
+login.button: Log in
+logout: Logout
+
+register: Register
+register.button: Register
+
+save: Save
+unknown: Unknown
+user:
+  email: Email
+  username: Username
+  password: Password
+
+password:
+  set: Set password ?
+  new: New password
+  current: Current password
+  conf: Confirm password
+
+book:
+  genre: Genre
+  author: Author
+  title: Title
+  new: New book
+  think: What do you think about this book?
+  lang: Language
+
+  comment:
+    add: Add a comment
+
+my:
+  books: My books
+  genres: My genres
+  authors: My authors
+
+edit:
+  profile: Edit profile
+  comment: Edit my comment of
+
+by: by

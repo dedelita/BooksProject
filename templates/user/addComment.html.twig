@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ 'edit.comment' | trans}} {{ book.title }} {% endblock %}
+{% block body %}
+  <h2>{{ book.title }} {{ 'by' | trans }} {{ book.author }}</h2>
+  {{ form_start(form) }}
+  <div class="form-group">
+    <span style="color:#e6c315; font-size: 1.5em;">
+        {% for i in 0..4 %}
+            {% if i < form.stars.vars.value %}
+            <i id="{{i}}" class="rating-star bi bi-star-fill selected"></i>
+            {% else %}
+            <i id="{{i}}" class="rating-star bi bi-star"></i>                
+            {% endif %}
+        {% endfor %}
+    </span>
+    </div>
+  {{ form_row(form.content) }}
+  {{ form_widget(form.stars) }}
+  
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'save' | trans}}</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block js %}
+    $(document).ready(function () {
+        function setRating(rating) {
+            $('#comment_stars').val(parseInt(rating)+1);
+            $('.rating-star').addClass("selected");
+            $('.rating-star#' + rating + ' ~ .rating-star').removeClass("selected").removeClass('bi-star-fill').addClass('bi-star');
+        }
+            
+        $('.rating-star')
+        .on('mouseover', function(e) {
+            var rating = e.target.id;
+            $('.rating-star').removeClass('bi-star').addClass('bi-star-fill');
+            $('.rating-star#' + rating + ' ~ .rating-star').removeClass('bi-star-fill').addClass('bi-star');
+        })
+        .on('mouseleave', function (e) {
+            $('.rating-star').removeClass('bi-star-fill').addClass('bi-star');
+            $('.rating-star.selected').removeClass('bi-star').addClass('bi-star-fill');  
+        })
+        .on('click', function(e) {
+            setRating(e.target.id);
+        });
+    })
+{% endblock %}

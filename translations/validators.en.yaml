@@ -1,0 +1,3 @@
+password:
+  same: The passwords should be the same
+  length: The password should have at least {{ limit }} characters

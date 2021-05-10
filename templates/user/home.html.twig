@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+<div>
+
+<h2>{{ 'my.books' | trans }}</h2>
+<div class="row">
+  <div class="col-sm-6">
+<div class="card">
+  <h6 class="card-header">{{"my.genres" | trans }}</h6>
+  <div class="card-body">
+    <h5 class="card-title">...</h5>
+    {% for genre in genres %}
+    {% if genre == "" %}
+      {% set genre = "unknown" | trans %}
+    {% endif %}
+        <span class="card-text row px-4 t5"><a href="{{ path('byGenre', {'genre': genre}) }}">{{genre}}</a></span>
+    {% endfor %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="#" class="btn btn-link btn-sm">Go somewhere</a>
+    </div>
+  </div>
+</div>
+ </div>
+  <div class="col-sm-6">
+<div class="card border-dark">
+  <h6 class="card-header border-dark">{{"my.authors" | trans }}</h6>
+  <div class="card-body">
+    {% for author in authors %}
+        <span class="card-text row px-4 t5"><a href="{{ path('byAuthor', {'author': author}) }}">{{author}}</a></span>
+    {% endfor %}
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="#" class="btn btn-link btn-sm">Go somewhere</a>
+    </div>
+  </div>
+</div>
+ </div>
+</div>
+
+</div>
+{% endblock %}

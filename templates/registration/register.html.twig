@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'register' | trans }}{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <h1>{{ 'register' | trans }}</h1>
+<div>
+{% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
+    {{ form_start(registrationForm) }}
+            {% if formErrors|length > 0 %}
+            <div class"alert alert-danger"><ul>
+        {% for error in formErrors %}
+            <li class="{{ error.cause.constraint.payload.severity ?? '' }}">{{ error.message }}</li>
+        {% endfor %}
+    </ul></div>
+            {% endif %}
+        {{ form_widget(registrationForm) }}
+        <button type="submit" class="btn btn-primary">{{ 'register.button' | trans }}</button>
+    {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}

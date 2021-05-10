@@ -1,0 +1,51 @@
+{% extends "base.html.twig" %}
+{% block title %} {{ 'edit.profile' | trans }} {% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+<div class="form-error">
+    <span>{{ form_errors(form) }}</span>
+</div>
+    <div class="form-group row">
+        {{ form_label(form.username, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
+        <div class="col-sm-10">
+        {{ form_widget(form.username) }}
+        </div>
+    </div>
+    <div class="form-group row">
+        {{ form_label(form.email, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
+        <div class="col-sm-10">
+        {{ form_widget(form.email) }}
+        </div>
+    </div>
+    {{ form_row(form.changePassword) }}
+    <div id="showPassword" style="display:none">
+        {{ form_row(form.currentPassword) }}
+        {{ form_row(form.plainPassword) }}
+    </div>
+    <button type="submit" class="btn btn-primary">{{ 'save' | trans }}</button>
+{{ form_end(form) }}
+{% endblock %}
+
+{% block js %}
+$(document).ready(function () {
+    function setShowPassword() {
+            if($("#user_changePassword")[0].checked) {
+                $('#showPassword').css("display", "block");
+                $('#user_currentPassword').prop('required', 'required');
+                $('#user_plainPassword_first').prop('required', 'required');
+                $('#user_plainPassword_second').prop('required', 'required');
+            } else {
+                $('#showPassword').css("display", "none");
+                $('#user_currentPassword').prop('required', false);
+                $('#user_plainPassword_first').prop('required', false);
+                $('#user_plainPassword_second').prop('required', false);
+            }
+        }
+
+    setShowPassword();
+
+    $("#user_changePassword").change(function() {setShowPassword()})
+})
+{% endblock %}

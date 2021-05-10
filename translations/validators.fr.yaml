@@ -1,0 +1,3 @@
+password:
+  same: Les mots de passe doivent être identiques
+  length:  Le mot de passe doit avoir au moins {{ limit }} lettres
