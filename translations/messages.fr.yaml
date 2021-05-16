@@ -38,3 +38,11 @@ edit:
   comment: Modifier mon comment sur
 
 by: de
+
+mail:
+  confirm:
+    subject: Confirmer votre email
+    title: Bienvenue chez BooksProject
+    content: Veuillez confirm votre email en cliquant sur ce lien
+    expire: Ce lien expire dans
+    end: Merci!

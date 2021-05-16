@@ -9,6 +9,7 @@ use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -16,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -31,7 +33,9 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator,
+        TranslatorInterface $translator): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -46,17 +50,8 @@ class RegistrationController extends AbstractController
                 )
             );
             $this->userRepository->save($user);
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('mp.dedelita@gmail.com', 'Books admin'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
+            $this->sendConfirmEmail();
+            
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
@@ -68,6 +63,24 @@ class RegistrationController extends AbstractController
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/send/conf_email", name="send_conf_email")
+     */
+    public function sendConfirmEmail(TranslatorInterface $translator)
+    {
+        $user = $this->getUser();
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+        (new TemplatedEmail())
+            ->from(new Address('mp.dedelita@gmail.com', 'Books admin'))
+            ->to($user->getEmail())
+            ->subject($translator->trans('mail.confirm.subject'))
+            ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+        // do anything else you need here, like send an email
+        return $this->redirectToRoute("home");
     }
 
     /**

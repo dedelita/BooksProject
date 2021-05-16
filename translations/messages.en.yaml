@@ -39,3 +39,11 @@ edit:
   comment: Edit my comment of
 
 by: by
+
+mail:
+  confirm:
+    subject: Confirm your email
+    title: Welcome to BooksProject
+    content: Please confirm your email address by clicking the following link
+    expire: This link will expire in
+    end: Thank you!

@@ -4,6 +4,12 @@
 <div>
 
 <h2>{{ 'my.books' | trans }}</h2>
+<pre>
+  {{ dump(app.user) }}
+</pre>
+{% if not(app.user.isVerified) %}
+  Confirm your email. If you didn't receive the email: <a href="{{ path('send_conf_email') }}">resend mail</a>
+{% endif %}
 <div class="row">
   <div class="col-sm-6">
 <div class="card">

@@ -122,8 +122,6 @@ class UserController extends AbstractController
 
         if ($formBook->isSubmitted() && $formBook->isValid()) {
             //9780439023481
-            //$gbooks = $bookController->getGBooks("The Hunger Games", "Suzanne Collins", "en");
-            //$gbooks = $bookController->getGBooks("Eve of Man", "Giovanna Fletcher Tom Fletcher", "en");
             $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
         }
 
@@ -174,7 +172,7 @@ class UserController extends AbstractController
         }
         
 
-        return $this->render("user/addComment.html.twig", [
+        return $this->render("user/editComment.html.twig", [
             "form" => $formComment->createView(),
             "book" => $book
             ]);
