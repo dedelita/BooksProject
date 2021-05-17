@@ -8,6 +8,7 @@ parameters:
     app_locales: en|fr
     app_name: "BooksProject"
     api_key: '%env(API_KEY)%'
+    app_gmail: "%env(GMAIL)%"
 services:
     # default configuration for services in *this* file
     _defaults:
