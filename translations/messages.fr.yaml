@@ -16,6 +16,7 @@ password:
   new: Nouveau mot de passe
   current: Mot de passe actuel
   conf: Confirmer le mot de passe
+  forgot: Mot de passe oublié ?
 
 book:
   genre: Genre

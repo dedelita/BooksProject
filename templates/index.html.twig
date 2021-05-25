@@ -1,4 +1,11 @@
 {% extends "base.html.twig" %}
 {% block body %}
-WELCOME ET BIENVENUE
+<div class="row center">
+    <div class="col">
+        WELCOME ET BIENVENUE
+    </div>
+    <div class="col">
+        {% include "security/login.html.twig" %}
+    </div>
+</div>
 {% endblock %}

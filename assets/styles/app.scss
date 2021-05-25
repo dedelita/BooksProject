@@ -1,6 +1,11 @@
+
+$secondary: purple;
+
 @import "~bootstrap/scss/bootstrap";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+KR&display=swap');
+
+$book:#ffbb33;
 
 html {
     position: relative;
@@ -8,11 +13,23 @@ html {
 }
 
 body {
-    background-color: rgb(255, 255, 255);
+    background-color: #ffffcc;
     font-family: 'Noto Sans KR', sans-serif;
-    margin-bottom: 60px;
+    margin-bottom: 45px;
 }
-  
+h1 {
+    padding-bottom: 15px;
+}
+.nav-color {
+    background-color: $book;
+    margin-bottom: 10px;
+}
+
+.nav-color a {
+    color: theme-color('light');
+}
+
+
 ul {
     list-style-type: none;
 }
@@ -20,11 +37,23 @@ ul {
 .container {
     min-height:90%;
 }
-  .footer {
+
+.footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 60px;
-    line-height: 60px;
-    background-color: #f5f5f5;
+    height: 45px;
+    line-height: 45px;
+    background-color: $book;
+    color: theme-color('light');
+}
+
+.right {
+    text-align: right;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }

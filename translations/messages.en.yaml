@@ -17,6 +17,7 @@ password:
   new: New password
   current: Current password
   conf: Confirm password
+  forgot: Forgot password?
 
 book:
   genre: Genre

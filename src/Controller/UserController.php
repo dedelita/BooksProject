@@ -42,10 +42,10 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="index") 
      */
-    public function index(Request $request)
-    {
-        return $this->render("index.html.twig");
-    }
+    // public function index(Request $request)
+    // {
+    //     return $this->render("index.html.twig");
+    // }
 
     /**
      * @Route("/home", name="home")
@@ -253,5 +253,14 @@ class UserController extends AbstractController
         return $this->render('security/editUser.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/resetPassword", name="forgot_pwd")
+     */
+    public function forgotPassword(Request $request)
+    {
+        //TODO
+        return render("security/forgotPassword.htlm.twig");
     }
 }
