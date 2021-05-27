@@ -1,11 +1,13 @@
 {% extends "base.html.twig" %}
 {% block body %}
-<div class="row center">
-    <div class="col">
+<div class="row index">
+    <div class="col welcome">
         WELCOME ET BIENVENUE
+        
     </div>
-    <div class="col">
+    <div class="col login">
         {% include "security/login.html.twig" %}
+        <span class="center">© 2021 - DMP</span>
     </div>
 </div>
 {% endblock %}

@@ -9,6 +9,7 @@ parameters:
     app_name: "BooksProject"
     api_key: '%env(API_KEY)%'
     app_gmail: "%env(GMAIL)%"
+    app_gmail_name: "Books Admin"
 services:
     # default configuration for services in *this* file
     _defaults:

@@ -15,17 +15,15 @@ html {
 body {
     background-color: #ffffcc;
     font-family: 'Noto Sans KR', sans-serif;
-    margin-bottom: 45px;
 }
 h1 {
     padding-bottom: 15px;
 }
 .nav-color {
     background-color: $book;
-    margin-bottom: 10px;
 }
 
-.nav-color a {
+a.nav-item, a.nav-brand {
     color: theme-color('light');
 }
 
@@ -34,8 +32,26 @@ ul {
     list-style-type: none;
 }
 
-.container {
+.container-fluid.app {
     min-height:90%;
+    margin-bottom: 45px;
+}
+
+.container-fluid.login {
+    padding: 0;
+}
+.container-fluid > .row.index {
+    background: #ffe4b5;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #ffffcc, #ffe4b5);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #ffffcc, #ffe4b5);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.welcome {
+    background: no-repeat 10% url('../images/books.jpg');
+    background-size: cover;
 }
 
 .footer {
@@ -56,4 +72,17 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}
+
+
+.registration {
+    width: 100%;
+    margin: 30px;
+    padding-bottom: 30px;
+}
+
+.registration form {
+    width: 100%;
+    margin: 0 45px;
+    max-width: 330px;
+}

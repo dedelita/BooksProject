@@ -1,8 +1,11 @@
 login: Connexion
 login.button: Se connecter
 logout: Déconnexion
-register: Inscription
-register.button: S'inscrire
+register: 
+  text: Inscription
+  button: S'inscrire
+  not: Pas encore inscrit ? 
+  already: Déjà inscrit ?
 save: Sauvegarder
 unknown: Inconnu
 
@@ -40,10 +43,30 @@ edit:
 
 by: de
 
+link:
+  expire: Ce lien expire dans
+  resend: appuyer ici pour renvoyer une demande
+
 mail:
   confirm:
     subject: Confirmer votre email
     title: Bienvenue chez BooksProject
-    content: Veuillez confirm votre email en cliquant sur ce lien
-    expire: Ce lien expire dans
-    end: Merci!
+    content: Veuillez confirmer votre email en cliquant sur ce lien
+    end: Merci !
+  reset_password:
+    subject: Votre demande de modification de votre mot de passe
+    title: Modifier votre mot de passe
+    content: Pour modifier votre mot de passe, veuillez suivre ce lien
+    end: Merci !
+
+reset_password:
+  title: Mot de passe oublié
+  error: Il y a eu un problème lors de la validation de votre requête
+  not_found: Aucun token n'a été trouvé dans le lien ou la session.
+  button: Modifier
+  request: Entrer votre email afin de recevoir un lien pour modifier votre mot de passe.
+  send: Envoyer le mail
+  check_email:
+    title: Email de modification de mot de passe
+    content: Un email contenant un lien de modification de mot de passe vous a été envoyé.
+    not_received: Si vous n'avez pas reçu de mail, veuillez vérifier vos spams ou %link%.

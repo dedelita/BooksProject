@@ -255,12 +255,4 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/resetPassword", name="forgot_pwd")
-     */
-    public function forgotPassword(Request $request)
-    {
-        //TODO
-        return render("security/forgotPassword.htlm.twig");
-    }
 }

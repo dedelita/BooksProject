@@ -17,10 +17,10 @@
         {% endblock %}
     </head>
     <body>
+    {% if app.user %}
 <nav class="navbar navbar-expand nav-color">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ path("home") }}">BooksProject</a>
-    {% if app.user %}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
         <a class="nav-link" href="{{ path("get_books") }}">{{"my.books"| trans }}</a>
@@ -42,7 +42,7 @@
           </ul>
         </li>
       </ul>
-      {% else %}
+      {# {% else %}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
         <a class="nav-link" href="{{ path("app_login") }}">{{"login" | trans }}</a>
@@ -50,17 +50,20 @@
         <li class="nav-item">
         <a class="nav-link" href="{{ path("app_register") }}">{{"register" | trans }}</a>
         </li>
-      </ul>
+      </ul> #}
         
-      {% endif %}
     </div>
 </nav>
+      {% endif %}
 
-        <div class="container">
+        <div class="container-fluid {{ app.user ? 'app' :'login' }}">
         {% block body %}{% endblock %}
         </div>
-        <footer class="footer">
+        {% if app.user %}
+          <footer class="footer">
           <div class="container">BooksProject - Delphine Martinez Parra - 2021</div>
         </footer>
+        {% endif %}
+        
     </body>
 </html>

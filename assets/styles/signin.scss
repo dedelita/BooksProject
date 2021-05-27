@@ -1,12 +1,18 @@
 
+.signin {
+  padding: 45px 15px;
+}
+
 .form-signin {
   width: 100%;
   max-width: 330px;
-  padding: 15px;
   margin: 0 auto;
   margin-top: 15px;
-  border-radius: 20px;
-  box-shadow: 4px 4px 2px 1px rgba(0, 0, 255, .2);
+  padding-bottom: 30px;
+}
+
+.forgot_password {
+  padding-bottom: 15px;
 }
 .form-signin .checkbox {
   font-weight: 400;

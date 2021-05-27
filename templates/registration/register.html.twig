@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'register' | trans }}{% endblock %}
+{% block title %}{{ 'register.text' | trans }}{% endblock %}
 
 {% block body %}
+<div class="registration">
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    <h1>{{ 'register' | trans }}</h1>
-<div>
+    <h1>{{ 'register.text' | trans }}</h1>
 {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
     {{ form_start(registrationForm) }}
             {% if formErrors|length > 0 %}
@@ -19,7 +19,10 @@
     </ul></div>
             {% endif %}
         {{ form_widget(registrationForm) }}
-        <button type="submit" class="btn btn-primary">{{ 'register.button' | trans }}</button>
+        <button type="submit" class="btn btn-dark">{{ 'register.button' | trans }}</button>
     {{ form_end(registrationForm) }}
+    </div>
+    <div class="right">
+        <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-dark" href="{{ path('app_login') }}">{{ "login.button" | trans }}</a>
     </div>
 {% endblock %}

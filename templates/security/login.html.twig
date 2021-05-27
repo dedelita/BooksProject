@@ -1,28 +1,33 @@
-<form method="post" class="form-signin">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+<div class="signin">
+    <form method="post" class="form-signin">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">{{ "login" | trans }}</h1>
-    <input type="text" value="{{ last_username }}" name="username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
-    <input type="password" name="password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
+        <h1 class="h3 mb-3 font-weight-normal">{{ "login" | trans }}</h1>
+        <input type="text" value="{{ last_username }}" name="username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
+        <input type="password" name="password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
 
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" class="form-control"
-    >
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" class="form-control">
+        {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
 
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Remember me
+                </label>
+            </div>
+        #}
+        <div class="forgot_password right">
+            <a class="text-dark" href="{{ path('app_forgot_password_request') }}"> {{ 'password.forgot' | trans }}</a>
         </div>
-    #}
+        <button class="btn btn-lg btn-dark btn-block" type="submit">
+            {{ "login.button" | trans }}
+        </button>
+    </form>
+
     <div class="right">
-        <a href="{ path('forgot_pwd') }"> {{ 'password.forgot' | trans }}</a>
+        <span class="font-italic"> {{ "register.not" | trans }}</span> <a class="text-dark" href="{{ path('app_register') }}">{{ "register.button" | trans }}</a>
     </div>
-    <button class="btn btn-lg btn-dark btn-block" type="submit">
-        {{ "login.button" | trans }}
-    </button>
-</form>
+</div>
