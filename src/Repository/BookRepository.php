@@ -112,8 +112,9 @@ class BookRepository extends ServiceEntityRepository
 
     public function getUserBooksOfAuthor($userId, $author)
     {
-        return $this->createGetUserBooks($userId)->andWhere("b.author =  :author")
-                ->setParameter("author", $author)
+        return $this->createGetUserBooks($userId)
+                ->andWhere("b.author like :author")
+                ->setParameter("author", "%".$author."%")
                 ->getQuery()
                 ->getResult();
     }

@@ -3,14 +3,16 @@
 {% block title %}{{ 'register.text' | trans }}{% endblock %}
 
 {% block body %}
-<div class="registration">
+<div class="row index">
+<div class="registration col login align-self-center">
     {% for flashError in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flashError }}</div>
     {% endfor %}
 
-    <h1>{{ 'register.text' | trans }}</h1>
-{% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
+    {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
     {{ form_start(registrationForm) }}
+    <h3 class="mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
+
             {% if formErrors|length > 0 %}
             <div class"alert alert-danger"><ul>
         {% for error in formErrors %}
@@ -19,10 +21,16 @@
     </ul></div>
             {% endif %}
         {{ form_widget(registrationForm) }}
-        <button type="submit" class="btn btn-dark">{{ 'register.button' | trans }}</button>
+        <button type="submit" class="btn btn-lg btn-block btn-dark">{{ 'register.button' | trans }}</button>
     {{ form_end(registrationForm) }}
-    </div>
+
     <div class="right">
         <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-dark" href="{{ path('app_login') }}">{{ "login.button" | trans }}</a>
     </div>
+    <span class="footer-log center">© 2021 - DMP</span>
+    </div>
+    <div class="col welcome">
+        WELCOME ET BIENVENUE
+    </div>
+</div>
 {% endblock %}

@@ -3,9 +3,11 @@
 
 {% block body %}
     <h1>My {{author}}'s books</h1>
-    {% for book in books %}
-        <div class="row">
-            {{ book.title }} - {{ book.author }}
-        </div>
-    {% endfor %}
+    <div class="row">
+        {% for book in books %}
+            <div class="col book">
+                <a href="{{ path('book_info', {'id': book.id }) }}"><img src="{{ book.image }}" alt="{{ book.title }}"/></a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

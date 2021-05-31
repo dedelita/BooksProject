@@ -10,6 +10,8 @@ register:
 
 
 save: Save
+search: Search
+select: Select
 unknown: Unknown
 user:
   email: Email
@@ -30,6 +32,8 @@ book:
   new: New book
   think: What do you think about this book?
   lang: Language
+  cover: Cover of
+  no_cover: No cover for
 
   comment:
     add: Add a comment

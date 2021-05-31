@@ -38,15 +38,6 @@ class UserController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-
-    /**
-     * @Route("/", name="index") 
-     */
-    // public function index(Request $request)
-    // {
-    //     return $this->render("index.html.twig");
-    // }
-
     /**
      * @Route("/home", name="home")
      * @IsGranted("ROLE_USER")
@@ -54,11 +45,12 @@ class UserController extends AbstractController
     public function home(BookRepository $bookRepository)
     {
         $user = $this->getUser();
+        $books = $bookRepository->getUserBooks($user->getId(), 'author');
 
         $genres = $bookRepository->getMyGenres($user->getId());
         $authors = $bookRepository->getMyAuthors($user->getId());
         
-        return $this->render('user/home.html.twig', ["genres" => $genres, "authors" =>$authors]);
+        return $this->render('user/home.html.twig', ["books" => $books, "genres" => $genres, "authors" => $authors]);
     }
 
     /**
@@ -87,24 +79,12 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/deleteUser", name="delete_user", methods="DELETE")
-     */
-    public function delete(Request $request): JsonResponse
-    {
-        $user = $this->getUser();
-        if ($user) {
-            $this->userRepository->delete($user);
-        }
-
-        return $this->redirectToRoute("index");
-    }
-
-    /**
      * @Route("/addBook", name="add_book")
      * @IsGranted("ROLE_USER")
      */
     public function addBook(Request $request, BookController $bookController, BookRepository $bookRepository, CommentRepository $commentRepository)
     {
+        $selected = "false";
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -121,8 +101,14 @@ class UserController extends AbstractController
         $formBook->handleRequest($request);
 
         if ($formBook->isSubmitted() && $formBook->isValid()) {
-            //9780439023481
-            $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
+            $b = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
+            if(!$b)
+                $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
+            else {
+                $user->addBook($b);
+                $this->userRepository->save($user);
+                return $this->redirectToRoute("add_com_book", ["idBook" => $b->getId()]);
+            }
         }
 
         if(sizeof($gbooks) == 1) {
@@ -138,16 +124,18 @@ class UserController extends AbstractController
             $this->userRepository->save($user);
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
-            return $this->redirectToRoute("add_com_book", ["idBook" => $res->getId()]);//$book, $request, $commentRepository);
+            return $this->redirectToRoute("add_com_book", ["idBook" => $res->getId()]);
+        } else {
+            $selected = "true";
         }
         
         return $this->render('user/addBook.html.twig', [
             'formBook' => $formBook->createView(),
             'formIsbn' => $formIsbn->createView(),
-            'gbooks' => $gbooks
+            'gbooks' => $gbooks, 
+            'selected' => $selected
         ]);
     }
-
 
     /**
      * @Route("/addComment/{idBook}", name="add_com_book")
@@ -157,16 +145,14 @@ class UserController extends AbstractController
     {
         $idBook = $request->get('idBook');
         $book = $bookRepository->find($idBook);
-        var_dump($book);
+        
         $user = $this->getUser();
         $comment = new Comment();
         $formComment = $this->createForm(CommentType::class, $comment);
         $formComment->handleRequest($request);
         if($formComment->isSubmitted() && $formComment->isValid()) {
-            var_dump($comment);
             $comment->setBook($book);
             $comment->setWriter($user);
-            //$comment = $commentRepository->add($comment->getContent(), $comment->getStars(), $user, $book);
             $commentRepository->save($comment);
             return $this->redirectToRoute('home');
         }
@@ -253,6 +239,20 @@ class UserController extends AbstractController
         return $this->render('security/editUser.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/deleteUser", name="delete_user")
+     * @IsGranted("ROLE_USER")
+     */
+    public function delete(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $this->userRepository->delete($user);
+        }
+
+        return $this->redirectToRoute("app_login");
     }
 
 }

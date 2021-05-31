@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Repository\BookRepository;
+use App\Repository\CommentRepository;
 use App\Repository\UserRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,7 +32,7 @@ class BookController extends AbstractController
     }
 
 
-    public function getResultsGB($service, $q, $maxRes, $startIndex, $lang = null)
+    private function getResultsGB($service, $q, $maxRes, $startIndex, $lang = null)
     {
         if($lang != null)
             return $service->volumes->listVolumes(['q' => $q], [
@@ -48,23 +49,25 @@ class BookController extends AbstractController
         ]);
     }
 
-    public function getGBooksInfo($gbook) {
+    private function getGBooksInfo($gbook) 
+    {
         $book = new Book();
         $book->setTitle($gbook['volumeInfo']['title']);
-        $book->setAuthor(implode(", ",$gbook['volumeInfo']['authors']));
+        $book->setAuthor(implode(", ", $gbook['volumeInfo']['authors']));
         $book->setDescription($gbook['volumeInfo']['description']);
         if($gbook['volumeInfo']['imageLinks'])
-               $book->setImage($gbook['volumeInfo']['imageLinks']['thumbnail']);
+            $book->setImage($gbook['volumeInfo']['imageLinks']['thumbnail']);
         foreach($gbook['volumeInfo']['industryIdentifiers'] as $identifier) {
             if($identifier['type'] == "ISBN_13")
                 $book->setIsbn($identifier['identifier']);
         }
         $book->setLanguage($gbook['volumeInfo']['language']);
+        //var_dump($gbook);
         return $book;
     }
 
     /**
-     * @Route("/testGApiIsbn", name="test_gapi_isbn", methods="GET")
+     * @Route("/testGApiIsbn", name="gapi_isbn", methods="GET")
      */
     public function getGBooksByIsbn($isbn) 
     {
@@ -78,7 +81,7 @@ class BookController extends AbstractController
     }
 
     /**
-     * @Route("/testGApi", name="test_gapi", methods="GET")
+     * @Route("/testGApi", name="gapi", methods="GET")
      */
     public function getGBooks($title, $author, $lang) 
     {
@@ -108,9 +111,25 @@ class BookController extends AbstractController
         }
         $books = [];
         foreach ($rgb as $item) {
-            if( $item['volumeInfo']['authors'] && strtolower($item['volumeInfo']['title']) == strtolower($title))
-                $books[] = $this->getGBooksInfo($item);;
+            if(in_array($author, $item['volumeInfo']['authors'])
+                && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title))
+                && ($item['volumeInfo']['language'] == $lang))
+                $books[] = $this->getGBooksInfo($item);
         }
         return $books;
+    }
+
+    /**
+     * @Route("/book/{id}", name="book_info")
+     */
+    public function getBookInfo(Request $request, CommentRepository $commentRepository)
+    {
+        $book = $this->bookRepository->find($request->get('id'));
+
+        $coms = $commentRepository->findByBook($book->getId());
+        return $this->render("user/bookInfo.html.twig", [
+            "book" => $book,
+            "coms" => $coms
+        ]);
     }
 }

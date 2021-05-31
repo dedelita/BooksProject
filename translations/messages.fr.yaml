@@ -7,6 +7,8 @@ register:
   not: Pas encore inscrit ? 
   already: Déjà inscrit ?
 save: Sauvegarder
+search: Rechercher
+select: Selectionner
 unknown: Inconnu
 
 user:
@@ -28,6 +30,8 @@ book:
   new: Nouveau livre
   think: Que pensez-vous de ce livre ?
   lang: Langue
+  cover: Couverture de 
+  no_cover: Aucune image pour
 
 comment:
   add: Ajouter un commentaire

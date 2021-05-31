@@ -1,47 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} {{ 'edit.comment' | trans}} {{ book.title }} {% endblock %}
+{% block title %}{{ 'edit.comment'|trans }} {{ book.title }}{% endblock %}
 {% block body %}
-  <h2>{{ book.title }} {{ 'by' | trans }} {{ book.author }}</h2>
-  {{ form_start(form) }}
-  <div class="form-group">
-    <span style="color:#e6c315; font-size: 1.5em;">
-        {% for i in 0..4 %}
-            {% if i < form.stars.vars.value %}
-            <i id="{{i}}" class="rating-star bi bi-star-fill selected"></i>
-            {% else %}
-            <i id="{{i}}" class="rating-star bi bi-star"></i>                
-            {% endif %}
-        {% endfor %}
-    </span>
-    </div>
-  {{ form_row(form.content) }}
-  {{ form_widget(form.stars) }}
-  
-    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'save' | trans}}</button>
-    {{ form_end(form) }}
+	<div class="row center mt-3">
+		<div class="col col-sm-3">
+			{% if not book.image %}
+				<img src="{{ asset('build/images/no_cover.svg') }}" 
+                    alt=" {{ 'book.no_cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    width="125"/>
+			{% else %}
+				<img src="{{ book.image }}" 
+                    alt="{{ 'book.cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    width="125"/>
+			{% endif %}
+		</div>
+		<div class="col">
+			<h2>
+				{{ book.title }} <br/> {{ 'by'|trans }} {{ book.author }}
+			</h2>
+		</div>
+	</div>
+	<div class="container">
+		{{ form_start(form) }}
+		<div class="form-group">
+			<span style="color:#e6c315; font-size: 1.5em;">
+				{% for i in 0..4 %}
+					{% if i < form.stars.vars.value %}
+						<i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
+					{% else %}
+						<i id="{{ i }}" class="rating-star bi bi-star"></i>
+					{% endif %}
+				{% endfor %}
+			</span>
+		</div>
+		{{ form_row(form.content) }}
+		{{ form_widget(form.stars) }}
+
+		<button class="btn btn-lg btn-dark btn-block" type="submit">{{ 'save'|trans }}</button>
+		{{ form_end(form) }}
+	</div>
 {% endblock %}
 
 {% block js %}
-    $(document).ready(function () {
+	$(document).ready(function () { 
         function setRating(rating) {
             $('#comment_stars').val(parseInt(rating)+1);
-            $('.rating-star').addClass("selected");
-            $('.rating-star#' + rating + ' ~ .rating-star').removeClass("selected").removeClass('bi-star-fill').addClass('bi-star');
-        }
-            
-        $('.rating-star')
-        .on('mouseover', function(e) {
-            var rating = e.target.id;
-            $('.rating-star').removeClass('bi-star').addClass('bi-star-fill');
-            $('.rating-star#' + rating + ' ~ .rating-star').removeClass('bi-star-fill').addClass('bi-star');
-        })
+            $('.rating-star').addClass("selected"); $('.rating-star#' + rating 
+            + ' ~.rating-star').removeClass("selected").removeClass('bi-star-fill').addClass('bi-star');
+        } 
+        $('.rating-star') .on('mouseover', function(e) { var rating = e.target.id;
+        $('.rating-star').removeClass('bi-star').addClass('bi-star-fill');
+        $('.rating-star#' + rating + ' ~.rating-star').removeClass('bi-star-fill').addClass('bi-star'); })
         .on('mouseleave', function (e) {
             $('.rating-star').removeClass('bi-star-fill').addClass('bi-star');
-            $('.rating-star.selected').removeClass('bi-star').addClass('bi-star-fill');  
-        })
-        .on('click', function(e) {
-            setRating(e.target.id);
+            $('.rating-star.selected').removeClass('bi-star').addClass('bi-star-fill'); })
+            .on('click', function(e) { setRating(e.target.id); 
         });
+        
     })
 {% endblock %}

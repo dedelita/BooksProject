@@ -3,7 +3,7 @@ $secondary: purple;
 
 @import "~bootstrap/scss/bootstrap";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
-@import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+KR&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+KR&family=Inter&display=swap');
 
 $book:#ffbb33;
 
@@ -16,15 +16,26 @@ body {
     background-color: #ffffcc;
     font-family: 'Noto Sans KR', sans-serif;
 }
-h1 {
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', sans-serif;
     padding-bottom: 15px;
 }
 .nav-color {
     background-color: $book;
 }
 
-a.nav-item, a.nav-brand {
+.nav-color .navbar-brand {
     color: theme-color('light');
+}
+
+/* change the link color */
+.nav-color .navbar-nav .nav-item .nav-link {
+    color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.nav-color .nav-item.active .nav-link,
+.nav-color .nav-item:hover .nav-link {
+    color: #ffffff;
 }
 
 
@@ -34,7 +45,9 @@ ul {
 
 .container-fluid.app {
     min-height:90%;
-    margin-bottom: 45px;
+    margin: 15px 0 45px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .container-fluid.login {
@@ -56,6 +69,7 @@ ul {
 
 .footer {
     position: absolute;
+    padding-left: 20px;
     bottom: 0;
     width: 100%;
     height: 45px;
@@ -76,13 +90,29 @@ ul {
 
 
 .registration {
-    width: 100%;
     margin: 30px;
-    padding-bottom: 30px;
+    padding: 0;
 }
 
 .registration form {
-    width: 100%;
-    margin: 0 45px;
-    max-width: 330px;
+  width: 100%;
+  min-width: 250px;
+  max-width: 330px;
+  margin: 0 auto;
+  margin-top: 15px;
+  padding-bottom: 30px;
+}
+
+.footer-log {
+    margin-top: 15px;
+}
+
+.tab-content {
+    background-color: wheat;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+}
+
+.col.book {
+    padding-bottom: 20px;
 }

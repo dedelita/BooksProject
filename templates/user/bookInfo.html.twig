@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body %}
+    <div class="row center mt-3 mb-2">
+		<div class="col col-sm-4 center">
+			{% if not book.image %}
+				<img src="{{ asset('build/images/no_cover.svg') }}" 
+                    alt=" {{ 'book.no_cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    width="125"/>
+			{% else %}
+				<img src="{{ book.image }}" 
+                    alt="{{ 'book.cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    width="125"/>
+			{% endif %}
+		</div>
+		<div class="col">
+			<h2>
+				{{ book.title }} <br/> {{ 'by' | trans }} {{ book.author }}
+			</h2>
+		</div>
+	</div>
+    <div>{{ book.description | slice(0, 200) ~ '...' }}</div>
+    
+    <div class="container mt-3">
+    {% for com in coms %}
+        <div class="card">
+            <div class="card-header">
+                <span class="col-9 card-title"><i class="bi bi-person-fill"></i> {{ com.writer.username | capitalize }}</span>
+                <span class="col-3 card-subtitle text-muted"><i class="bi bi-clock"></i> {{ com.date | date("d/m/Y") }}</span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ com.content }}</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <span class="col-9 card-title"><i class="bi bi-person-fill"></i> {{ com.writer.username | capitalize }}</span>
+                <span class="col-3 card-subtitle text-muted"><i class="bi bi-clock"></i> {{ com.date | date("d/m/Y") }}</span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ com.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

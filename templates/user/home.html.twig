@@ -3,19 +3,30 @@
 
 <div>
 
-<h2>{{ 'my.books' | trans }}</h2>
-<pre>
-  {{ dump(app.user) }}
-</pre>
+<h2><i class="bi bi-book"></i>{{ 'my.books' | trans }}</h2>
 {% if not(app.user.isVerified) %}
   Confirm your email. If you didn't receive the email: <a href="{{ path('send_conf_email') }}">resend mail</a>
 {% endif %}
+
+  <div class="container">
+	{% for book in books %}
+	  <div class="row center mt-3">
+    {% if book.image %}
+		  <div class="col-sm-2"><img src="{{ book.image }}" width="50" height="79"/></div>
+    {% else %}
+      <div class="col-sm-2"><img src="{{ asset('build/images/no_cover.svg') }}" width="50" height="79"/></div>
+    {% endif %}
+		<div class="col-sm-6">{{ book.author }} - {{ book.title }}</div>
+		<div class="col-sm-3"><a href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a></div>
+	  </div>
+	{% endfor %}
+  </div>
+
 <div class="row">
   <div class="col-sm-6">
 <div class="card">
   <h6 class="card-header">{{"my.genres" | trans }}</h6>
   <div class="card-body">
-    <h5 class="card-title">...</h5>
     {% for genre in genres %}
     {% if genre == "" %}
       {% set genre = "unknown" | trans %}

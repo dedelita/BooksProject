@@ -37,7 +37,7 @@ class Book
     private $comments = [];
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=13)
      */
     private $isbn;
 
@@ -47,7 +47,7 @@ class Book
     private $image;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", length=65535, nullable=true)
      */
     private $description;
 
@@ -109,7 +109,7 @@ class Book
         return $this;
     }
 
-    public function getIsbn(): ?int
+    public function getIsbn(): ?string
     {
         return $this->isbn;
     }
