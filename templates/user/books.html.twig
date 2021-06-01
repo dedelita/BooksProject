@@ -16,7 +16,10 @@
 		<div class="col-sm-2">{{ book.genre }}</div>
 		<div class="col-sm-3">{{ book.author }}</div>
 		<div class="col-sm-5">{{ book.title }}</div>
-		<div class="col-sm-1"><a href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a></div>
+		<div class="col-sm-2">
+			<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
+			<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+		</div>
 	  </div>
 	{% endfor %}
   </div>

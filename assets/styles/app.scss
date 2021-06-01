@@ -107,6 +107,15 @@ ul {
     margin-top: 15px;
 }
 
+.star {
+    color:#e6c315;
+    font-size: 1.5em;
+}
+
+.star.mini {
+    font-size: 1rem;
+}
+
 .tab-content {
     background-color: wheat;
     margin-bottom: 10px;
@@ -115,4 +124,39 @@ ul {
 
 .col.book {
     padding-bottom: 20px;
+}
+
+.card-header {
+    padding: 5px 15px 0;
+}
+
+.icon-link {
+    padding-right: 5px;
+}
+
+.comment {
+    border: #ff9500 1px solid;
+}
+.comment.odd {
+    background-color: white;
+}
+
+.comment.even {
+    background-color: #feffd9;
+}
+.comment .writer {
+    padding: 0 8px;
+    font-size: 15px;
+}
+
+.writer .bi {
+    font-size:  20px;
+}
+
+.comment .content {
+    padding: 0 10px 10px;
+}
+
+.cover {
+    height: 79px;
 }

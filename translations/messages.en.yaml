@@ -13,6 +13,10 @@ save: Save
 search: Search
 select: Select
 unknown: Unknown
+read:
+  more: Read more
+  less: Read less
+
 user:
   email: Email
   username: Username
@@ -26,6 +30,7 @@ password:
   forgot: Forgot password?
 
 book:
+  by: by
   genre: Genre
   author: Author
   title: Title

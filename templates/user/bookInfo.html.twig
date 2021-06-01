@@ -20,28 +20,54 @@
 			</h2>
 		</div>
 	</div>
-    <div>{{ book.description | slice(0, 200) ~ '...' }}</div>
+    <div>
+    {% set text = book.description | u.truncate(200, "...", false) %}
+    {% if book.description | length > 225 %}
+        <div id="part">
+            {{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full')">{{ "read.more" | trans }}</button>  
+        </div>
+        <div id="full" style="display:none">
+            {{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part')">{{ "read.less" | trans }}</button>  
+        </div>
+    {% else %}
+        {{ book.description }}
+    {% endif %}
+    </div>
     
     <div class="container mt-3">
     {% for com in coms %}
-        <div class="card">
-            <div class="card-header">
-                <span class="col-9 card-title"><i class="bi bi-person-fill"></i> {{ com.writer.username | capitalize }}</span>
-                <span class="col-3 card-subtitle text-muted"><i class="bi bi-clock"></i> {{ com.date | date("d/m/Y") }}</span>
+        <div class="comment {% if loop.index is even %}even{% else %}odd{% endif %} {% if not(loop.first) %}border-top-0{% endif %}">
+            <div class="writer text-bold">
+                <span>
+                    <i class="bi bi-person-fill"></i> {{ com.writer.username | capitalize }}
+                </span>
+                <span class="text-muted float-right"><i class="bi bi-clock"></i> {{ com.date | date("d/m/Y H:i") }}</span>
             </div>
-            <div class="card-body">
-                <p class="card-text">{{ com.content }}</p>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="col-9 card-title"><i class="bi bi-person-fill"></i> {{ com.writer.username | capitalize }}</span>
-                <span class="col-3 card-subtitle text-muted"><i class="bi bi-clock"></i> {{ com.date | date("d/m/Y") }}</span>
-            </div>
-            <div class="card-body">
+            <div class="content">
+                <span class="star mini">
+                    {% for i in 0..4 %}
+                        {% if i < com.stars %}
+                            <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
+                        {% else %}
+                            <i id="{{ i }}" class="rating-star bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
                 <p class="card-text">{{ com.content }}</p>
             </div>
         </div>
     {% endfor %}
     </div>
+{% endblock %}
+
+{% block js %}
+    function switchText(size) {
+        if(size == "full") {
+            $('#full').css("display", "block")
+            $('#part').css("display", "none")
+        } else {
+            $('#full').css("display", "none");
+            $('#part').css("display", "block");
+        }
+    }
 {% endblock %}

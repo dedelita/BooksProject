@@ -11,6 +11,10 @@ search: Rechercher
 select: Selectionner
 unknown: Inconnu
 
+read:
+  more: Voir plus
+  less: Voir moins
+
 user:
   email: Email
   username: Pseudo
@@ -24,6 +28,7 @@ password:
   forgot: Mot de passe oublié ?
 
 book:
+  by: de
   genre: Genre
   author: Auteur
   title: Titre

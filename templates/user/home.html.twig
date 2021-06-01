@@ -12,9 +12,15 @@
 	{% for book in books %}
 	  <div class="row center mt-3">
     {% if book.image %}
-		  <div class="col-sm-2"><img src="{{ book.image }}" width="50" height="79"/></div>
+		  <div class="col-sm-2 center cover">
+      <a href="{{ path('book_info', {'id': book.id}) }}">
+        <img src="{{ book.image }}" title="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" alt="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" width="50"/>
+      </a></div>
     {% else %}
-      <div class="col-sm-2"><img src="{{ asset('build/images/no_cover.svg') }}" width="50" height="79"/></div>
+      <div class="col-sm-2 cover">
+        <a href="{{ path('book_info', {'id': book.id}) }}">
+          <img src="{{ asset('build/images/no_cover.svg') }}" title="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" alt="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" width="50"/></div>
+        </a>
     {% endif %}
 		<div class="col-sm-6">{{ book.author }} - {{ book.title }}</div>
 		<div class="col-sm-3"><a href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a></div>
@@ -23,7 +29,7 @@
   </div>
 
 <div class="row">
-  <div class="col-sm-6">
+{#   <div class="col-sm-6">
 <div class="card">
   <h6 class="card-header">{{"my.genres" | trans }}</h6>
   <div class="card-body">
@@ -38,7 +44,7 @@
     </div>
   </div>
 </div>
- </div>
+ </div> 
   <div class="col-sm-6">
 <div class="card border-dark">
   <h6 class="card-header border-dark">{{"my.authors" | trans }}</h6>
@@ -52,7 +58,7 @@
   </div>
 </div>
  </div>
-</div>
+</div>#}
 
 </div>
 {% endblock %}

@@ -23,7 +23,7 @@
 	<div class="container">
 		{{ form_start(form) }}
 		<div class="form-group">
-			<span style="color:#e6c315; font-size: 1.5em;">
+			<span class="star">
 				{% for i in 0..4 %}
 					{% if i < form.stars.vars.value %}
 						<i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
