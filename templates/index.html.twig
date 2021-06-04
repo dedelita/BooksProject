@@ -1,9 +1,11 @@
 {% extends "base.html.twig" %}
 {% block body %}
+        {% if check_email %}
+            {% include "reset_password/check_email.html.twig" %}
+        {% endif %}
 <div class="row index">
     <div class="col welcome">
         WELCOME ET BIENVENUE
-        
     </div>
     <div class="col login">
         {% include "security/login.html.twig" %}

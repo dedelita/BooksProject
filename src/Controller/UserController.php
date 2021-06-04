@@ -42,7 +42,7 @@ class UserController extends AbstractController
      * @Route("/home", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(BookRepository $bookRepository)
+    public function home(Request $request, BookRepository $bookRepository)
     {
         $user = $this->getUser();
         $books = $bookRepository->getUserBooks($user->getId(), 'author');

@@ -12,3 +12,7 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 // start the Stimulus application
 require('bootstrap');
+
+$(document).ready(function() {
+    $('[data-toggle="popover"]').popover();
+});

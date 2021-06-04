@@ -45,7 +45,7 @@ ul {
 
 .container-fluid.app {
     min-height:90%;
-    margin: 15px 0 45px;
+    margin: 0 0 45px;
     padding-left: 30px;
     padding-right: 30px;
 }
@@ -62,6 +62,9 @@ ul {
     padding: 0;
 }
 
+.container.books {
+    padding-bottom: 15px;
+}
 .welcome {
     background: no-repeat 10% url('../images/books.jpg');
     background-size: cover;
@@ -86,6 +89,20 @@ ul {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.reset_password {
+    padding: 15px;
+}
+.reset_password form {
+    width: 500px;
+}
+
+.reset_password form input {
+width: 250px;
+}
+.reset_password form button {
+    margin-top: 15px;
 }
 
 
@@ -123,6 +140,7 @@ ul {
 }
 
 .col.book {
+    max-width: 180px;
     padding-bottom: 20px;
 }
 
@@ -132,9 +150,14 @@ ul {
 
 .icon-link {
     padding-right: 5px;
+    font-size: 20px;
+}
+.icon-link .bi {
+    vertical-align: super;
 }
 
 .comment {
+    width: 550px;
     border: #ff9500 1px solid;
 }
 .comment.odd {
@@ -149,8 +172,12 @@ ul {
     font-size: 15px;
 }
 
+.writer > span {
+    padding: 5px;
+}
+
 .writer .bi {
-    font-size:  20px;
+    font-size: 20px;
 }
 
 .comment .content {

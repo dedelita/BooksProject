@@ -13,6 +13,9 @@ save: Save
 search: Search
 select: Select
 unknown: Unknown
+email.unknown: Unknown email
+index.return: Return to login
+
 read:
   more: Read more
   less: Read less

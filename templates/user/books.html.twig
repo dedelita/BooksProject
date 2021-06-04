@@ -1,31 +1,51 @@
 {% extends 'base.html.twig' %}
 {% block title %} {{ 'my.books' | trans }} {% endblock %}
 {% block body %}
-  <h1 class="mt-5">
+  <h1 class="mt-3">
 	<i class="bi bi-book"></i> {{ 'my.books' | trans }}
   </h1>
   <div class="container">
-	<div class="row">
-	  <div class="col-sm-2">{{ 'book.genre' | trans}}</div>
+{# 	<div class="row">
 	  <div class="col-sm-3">{{ 'book.author' | trans }}</div>
 	  <div class="col-sm-5">{{ 'book.title' | trans }}</div>
 	  <div class="col-sm-1"></div>
 	</div>
 	{% for book in books %}
 	  <div class="row">
-		<div class="col-sm-2">{{ book.genre }}</div>
-		<div class="col-sm-3">{{ book.author }}</div>
-		<div class="col-sm-5">{{ book.title }}</div>
-		<div class="col-sm-2">
-			<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
-			<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+		<div class="col-sm-3 align-self-center">{{ book.author }}</div>
+		<div class="col-sm-4 align-self-center">{{ book.title }}</div>
+		<div class="col-sm-3 align-self-center">
+			<a class="icon-link align-self-center" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
+			<a class="icon-link align-self-center" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+			<a class="icon-link align-self-center text-danger" data-toggle="modal" data-target="#removeBookModal"><i class="bi bi-trash-fill"></i></a>
 		</div>
 	  </div>
 	{% endfor %}
+    </div> #}
+
+	<div class="row">
+        {% for book in books %}
+  {# {% include "modals/confRemoveBook.html.twig" with {idBook: book.id} %} #}
+            <div class="col book">
+                <a class="center" href="{{ path('book_info', {'id': book.id }) }}">
+					<img src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
+						alt="{{ book.title }}" width="120px"/>
+				</a>
+				<div class="row center">
+					{% if not(book.image) %}
+						<span>{{ book.author }} - {{ book.title }}</span>
+					{% endif %}
+						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
+						<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal"><i class="bi bi-trash-fill"></i></a>
+		
+				</div>
+            </div>
+        {% endfor %}
   </div>
+
 {% endblock %}
-{# 
-{% for comment in book.comments %}
+{# {% for comment in book.comments %}
 		  <div class="col-sm">{{ comment.content }}</div>
 		  <span style="color:#e6c315">
 			{% for i in 0..4 %}
@@ -36,5 +56,6 @@
 			  {% endif %}
 			{% endfor %}
 		  </span>
-		{% endfor %}
- #}
+		{% endfor %}#}
+{% block js %}
+{% endblock %}

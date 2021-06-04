@@ -111,10 +111,21 @@ class BookController extends AbstractController
         }
         $books = [];
         foreach ($rgb as $item) {
-            if(in_array($author, $item['volumeInfo']['authors'])
-                && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title))
-                && ($item['volumeInfo']['language'] == $lang))
+            if($item['volumeInfo']['authors'] 
+                && (($author && in_array($author, $item['volumeInfo']['authors'])) || (!$author))
+               && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title))
+               && ($item['volumeInfo']['language'] == $lang))
                 $books[] = $this->getGBooksInfo($item);
+        }
+        if(!$books) {
+            foreach ($rgb as $item) {
+                if($item['volumeInfo']['authors'] 
+                    && (($author && in_array($author, $item['volumeInfo']['authors'])) || (!$author))
+                   && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title))) {
+                    $item['volumeInfo']['language'] = $lang;
+                    $books[] = $this->getGBooksInfo($item);
+                   }
+            }
         }
         return $books;
     }
