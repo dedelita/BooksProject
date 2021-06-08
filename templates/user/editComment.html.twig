@@ -2,6 +2,11 @@
 
 {% block title %}{{ 'edit.comment'|trans }} {{ book.title }}{% endblock %}
 {% block body %}
+{% if new %}
+	<div class="text-right">
+		<a href="{{ path('home') }}" class="btn btn-link" type="submit">{{ 'skip'|trans }}</a>
+	</div>
+{% endif %}
 	<div class="row center mt-3">
 		<div class="col col-sm-3">
 			{% if not book.image %}

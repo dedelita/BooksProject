@@ -25,7 +25,7 @@
 
 	<div class="row">
         {% for book in books %}
-  {# {% include "modals/confRemoveBook.html.twig" with {idBook: book.id} %} #}
+   			{{ render(controller('App\\Controller\\UserController:removeBook', {"idBook": book.id })) }}
             <div class="col book">
                 <a class="center" href="{{ path('book_info', {'id': book.id }) }}">
 					<img src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
@@ -37,11 +37,11 @@
 					{% endif %}
 						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
 						<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
-						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal"><i class="bi bi-trash-fill"></i></a>
-		
+						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal{{book.id}}"><i class="bi bi-trash-fill"></i></a>
 				</div>
             </div>
         {% endfor %}
+  </div>
   </div>
 
 {% endblock %}
@@ -57,5 +57,3 @@
 			{% endfor %}
 		  </span>
 		{% endfor %}#}
-{% block js %}
-{% endblock %}

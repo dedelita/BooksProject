@@ -15,7 +15,9 @@ select: Select
 unknown: Unknown
 email.unknown: Unknown email
 index.return: Return to login
-
+cancel: Cancel
+yes: Yes
+skip: Skip
 read:
   more: Read more
   less: Read less
@@ -42,6 +44,9 @@ book:
   lang: Language
   cover: Cover of
   no_cover: No cover for
+  remove: Remove
+  com.delete: Delete the associated comment
+  none: Book not found
 
   comment:
     add: Add a comment

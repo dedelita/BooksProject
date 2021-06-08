@@ -15,6 +15,9 @@ read:
   more: Voir plus
   less: Voir moins
 index.return: Retourner à l'accueil
+cancel: Annuler
+yes: Oui
+skip: Ignorer
 
 user:
   email: Email
@@ -38,6 +41,9 @@ book:
   lang: Langue
   cover: Couverture de 
   no_cover: Aucune image pour
+  remove: Supprimer
+  com.delete: Supprimer le commentaire associé
+  none: Pas de résultat pour le livre recherché
 
 comment:
   add: Ajouter un commentaire

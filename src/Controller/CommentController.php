@@ -53,6 +53,11 @@ class CommentController extends AbstractController
             $comment->setWriter($user);
             $this->commentRepository->save($comment);
         }
-        return $this->render("user/editComment.html.twig", ['form' => $form->createView(), "book" => $book, "com"=>$comment]);
+        return $this->render("user/editComment.html.twig", [
+            'form' => $form->createView(), 
+            "book" => $book, 
+            "com"=>$comment, 
+            "new" => false
+        ]);
     }
 }

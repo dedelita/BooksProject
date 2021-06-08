@@ -1,13 +1,30 @@
-<div class="modal fade" id="removeBookModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">{{ 'book.remove' | trans }}</h4>
-                </div>
-                <div class="modal-body">
+<div class="modal fade" id="removeBookModal{{id}}" tabindex="-1" role="dialog" aria-labelledby="removeBookModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h4 class="modal-title p-0 center">{{ 'book.remove' | trans }} {{ title }} ?</h4>
+            </div>
+            <div class="modal-body row">
+            {{ form_start(form, { 'action': path('remove_book', {'idBook': id }) }) }}
+            <div class="col pl-5">
+            {% if comment %}
+                {{ form_widget(form.deleteCom) }}
+                {{ form_label(form.deleteCom, {attr: {class: 'form-check-label'} }) }}
+            {% else %}
+            <div class="not-displayed">
+                {{ form_row(form.deleteCom, {label_attr: {class: 'form-check-label'} , disabled:'disabled'}) }}
+            </div>
+            {% endif %}
+                {# <label class="form-check-label" for="deleteCom{{ id }}">
+                    {{ 'book.com.delete' | trans }}
+                </label> #}
+            </div>
+                <div class="text-right align-self-center col">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'cancel' | trans }}</button>
-                    <a href="{{ path('remove_book', {'idBook': idBook }) }}" class="btn btn-dark">{{ 'yes' | trans }}</button>
+                    <button type="submit" class="btn btn-danger modal-submit">{{ 'yes' | trans }}</button>
                 </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
+</div>

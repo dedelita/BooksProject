@@ -7,6 +7,7 @@ use App\Entity\Comment;
 use App\Form\BookType;
 use App\Form\CommentType;
 use App\Form\GBookIsbnType;
+use App\Form\CheckDeleteCommentType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\BookRepository;
@@ -141,7 +142,7 @@ class UserController extends AbstractController
      * @Route("/addComment/{idBook}", name="add_com_book")
      * @IsGranted("ROLE_USER")
      */
-    public function addComment(Request $request, CommentRepository $commentRepository, BookRepository $bookRepository)
+    public function addComment(Request $request, BookRepository $bookRepository, CommentRepository $commentRepository)
     {
         $idBook = $request->get('idBook');
         $book = $bookRepository->find($idBook);
@@ -160,14 +161,15 @@ class UserController extends AbstractController
 
         return $this->render("user/editComment.html.twig", [
             "form" => $formComment->createView(),
-            "book" => $book
+            "book" => $book,
+            "new" => true
             ]);
     }
     /**
-     * @Route("/myBooks", name="get_books", methods="GET")
+     * @Route("/myBooks", name="get_books")
      * @IsGranted("ROLE_USER")
      */
-    public function getBooks(CommentRepository $commentRepository, BookRepository $bookRepository)
+    public function getBooks(BookRepository $bookRepository, CommentRepository $commentRepository)
     {
         $user = $this->getUser();
         $books = $bookRepository->getUserBooks($user->getId(), 'author');
@@ -188,14 +190,34 @@ class UserController extends AbstractController
      * @Route("/removeBook/{idBook}", name="remove_book")
      * @IsGranted("ROLE_USER")
      */
-    public function removeBook(Request $request)
+    public function removeBook(Request $request, BookRepository $bookRepository, CommentRepository $commentRepository)
     {
+        $idBook = $request->get('idBook');
+        $book = $bookRepository->find($idBook);
         $user = $this->getUser();
-        $book = $this->bookRepository->find($request->get('idBook'));
-        $user->removeBook($book);
-        $this->userRepository->save($user);
 
-        return $this->redirectToRoute("home");
+        $comment = $commentRepository->findOneBy([
+            'book' => $book->getId(),
+            'writer' => $user->getId(),
+        ]);
+        
+        $form = $this->createForm(CheckDeleteCommentType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $com = $form->get("deleteCom")->getData();
+            if($com) {
+                $commentRepository->delete($comment);
+            }
+            $user->removeBook($book);
+            $this->userRepository->save($user);
+            return $this->redirectToRoute("home");
+        }
+        return $this->render("modals/confRemoveBook.html.twig", [
+            "form" => $form->createView(),
+            "id" => $idBook,
+            "title" => $book->getTitle(),
+            "comment" => $comment
+        ]);
     }
 
     /**
