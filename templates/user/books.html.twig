@@ -1,59 +1,33 @@
 {% extends 'base.html.twig' %}
 {% block title %} {{ 'my.books' | trans }} {% endblock %}
 {% block body %}
-  <h1 class="mt-3">
-	<i class="bi bi-book"></i> {{ 'my.books' | trans }}
-  </h1>
-  <div class="container">
-{# 	<div class="row">
-	  <div class="col-sm-3">{{ 'book.author' | trans }}</div>
-	  <div class="col-sm-5">{{ 'book.title' | trans }}</div>
-	  <div class="col-sm-1"></div>
-	</div>
-	{% for book in books %}
-	  <div class="row">
-		<div class="col-sm-3 align-self-center">{{ book.author }}</div>
-		<div class="col-sm-4 align-self-center">{{ book.title }}</div>
-		<div class="col-sm-3 align-self-center">
-			<a class="icon-link align-self-center" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
-			<a class="icon-link align-self-center" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
-			<a class="icon-link align-self-center text-danger" data-toggle="modal" data-target="#removeBookModal"><i class="bi bi-trash-fill"></i></a>
-		</div>
-	  </div>
-	{% endfor %}
-    </div> #}
-
-	<div class="row">
-        {% for book in books %}
-   			{{ render(controller('App\\Controller\\UserController:removeBook', {"idBook": book.id })) }}
-            <div class="col book">
-                <a class="center" href="{{ path('book_info', {'id': book.id }) }}">
-					<img src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
-						alt="{{ book.title }}" width="120px"/>
+<div class="row">
+	<h1 class="mt-3 col">
+		<i class="bi bi-book"></i> {{ 'my.books' | trans }}
+	</h1>
+	<div class="col align-self-center">
+		<ul class="list-inline nav nav-tabs nav-books justify-content-end" role="tablist">
+			<li class="list-inline-item line" role="presentation">
+				<a class="nav-link btn {{ not selected ? 'active' : ''}}" id="line-tab" data-toggle="tab" 
+				data-target="#line" role="tab" aria-controls="line" aria-selected="false">
+					<i class="bi bi-list-ul"> {{ 'list' | trans }}</i>
 				</a>
-				<div class="row center">
-					{% if not(book.image) %}
-						<span>{{ book.author }} - {{ book.title }}</span>
-					{% endif %}
-						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
-						<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
-						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal{{book.id}}"><i class="bi bi-trash-fill"></i></a>
-				</div>
-            </div>
-        {% endfor %}
-  </div>
-  </div>
-
+			</li>
+			<li class="list-inline-item grid" role="presentation">
+				<a class="nav-link btn {{ selected ? 'active' : ''}}" id="grid-tab" data-toggle="tab"
+				 data-target="#grid" role="tab" aria-controls="grid" aria-selected="true">
+					<i class="bi bi-grid-3x3-gap-fill"> {{ 'grid' | trans }}</i>
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="tab-content">
+	<div class="tab-pane fade {{ not selected ? 'show active' : ''}}" id="line" role="tabpanel" aria-labelledby="line-tab">
+		{% include "books/list_line.html.twig" %}
+	</div>
+	<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+		{% include "books/list_grid.html.twig" %}
+	</div>
+</div>
 {% endblock %}
-{# {% for comment in book.comments %}
-		  <div class="col-sm">{{ comment.content }}</div>
-		  <span style="color:#e6c315">
-			{% for i in 0..4 %}
-			  {% if i < comment.stars %}
-				<i class="bi bi-star-fill"></i>
-			  {% else %}
-				<i class="bi bi-star"></i>
-			  {% endif %}
-			{% endfor %}
-		  </span>
-		{% endfor %}#}

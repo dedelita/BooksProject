@@ -1,0 +1,24 @@
+
+<div class="container">
+	<div class="row">
+        {% for book in books %}
+   			{{ render(controller('App\\Controller\\UserController::removeBook', {"idBook": book.id, "type": "grid" })) }}
+            <div class="col book">
+                <a class="{{ book.image? 'cover' : 'no-cover center' }}" href="{{ path('book_info', {'id': book.id }) }}">
+				<div class="text-center text-dark">
+					<img class="{{ book.image ? 'cover' : '' }}" src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
+						alt="{{ book.title }}" width="120px"/>
+					{% if not book.image %}
+						<span style="display:block; min-height:48px">{{ book.title }}</span>
+					{% endif %}
+					</div>
+				</a>
+				<div class="row center">
+						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
+						<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal{{book.id}}grid"><i class="bi bi-trash-fill"></i></a>
+				</div>
+            </div>
+        {% endfor %}
+  </div>
+</div>

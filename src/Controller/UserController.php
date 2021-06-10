@@ -85,7 +85,7 @@ class UserController extends AbstractController
      */
     public function addBook(Request $request, BookController $bookController, BookRepository $bookRepository, CommentRepository $commentRepository)
     {
-        $selected = "false";
+        $selected = false;
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
@@ -126,8 +126,8 @@ class UserController extends AbstractController
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
             return $this->redirectToRoute("add_com_book", ["idBook" => $res->getId()]);
-        } else {
-            $selected = "true";
+        } elseif($formBook->isSubmitted()) {
+            $selected = true;
         }
         
         return $this->render('user/addBook.html.twig', [
@@ -148,7 +148,12 @@ class UserController extends AbstractController
         $book = $bookRepository->find($idBook);
         
         $user = $this->getUser();
-        $comment = new Comment();
+        $comment = $commentRepository->findOneBy([
+            'book' => $book->getId(),
+            'writer' => $user->getId(),
+        ]);
+        if(!$comment)
+            $comment = new Comment();
         $formComment = $this->createForm(CommentType::class, $comment);
         $formComment->handleRequest($request);
         if($formComment->isSubmitted() && $formComment->isValid()) {
@@ -158,7 +163,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('home');
         }
         
-
         return $this->render("user/editComment.html.twig", [
             "form" => $formComment->createView(),
             "book" => $book,
@@ -183,7 +187,7 @@ class UserController extends AbstractController
                 $book->addComment($com);
             }
         }
-        return $this->render('user/books.html.twig', ['books' => $books]);
+        return $this->render('user/books.html.twig', ['books' => $books, 'selected' => true]);
     }
 
     /**
@@ -193,6 +197,7 @@ class UserController extends AbstractController
     public function removeBook(Request $request, BookRepository $bookRepository, CommentRepository $commentRepository)
     {
         $idBook = $request->get('idBook');
+        $type = $request->get('type');
         $book = $bookRepository->find($idBook);
         $user = $this->getUser();
 
@@ -216,7 +221,8 @@ class UserController extends AbstractController
             "form" => $form->createView(),
             "id" => $idBook,
             "title" => $book->getTitle(),
-            "comment" => $comment
+            "comment" => $comment,
+            "type" => $type
         ]);
     }
 

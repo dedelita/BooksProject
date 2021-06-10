@@ -1,4 +1,4 @@
-<div class="modal fade" id="removeBookModal{{id}}" tabindex="-1" role="dialog" aria-labelledby="removeBookModal">
+<div class="modal fade" id="removeBookModal{{id}}{{type}}" tabindex="-1" role="dialog" aria-labelledby="removeBookModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -15,9 +15,6 @@
                 {{ form_row(form.deleteCom, {label_attr: {class: 'form-check-label'} , disabled:'disabled'}) }}
             </div>
             {% endif %}
-                {# <label class="form-check-label" for="deleteCom{{ id }}">
-                    {{ 'book.com.delete' | trans }}
-                </label> #}
             </div>
                 <div class="text-right align-self-center col">
                     <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'cancel' | trans }}</button>
