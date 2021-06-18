@@ -77,7 +77,7 @@ class UserController extends AbstractController
         foreach ($authors as $a) {
             $author = [];
             $author["name"] = $a;
-            $author["books"] = $bookRepository->findByAuthor($a);
+            $author["books"] = $bookRepository->getUserBooksOfAuthor($user->getId(), $a);
             $list_authors[] = $author;
         }
         return $this->render("user/authors.html.twig", [
