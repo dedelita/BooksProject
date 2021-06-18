@@ -47,7 +47,6 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $books = $bookRepository->getUserBooks($user->getId(), 'author');
-
         $genres = $bookRepository->getMyGenres($user->getId());
         $authors = $bookRepository->getMyAuthors($user->getId());
         
@@ -66,7 +65,25 @@ class UserController extends AbstractController
 
         return $this->render("user/booksOfGenre.html.twig", ["genre" => $genre, "books" => $books]);
     }
+    /**
+     * @Route("/authors",name="authors")
+     * @IsGranted("ROLE_USER")
+     */
+    public function getAuthors(Request $request, BookRepository $bookRepository) {
+        $user = $this->getUser();
+        $authors = $bookRepository->getMyAuthors($user->getId());
 
+        $list_authors = [];
+        foreach ($authors as $a) {
+            $author = [];
+            $author["name"] = $a;
+            $author["books"] = $bookRepository->findByAuthor($a);
+            $list_authors[] = $author;
+        }
+        return $this->render("user/authors.html.twig", [
+            "authors" => $list_authors
+        ]);
+    }
     /**
      * @Route("/books_author/{author}", name="byAuthor")
      * @IsGranted("ROLE_USER")
@@ -102,9 +119,11 @@ class UserController extends AbstractController
         $formBook->handleRequest($request);
 
         if ($formBook->isSubmitted() && $formBook->isValid()) {
-            $b = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
+            $author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $book->getAuthor());
+            $book->setAuthor($author);
+            $b = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $author]);
             if(!$b)
-                $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
+                $gbooks = $bookController->getGBooks($book->getTitle(), $author, $book->getLanguage());
             else {
                 $user->addBook($b);
                 $this->userRepository->save($user);

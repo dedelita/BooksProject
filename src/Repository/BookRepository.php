@@ -21,13 +21,15 @@ class BookRepository extends ServiceEntityRepository
     }
 
     public function save($book) {
+        $new_author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $book->getAuthor());
         $this->_em->persist($book);
         $this->_em->flush();
     }
 
     public function add($author, $title, $genre) {
+        $new_author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $author);
         $book = new Book();
-        $book->setAuthor($author);
+        $book->setAuthor($new_author);
         $book->setTitle($title);
         $book->setGenre($genre);
         $this->save($book);
@@ -91,6 +93,7 @@ class BookRepository extends ServiceEntityRepository
         $results = $this->createGetUserBooks($userId)
             ->select('b.author')
             ->distinct('b.author')
+            ->orderBy('b.author')
             ->getQuery()
             ->getResult();
             

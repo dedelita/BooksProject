@@ -72,6 +72,8 @@ mail:
     title: Welcome to BooksProject
     content: Please confirm your email address by clicking the following link
     end: Thank you!
+    confirm: "Confirm your email. If you didn't receive the email:"
+    resend: resend mail
   reset_password:
     subject: Your password reset request
     title: Reset password

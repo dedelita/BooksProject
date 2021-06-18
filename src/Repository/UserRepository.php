@@ -45,14 +45,9 @@ class UserRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('u')
         ->where("u.id = :id")
         ->setParameter("id", $id)
-            //->select('b')
-            //->from(Book::class, 'b')
-            
-            ->leftJoin('u.books', 'b')
-
-            ->getQuery();
-            
-            return $query->getResult();
+        ->leftJoin('u.books', 'b')
+        ->getQuery();
+        return $query->getResult();
     }
 
 

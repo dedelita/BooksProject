@@ -1,12 +1,16 @@
 {% extends "base.html.twig" %}
 {% block body %}
 
-{% if not(app.user.isVerified) %}
-  Confirm your email. If you didn't receive the email: <a href="{{ path('send_conf_email') }}">resend mail</a>
+{% if not app.user.isVerified %}
+<div class="alert alert-warning mt-3 pt-0" role="alert">
+<i class="bi bi-exclamation-triangle-fill"></i>
+<span>{{ 'mail.confirm.confirm' | trans }} <a href="{{ path('send_conf_email') }}">{{ 'mail.confirm.resend' | trans }}</a>.</span>
+</div>
 {% endif %}
 
 <div>
-<div><i class="bi bi-plus-circle"></i> {{ 'book.new' | trans }}</div>
+<a href="{{ path("add_book") }}" class="btn"><i class="bi bi-plus-circle"></i> {{ 'book.new' | trans }}</a>
+<a href="{{ path("authors") }}" class="btn"><i class="bi bi-file-person"></i> {{ 'my.authors' | trans }}</a>
 </div>
   <div class="container books">
     <div class="heading">
@@ -16,24 +20,7 @@
     {% include "books/list_grid.html.twig" with {'books': books|slice(0, 5)} %}
   </div>
 
-{#<div class="row">
-   <div class="col-sm-6">
-<div class="card">
-  <h6 class="card-header">{{"my.genres" | trans }}</h6>
-  <div class="card-body">
-    {% for genre in genres %}
-    {% if genre == "" %}
-      {% set genre = "unknown" | trans %}
-    {% endif %}
-        <span class="card-text row px-4 t5"><a href="{{ path('byGenre', {'genre': genre}) }}">{{genre}}</a></span>
-    {% endfor %}
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="#" class="btn btn-link btn-sm">Go somewhere</a>
-    </div>
-  </div>
-</div>
- </div> 
-  <div class="col-sm-6">
+{#
 <div class="card border-dark">
   <h6 class="card-header border-dark">{{"my.authors" | trans }}</h6>
   <div class="card-body">
@@ -44,9 +31,5 @@
     <a href="#" class="btn btn-link btn-sm">Go somewhere</a>
     </div>
   </div>
-</div>
- </div>
-</div>
-
 </div>#}
 {% endblock %}

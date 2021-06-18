@@ -69,6 +69,8 @@ mail:
     title: Bienvenue chez BooksProject
     content: Veuillez confirmer votre email en cliquant sur ce lien
     end: Merci !
+    confirm: "Veuillez confirmer votre email. Si vous n'avez pas reçu de mail, veuillez cliquer sur "
+    resend: renvoyer un mail
   reset_password:
     subject: Votre demande de modification de mot de passe
     title: Modifier votre mot de passe
