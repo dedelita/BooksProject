@@ -8,11 +8,11 @@
             {{ form_start(form, { 'action': path('remove_book', {'idBook': id }) }) }}
             <div class="col pl-5">
             {% if comment %}
-                {{ form_widget(form.deleteCom) }}
-                {{ form_label(form.deleteCom, {attr: {class: 'form-check-label'} }) }}
+                {{ form_widget(form.deleteCom, {id: form.deleteCom.vars.id ~ id}) }}
+                {{ form_label(form.deleteCom, {id: form.deleteCom.vars.id ~ id, attr: {class: 'form-check-label'} }) }}
             {% else %}
             <div class="not-displayed">
-                {{ form_row(form.deleteCom, {label_attr: {class: 'form-check-label'} , disabled:'disabled'}) }}
+                {{ form_row(form.deleteCom, {id: form.deleteCom.vars.id ~ id, label_attr: {class: 'form-check-label'} , disabled:'disabled'}) }}
             </div>
             {% endif %}
             </div>

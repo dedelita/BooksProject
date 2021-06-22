@@ -21,6 +21,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
+use Symfony\Component\CssSelector\XPath\TranslatorInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -30,13 +32,17 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 class UserController extends AbstractController
 {
     private $userRepository;
+    private $session;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, SessionInterface $session)
     {
         $this->userRepository = $userRepository;
+        $this->session = $session;
     }
 
     /**
@@ -302,4 +308,14 @@ class UserController extends AbstractController
         return $this->redirectToRoute("app_login");
     }
 
+    /**
+     * @Route("/switchLocale/{locale}", name="switchLocale")
+     */
+    public function switchLocalte(Request $request) {
+        $locale = $request->get("locale");
+       // $translator->setLocale($locale);
+       $this->session->set("_locale", $locale);
+        return $this->redirectToRoute("home");
+    }
+//$form = $this->createForm(new CommentType(), $comment, array('action' => $this->generateUrl('acme_taskmanager_comment_create', array('task' => $task->getId()))));
 }

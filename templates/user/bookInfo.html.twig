@@ -34,7 +34,7 @@
     {% endif %}
     </div>
     
-    <div class="container mt-3">
+    <div class="container mt-3 d-flex justify-content-end">
     {% for com in coms %}
         <div class="comment {% if loop.index is even %}even{% else %}odd{% endif %} {% if not(loop.first) %}border-top-0{% endif %}">
             <div class="writer text-bold">

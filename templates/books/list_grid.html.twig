@@ -2,7 +2,7 @@
 <div class="container">
 	<div class="row">
         {% for book in books %}
-   			{{ render(controller('App\\Controller\\UserController::removeBook', {"idBook": book.id, "type": "grid" })) }}
+   			{{ render(path('remove_book', {idBook: book.id, type: "grid" })) }}
             <div class="col book">
                 <a class="{{ book.image? 'cover' : 'no-cover center' }}" href="{{ path('book_info', {'id': book.id }) }}">
 				<div class="text-center text-dark">
