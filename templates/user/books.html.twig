@@ -8,16 +8,18 @@
 	<div class="col align-self-center">
 		<ul class="list-inline nav nav-tabs nav-books justify-content-end" role="tablist">
 			<li class="list-inline-item line" role="presentation">
-				<a class="nav-link btn {{ not selected ? 'active' : ''}}" id="line-tab" data-toggle="tab" 
-				data-target="#line" role="tab" aria-controls="line" aria-selected="false">
+				<button class="nav-link btn {{ not selected ? 'active' : ''}}" id="line-tab" data-toggle="tab" 
+				data-target="#line" role="tab" aria-controls="line" aria-selected="false"
+				 onClick="setBooksList('line')">
 					<i class="bi bi-list-ul"> {{ 'list.line' | trans }}</i>
-				</a>
+				</button>
 			</li>
 			<li class="list-inline-item grid" role="presentation">
-				<a class="nav-link btn {{ selected ? 'active' : ''}}" id="grid-tab" data-toggle="tab"
-				 data-target="#grid" role="tab" aria-controls="grid" aria-selected="true">
+				<button class="nav-link btn {{ selected ? 'active' : ''}} list" id="grid-tab" data-toggle="tab"
+				 data-target="#grid" role="tab" aria-controls="grid" aria-selected="true"
+				 onClick="setBooksList('grid')">
 					<i class="bi bi-grid-3x3-gap-fill"> {{ 'list.grid' | trans }}</i>
-				</a>
+				</button>
 			</li>
 		</ul>
 	</div>
@@ -27,7 +29,17 @@
 		{% include "books/list_line.html.twig" %}
 	</div>
 	<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="grid" role="tabpanel" aria-labelledby="grid-tab">
-		{% include "books/list_grid.html.twig" %}
+		{% include "books/list_grid.html.twig" with {'page': "books"} %}
 	</div>
 </div>
+{% endblock %}
+
+{% block js %}
+	function setBooksList(list) {
+		$.ajax({
+			url: "{{ path("setBooksList") }}",
+			data: {"list": list},
+			success: function(res) {}
+		})
+	}
 {% endblock %}

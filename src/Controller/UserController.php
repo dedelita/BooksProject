@@ -199,9 +199,22 @@ class UserController extends AbstractController
                 $book->addComment($com);
             }
         }
-        return $this->render('user/books.html.twig', ['books' => $books, 'selected' => true]);
+        $selected = true;
+        if($this->session->get("booksList") == "line") {
+            $selected = false;
+        }
+        return $this->render('user/books.html.twig', ['books' => $books, 'selected' => $selected]);
     }
 
+    /**
+     * @Route("/setBooksList", name="setBooksList")
+     */
+    public function setBooksList(Request $request) {
+        $booksList = $request->get("list");
+        $this->session->set("booksList", $booksList);
+
+        return new Response($booksList);
+    }
     /**
      * @Route("/removeBook/{idBook}", name="remove_book")
      * @IsGranted("ROLE_USER")
