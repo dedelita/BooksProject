@@ -3,8 +3,11 @@
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -12,14 +15,25 @@ class LocaleRewriteSubscriber implements EventSubscriberInterface
 {
     private $defaultLocale;
     private $supportedLocales;
+    private $request;
 
     /**
      * $defaultLocale and $supportedLocales injected from services.yaml
      */
-    public function __construct(string $defaultLocale, string $supportedLocales)
+    public function __construct(string $defaultLocale, string $supportedLocales, RequestStack $requestStack)
     {
         $this->defaultLocale = $defaultLocale;
         $this->supportedLocales = explode("|", $supportedLocales);
+        $this->request = $requestStack->getCurrentRequest();
+    }
+
+    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    {
+        $user = $event->getAuthenticationToken()->getUser();
+
+        if (null !== $user->getPreferedLanguage()) {
+            $this->request->getSession()->set('_locale', $user->getPreferedLanguage());
+        }
     }
 
     public function onKernelRequest(RequestEvent $event)
@@ -53,6 +67,7 @@ class LocaleRewriteSubscriber implements EventSubscriberInterface
         return array(
             // must be registered before the default Locale listener
             KernelEvents::REQUEST => [['onKernelRequest', 101]],
+            SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin',
         );
     }
 }

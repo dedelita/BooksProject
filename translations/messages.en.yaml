@@ -55,12 +55,17 @@ my:
   books: My books
   genres: My genres
   authors: My authors
+  5last_books: My 5 last books
 
 edit:
   profile: Edit profile
   comment: Edit my comment of
 
 by: by
+
+list:
+  line: line
+  grid: grid
 
 link:
   expire: This link will expire in

@@ -52,12 +52,17 @@ my:
   books: Mes livres
   genres: Mes genres
   authors: Mes auteurs
+  5last_books: Mes 5 derniers livres
 
 edit:
   profile: Modifier mon profil
   comment: Modifier mon comment sur
 
 by: de
+
+list:
+  line: ligne
+  grid: grille
 
 link:
   expire: Ce lien expire dans

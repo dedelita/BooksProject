@@ -58,34 +58,24 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('id', $userId);
     }
 
-    public function getUserBooks($userId, $orderBy) {
+    public function getUserBooks($userId, $orderBy = null) {
         $q = $this->createGetUserBooks($userId);
         switch($orderBy) {
-            case "genre": 
-                $q->orderBy("b.genre");
+            case "title": 
+                $q->orderBy("b.title");
                 break;
+                case "title_desc":
+                    $q->orderBy("b.title DESC");
+                    break;
             case "author": 
                 $q->orderBy("b.author");
+                break;
+            case "author_desc": 
+                $q->orderBy("b.author DESC");
                 break;
         }
         return $q->getQuery()
                 ->getResult();
-    }
-
-    public function getMyGenres($userId)
-    {
-        $results = $this->createGetUserBooks($userId)
-            ->select('b.genre')
-            ->distinct('b.genre')
-            ->getQuery()
-            ->getResult();
-            
-        $genres = [];
-        foreach ($results as $res) {
-        foreach ($res as $r) 
-            $genres[] = $r;
-        }
-        return $genres;
     }
 
     public function getMyAuthors($userId)
@@ -103,14 +93,6 @@ class BookRepository extends ServiceEntityRepository
             $authors[] = $r;
         }
         return $authors;
-    }
-
-    public function getUserBooksOfGenre($userId, $genre)
-    {
-        return $this->createGetUserBooks($userId)->andWhere("b.genre =  :genre")
-                ->setParameter("genre", $genre)
-                ->getQuery()
-                ->getResult();
     }
 
     public function getUserBooksOfAuthor($userId, $author)

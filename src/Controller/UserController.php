@@ -52,25 +52,12 @@ class UserController extends AbstractController
     public function home(Request $request, BookRepository $bookRepository)
     {
         $user = $this->getUser();
-        $books = $bookRepository->getUserBooks($user->getId(), 'author');
-        $genres = $bookRepository->getMyGenres($user->getId());
+        $books = array_reverse($bookRepository->getUserBooks($user->getId()));
         $authors = $bookRepository->getMyAuthors($user->getId());
         
-        return $this->render('user/home.html.twig', ["books" => $books, "genres" => $genres, "authors" => $authors]);
+        return $this->render('user/home.html.twig', ["books" => $books, "authors" => $authors]);
     }
 
-    /**
-     * @Route("/books_genre/{genre}", name="byGenre")
-     * @IsGranted("ROLE_USER")
-     */
-    public function showBooksOfGenre(Request $request, BookRepository $bookRepository)
-    {
-        $user = $this->getUser();
-        $genre = $request->get("genre");
-        $books = $bookRepository->getUserBooksOfGenre($user->getId(), $genre);
-
-        return $this->render("user/booksOfGenre.html.twig", ["genre" => $genre, "books" => $books]);
-    }
     /**
      * @Route("/authors",name="authors")
      * @IsGranted("ROLE_USER")
@@ -311,11 +298,14 @@ class UserController extends AbstractController
     /**
      * @Route("/switchLocale/{locale}", name="switchLocale")
      */
-    public function switchLocalte(Request $request) {
+    public function switchLocalte(Request $request) 
+    {
         $locale = $request->get("locale");
-       // $translator->setLocale($locale);
-       $this->session->set("_locale", $locale);
+        $this->session->set("_locale", $locale);
+        if($this->getUser()) {
+            $this->getUser()->setPreferedLanguage($locale);
+            $this->userRepository->save($this->getUser());
+        }
         return $this->redirectToRoute("home");
     }
-//$form = $this->createForm(new CommentType(), $comment, array('action' => $this->generateUrl('acme_taskmanager_comment_create', array('task' => $task->getId()))));
 }

@@ -59,6 +59,11 @@ class User implements UserInterface
      */
     private $isVerified = false;
 
+    /**
+     * @ORM\Column(type="string", length=2, options={"default" : "fr"})
+     */
+    private $preferedLanguage;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
@@ -183,6 +188,18 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPreferedLanguage(): ?string
+    {
+        return $this->preferedLanguage;
+    }
+
+    public function setPreferedLanguage(string $preferedLanguage): self
+    {
+        $this->preferedLanguage = $preferedLanguage;
 
         return $this;
     }
