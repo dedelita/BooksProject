@@ -24,15 +24,8 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\CssSelector\XPath\TranslatorInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 class UserController extends AbstractController
 {
@@ -185,25 +178,21 @@ class UserController extends AbstractController
      * @Route("/myBooks", name="get_books")
      * @IsGranted("ROLE_USER")
      */
-    public function getBooks(BookRepository $bookRepository, CommentRepository $commentRepository)
+    public function getBooks(BookRepository $bookRepository, CommentRepository $commentRepository, PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
-        $books = $bookRepository->getUserBooks($user->getId(), 'author');
+        $query = $bookRepository->getUserBooksQuery($user->getId());
 
-        foreach ($books as $book) {
-            $com = $commentRepository->findOneBy([
-                'book' => $book->getId(),
-                'writer' => $user->getId(),
-            ]);
-            if ($com) {
-                $book->addComment($com);
-            }
-        }
+        $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 30);
+        
         $selected = true;
         if($this->session->get("booksList") == "line") {
             $selected = false;
         }
-        return $this->render('user/books.html.twig', ['books' => $books, 'selected' => $selected]);
+        return $this->render('user/books.html.twig', [
+            'pagination' => $pagination,
+            'selected' => $selected
+        ]);
     }
 
     /**
@@ -212,9 +201,9 @@ class UserController extends AbstractController
     public function setBooksList(Request $request) {
         $booksList = $request->get("list");
         $this->session->set("booksList", $booksList);
-
         return new Response($booksList);
     }
+
     /**
      * @Route("/removeBook/{idBook}", name="remove_book")
      * @IsGranted("ROLE_USER")

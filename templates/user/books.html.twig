@@ -5,6 +5,27 @@
 	<h1 class="mt-3 col">
 		<i class="bi bi-book"></i> {{ 'my.books' | trans }}
 	</h1>
+	{% if app.request.get('sort') %}
+		{% set sort = app.request.get('sort') %}
+	{% else %}
+		{% set sort = "items" %}
+	{% endif %}
+	{% set direction = app.request.get('direction') %}
+	<div class="col align-self-center">
+        <button class="btn btn-pagination" {% if sort == 'items' or sort == 'items_desc' %}class="sorted"{% endif %}>
+            {% if sort == 'items' and direction == "desc" %}
+				<a href="{{ path('get_books') }}">{{ 'book.order' | trans }} <i class="fa fa-sort-asc"></i></a>
+			{% else %}
+				<a href="{{ sort!='items' ? path('get_books') : path('get_books', {'direction':'desc'}) }}">{{ 'book.order' | trans }} <i class="fa {{sort=='items' ? 'fa-sort-desc' : 'fa-sort'}}"></i></a>
+			{% endif %}
+        </button>
+        <button class="btn btn-pagination" {% if pagination.isSorted('b.title') %}class="sorted"{% endif %}>
+            {{ knp_pagination_sortable(pagination, 'book.title' | trans, 'b.title') }}
+        </button>
+        <button class="btn btn-pagination" {% if pagination.isSorted('b.author') %}class="sorted"{% endif %}>
+            {{ knp_pagination_sortable(pagination, 'book.author' | trans, 'b.author') }}
+        </button>
+	</div>
 	<div class="col align-self-center">
 		<ul class="list-inline nav nav-tabs nav-books justify-content-end" role="tablist">
 			<li class="list-inline-item line" role="presentation">
@@ -25,11 +46,17 @@
 	</div>
 </div>
 <div class="tab-content">
+	{% if sort == "items" and direction == "desc" %}
+		{% set pagination = pagination|reverse %}
+	{% endif %}
 	<div class="tab-pane fade {{ not selected ? 'show active' : ''}}" id="line" role="tabpanel" aria-labelledby="line-tab">
 		{% include "books/list_line.html.twig" %}
 	</div>
 	<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="grid" role="tabpanel" aria-labelledby="grid-tab">
 		{% include "books/list_grid.html.twig" with {'page': "books"} %}
+	</div>
+	<div class="navigation">
+		{{ knp_pagination_render(pagination) }}
 	</div>
 </div>
 {% endblock %}

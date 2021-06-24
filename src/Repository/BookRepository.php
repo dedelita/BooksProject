@@ -21,15 +21,13 @@ class BookRepository extends ServiceEntityRepository
     }
 
     public function save($book) {
-        $new_author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $book->getAuthor());
         $this->_em->persist($book);
         $this->_em->flush();
     }
 
     public function add($author, $title, $genre) {
-        $new_author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $author);
         $book = new Book();
-        $book->setAuthor($new_author);
+        $book->setAuthor($author);
         $book->setTitle($title);
         $book->setGenre($genre);
         $this->save($book);
@@ -58,15 +56,9 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('id', $userId);
     }
 
-    public function getUserBooks($userId, $orderBy = null) {
+    public function getUserBooksQuery($userId, $orderBy = null) {
         $q = $this->createGetUserBooks($userId);
         switch($orderBy) {
-            case "title": 
-                $q->orderBy("b.title");
-                break;
-                case "title_desc":
-                    $q->orderBy("b.title DESC");
-                    break;
             case "author": 
                 $q->orderBy("b.author");
                 break;
@@ -74,8 +66,12 @@ class BookRepository extends ServiceEntityRepository
                 $q->orderBy("b.author DESC");
                 break;
         }
-        return $q->getQuery()
-                ->getResult();
+        return $q->getQuery();
+    }
+
+    public function getUserBooks($userId, $orderBy = null) {
+        return $this->getUserBooksQuery($userId, $orderBy)
+            ->getResult();
     }
 
     public function getMyAuthors($userId)

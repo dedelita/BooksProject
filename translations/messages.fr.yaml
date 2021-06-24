@@ -44,6 +44,7 @@ book:
   remove: Supprimer
   com.delete: Supprimer le commentaire associé
   none: Pas de résultat pour le livre recherché
+  order: Ajout
 
 comment:
   add: Ajouter un commentaire

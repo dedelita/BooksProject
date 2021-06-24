@@ -5,6 +5,7 @@ $secondary: purple;
 @import "~flag-icon-css/sass/flag-icon";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+KR&family=Inter&display=swap');
+@import '~font-awesome/scss/font-awesome.scss';
 
 $book:#ffbb33;
 
@@ -212,6 +213,7 @@ width: 250px;
     vertical-align: super;
 }
 
+/* Comment */
 .comment {
     width: 550px;
     border: #ff9500 1px solid;
@@ -242,4 +244,12 @@ width: 250px;
 
 .cover {
     height: 79px;
+}
+
+/* Pagination */
+.btn-pagination {
+    padding: 1px 6px;
+}
+a.sortable {
+    padding-right: 2px;
 }

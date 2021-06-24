@@ -47,6 +47,7 @@ book:
   remove: Remove
   com.delete: Delete the associated comment
   none: Book not found
+  order: Added
 
   comment:
     add: Add a comment
