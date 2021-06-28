@@ -1,7 +1,7 @@
 
 <div class="container">
 	<div class="row {{ page == "home" ? 'justify-content-md-center' : ''}}">
-        {% for book in pagination %}
+        {% for book in books %}
    			{{ render(path('remove_book', {idBook: book.id, type: "grid" })) }}
             <div class="col book">
                 <a class="{{ book.image? 'cover' : 'no-cover center' }}" href="{{ path('book_info', {'id': book.id }) }}">
@@ -14,8 +14,8 @@
 					</div>
 				</a>
 				<div class="row center">
-						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
 						<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+						<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
 						<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal{{book.id}}grid"><i class="bi bi-trash-fill"></i></a>
 				</div>
             </div>

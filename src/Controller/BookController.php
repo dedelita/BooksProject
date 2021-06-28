@@ -119,10 +119,10 @@ class BookController extends AbstractController
         }
         $books = [];
         foreach ($rgb as $item) {
-            if($this->checkBook($item, $author, $title))
+            if($this->checkBook($item, $author, $title) && $item['volumeInfo']['language'] == $lang)
                 $books[] = $this->getGBooksInfo($item);
         }
-        
+
         if(!$books) {
             foreach ($rgb as $item) {
                 if($this->checkBook($item, $author, $title)) {

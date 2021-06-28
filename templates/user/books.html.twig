@@ -25,6 +25,9 @@
         <button class="btn btn-pagination" {% if pagination.isSorted('b.author') %}class="sorted"{% endif %}>
             {{ knp_pagination_sortable(pagination, 'book.author' | trans, 'b.author') }}
         </button>
+        <button class="btn btn-pagination" {% if pagination.isSorted(['b.language', 'b.id']) %}class="sorted"{% endif %}>
+            {{ knp_pagination_sortable(pagination, 'book.lang' | trans, ['b.language', 'b.id']) }}
+        </button>
 	</div>
 	<div class="col align-self-center">
 		<ul class="list-inline nav nav-tabs nav-books justify-content-end" role="tablist">
@@ -49,6 +52,7 @@
 	{% if sort == "items" and direction == "desc" %}
 		{% set pagination = pagination|reverse %}
 	{% endif %}
+	{% set books = pagination %}
 	<div class="tab-pane fade {{ not selected ? 'show active' : ''}}" id="line" role="tabpanel" aria-labelledby="line-tab">
 		{% include "books/list_line.html.twig" %}
 	</div>

@@ -5,7 +5,7 @@
 {% for author in authors %}
     <h3>{{ author.name }}</h3>
     
-    {% include "books/list_grid.html.twig" with {'pagination': author.books, 'page': "authors"} %}
+    {% include "books/list_grid.html.twig" with {'books': author.books, 'page': "authors"} %}
 {% endfor %}
 </div>
 {% endblock %}

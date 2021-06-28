@@ -105,11 +105,9 @@ class UserController extends AbstractController
         $formBook->handleRequest($request);
 
         if ($formBook->isSubmitted() && $formBook->isValid()) {
-            $author = preg_replace('/[^a-zA-Z0-9%\[\]\ \(\)%&-]/s', '', $book->getAuthor());
-            $book->setAuthor($author);
-            $b = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $author]);
+            $b = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             if(!$b)
-                $gbooks = $bookController->getGBooks($book->getTitle(), $author, $book->getLanguage());
+                $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
             else {
                 $user->addBook($b);
                 $this->userRepository->save($user);

@@ -46,7 +46,7 @@
 			</div>
 		</div>
 	</div>
-	<div>
+	<div class="pb-1">
 	{% if not gbooks and formBook.vars.submitted %}
 		<div class="alert alert-danger">{{ 'book.none' | trans }}</div>
 	{% endif %}
@@ -64,17 +64,18 @@
 							<p class="card-text">
     							{% set text = book.description | u.truncate(200, "...", false) %}
 								{% if book.description | length > 225 %}
-									<div id="part">
-										{{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full')">{{ "read.more" | trans }}</button>  
+									<div id="part{{ loop.index }}">
+										{{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full', {{ loop.index }})">{{ "read.more" | trans }}</button>  
 									</div>
-									<div id="full" style="display:none">
-										{{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part')">{{ "read.less" | trans }}</button>  
+									<div id="full{{ loop.index }}" style="display:none">
+										{{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part', {{ loop.index }})">{{ "read.less" | trans }}</button>  
 									</div>
 								{% else %}
 									{{ book.description }}
 								{% endif %}
-							<p class="card-text">
-								<button id="{{ book.isbn }}" class="book btn btn-small" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
+							</p>
+							<p class="card-text text-right">
+								<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-dark" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
 								<small class="text-muted"></small>
 							</p>
 						</div>
@@ -82,8 +83,8 @@
 				</div>
 			</div>
 			{% endfor %}
-		</div>
 	</div>
+</div>
 {% endblock %}
 
 {% block js %}
@@ -95,13 +96,13 @@
 	    console.log(my_isbn)
 	  }
 	  
-    function switchText(size) {
+    function switchText(size, id) {
         if(size == "full") {
-            $('#full').css("display", "block")
-            $('#part').css("display", "none")
+            $('#full' + id).css("display", "block")
+            $('#part' + id).css("display", "none")
         } else {
-            $('#full').css("display", "none");
-            $('#part').css("display", "block");
+            $('#full' + id).css("display", "none");
+            $('#part' + id).css("display", "block");
         }
     }
 {% endblock %}
