@@ -63,7 +63,7 @@ class BookRepository extends ServiceEntityRepository
                 $q->orderBy("b.author");
                 break;
             case "author_desc": 
-                $q->orderBy("b.author DESC");
+                $q->orderBy("b.author", "DESC");
                 break;
         }
         return $q->getQuery();
@@ -74,11 +74,32 @@ class BookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getMyAuthors($userId)
+    public function getUserBooksByAuthors($userId) {
+        return $this->createGetUserBooks($userId)
+                ->orderBy('b.author')
+                ->getQuery()
+                ->getResult();
+    }
+
+    public function countUserAuthors($userId) {
+        return $this->createGetUserBooks($userId)
+        ->select('count(distinct b.author)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+    }
+    public function getUserAuthorsQuery($userId) {
+        return $this->createGetUserBooks($userId)
+        ->select('b.author')
+        ->distinct()
+        ->groupBy('b.author')
+        ->getQuery();
+    }
+    /* public function getUserAuthors($userId)
     {
         $results = $this->createGetUserBooks($userId)
             ->select('b.author')
-            ->distinct('b.author')
+            ->distinct()
             ->orderBy('b.author')
             ->getQuery()
             ->getResult();
@@ -89,7 +110,7 @@ class BookRepository extends ServiceEntityRepository
             $authors[] = $r;
         }
         return $authors;
-    }
+    } */
 
     public function getUserBooksOfAuthor($userId, $author)
     {

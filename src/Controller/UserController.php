@@ -46,28 +46,25 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $books = array_reverse($bookRepository->getUserBooks($user->getId()));
-        $authors = $bookRepository->getMyAuthors($user->getId());
         
-        return $this->render('user/home.html.twig', ["books" => $books, "authors" => $authors]);
+        return $this->render('user/home.html.twig', ["books" => $books]);
     }
 
     /**
      * @Route("/authors",name="authors")
      * @IsGranted("ROLE_USER")
      */
-    public function getAuthors(Request $request, BookRepository $bookRepository) {
+    public function getAuthors(Request $request, BookRepository $bookRepository, PaginatorInterface $paginator) {
         $user = $this->getUser();
-        $authors = $bookRepository->getMyAuthors($user->getId());
-
-        $list_authors = [];
-        foreach ($authors as $a) {
-            $author = [];
-            $author["name"] = $a;
-            $author["books"] = $bookRepository->getUserBooksOfAuthor($user->getId(), $a);
-            $list_authors[] = $author;
-        }
+        
+        $query = $bookRepository->getUserAuthorsQuery(
+            $user->getId())->setHint(
+                'knp_paginator.count', 
+                $bookRepository->countUserAuthors($user->getId())
+            );
+        $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 3);
         return $this->render("user/authors.html.twig", [
-            "authors" => $list_authors
+            "authors" => $pagination
         ]);
     }
     /**
@@ -79,7 +76,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
         $author = $request->get("author");
         $books = $bookRepository->getUserBooksOfAuthor($user->getId(), $author);
-        return $this->render("user/booksOfAuthor.html.twig", ["author" => $author, "books" => $books]);
+        return $this->render("books/list_grid.html.twig", ["books" => $books, "page" => "authors"]);
     }
 
     /**

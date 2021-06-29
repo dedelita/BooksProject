@@ -55,10 +55,14 @@ class BookController extends AbstractController
         foreach ($authors as $author) {
             $author = preg_replace("/([A-Z]{1})\-([A-Z]{1}) (.*)/", "$1.$2. $3", $author);
             $author = preg_replace("/([A-Z]{1})\. ([A-Z]{1}\.)(.*)/", "$1.$2 $3", $author);
-            $authors_list[] = $author;
+            $authors_list[] = ucwords(strtolower($author));
         }
         $book = new Book();
-        $book->setTitle($gbook['volumeInfo']['title']);
+        if($gbook['volumeInfo']['subtitle']) {
+            $book->setTitle($gbook['volumeInfo']['title'] . " - " . $gbook['volumeInfo']['subtitle']);
+        } else {
+            $book->setTitle($gbook['volumeInfo']['title']);
+        }
         $book->setAuthor(implode(", ", $authors_list));
         $book->setDescription($gbook['volumeInfo']['description']);
         $book->setImage($gbook['volumeInfo']['imageLinks']['thumbnail']);
@@ -87,7 +91,8 @@ class BookController extends AbstractController
     private function checkBook($item, $author, $title) {
         return $item['volumeInfo']['imageLinks'] && $item['volumeInfo']['authors'] 
         && (($author && in_array(strtolower($author), array_map("strtolower", $item['volumeInfo']['authors']))) || ($author && preg_grep('/[*]*?' . strtolower($author) . '[*]*?/', array_map("strtolower", $item['volumeInfo']['authors']))) || (!$author))
-       && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title));
+       && (str_contains(strtolower($item['volumeInfo']['title']), strtolower($title)) ||
+       str_contains(strtolower($item['volumeInfo']['subtitle']), strtolower($title)));
     }
 
     /**
@@ -129,6 +134,15 @@ class BookController extends AbstractController
                     $item['volumeInfo']['language'] = $lang;
                     $books[] = $this->getGBooksInfo($item);
                    }
+            }
+        }
+        if(!$books) {
+            $q =  str_replace(' ', '+', $title) . "+inauthor:$author";
+            $results = $this->getResultsGB($service, $q, 40, $startIndex, $lang);
+            $rgb = $results->getItems();
+            foreach ($rgb as $item) {
+                if($this->checkBook($item, $author, $title) && $item['volumeInfo']['language'] == $lang)
+                    $books[] = $this->getGBooksInfo($item);
             }
         }
         return $books;
