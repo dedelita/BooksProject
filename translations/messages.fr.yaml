@@ -45,9 +45,12 @@ book:
   com.delete: Supprimer le commentaire associé
   none: Pas de résultat pour le livre recherché
   order: Ajout
+  show: Voir %book%
+  delete: Supprimer %book% 
 
 comment:
   add: Ajouter un commentaire
+  edit: Modifier le commentaire de %book%
 
 my:
   books: Mes livres

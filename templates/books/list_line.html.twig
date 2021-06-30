@@ -1,4 +1,3 @@
-
 <div class="container">
 	{% for book in books %}
    		{{ render(path('remove_book', {"idBook": book.id, "type": "line" })) }}
@@ -6,17 +5,25 @@
 			<div class="col-sm-2 center cover">
 				<a href="{{ path('book_info', {'id': book.id}) }}">
 					<img src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
-					title="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" 
-					alt="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" width="50"/>
+						title="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" 
+						alt="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" width="50"/>
 				</a>
 			</div>
 			<div class="col-sm-6">{{ book.author }} - {{ book.title }}</div>
 			<div class="col-sm-3">
-				<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}">
+				<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"
+					title="{{ 'book.show' | trans({'%book%': book.title }) }}">
 					<i class="bi bi-pencil-square"></i>
 				</a>
-				<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
-				<a class="icon-link text-danger" data-toggle="modal" data-target="#removeBookModal{{book.id}}line"><i class="bi bi-trash-fill"></i></a>
+				<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"
+					title="{{ 'comment.edit' | trans({'%book%': book.title }) }}">
+					<i class="bi bi-eye-fill"></i>
+				</a>
+				<a class="icon-link text-danger" data-toggle="modal"
+					data-target="#removeBookModal{{book.id}}line"
+					title="{{ 'book.delete' | trans({'%book%': book.title }) }}">
+					<i class="bi bi-trash-fill"></i>
+				</a>
 			</div>
 		</div>
 	{% endfor %}
