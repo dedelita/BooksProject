@@ -62,7 +62,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=2, options={"default" : "fr"})
      */
-    private $preferedLanguage;
+    private $preferredLanguage;
 
     public function __construct()
     {
@@ -192,14 +192,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPreferedLanguage(): ?string
+    public function getPreferredLanguage(): ?string
     {
-        return $this->preferedLanguage;
+        return $this->preferredLanguage;
     }
 
-    public function setPreferedLanguage(string $preferedLanguage): self
+    public function setPreferredLanguage(string $preferredLanguage): self
     {
-        $this->preferedLanguage = $preferedLanguage;
+        $this->preferredLanguage = $preferredLanguage;
 
         return $this;
     }

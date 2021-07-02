@@ -298,11 +298,12 @@ class UserController extends AbstractController
      */
     public function switchLocale(Request $request) 
     {
+        $user = $this->getUser();
         $locale = $request->get("_locale");
         $this->session->set("_locale", $locale);
-        if($this->getUser()) {
-            $this->getUser()->setPreferedLanguage($this->session->get("_locale"));
-            $this->userRepository->save($this->getUser());
+        if($user) {
+            $user->setPreferredLanguage($this->session->get("_locale"));
+            $this->userRepository->save($user);
         }
         return $this->redirectToRoute($this->session->get("lastRoute", "home"));
     }
