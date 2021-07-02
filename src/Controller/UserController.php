@@ -46,7 +46,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $books = array_reverse($bookRepository->getUserBooks($user->getId()));
-        
+        $this->session->set("lastRoute", "home");
         return $this->render('user/home.html.twig', ["books" => $books]);
     }
 
@@ -56,7 +56,7 @@ class UserController extends AbstractController
      */
     public function getAuthors(Request $request, BookRepository $bookRepository, PaginatorInterface $paginator) {
         $user = $this->getUser();
-        
+        $this->session->set("lastRoute", "authors");
         $query = $bookRepository->getUserAuthorsQuery(
             $user->getId())->setHint(
                 'knp_paginator.count', 
@@ -90,6 +90,7 @@ class UserController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+        $this->session->set("lastRoute", "add_book");
         $gbooks = [];
         $formIsbn = $this->createForm(GBookIsbnType::class);
         $formIsbn->handleRequest($request);
@@ -177,8 +178,8 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $query = $bookRepository->getUserBooksQuery($user->getId());
-
-        $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 30);
+        $this->session->set("lastRoute", "get_books");
+        $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 21);
         
         $selected = true;
         if($this->session->get("booksList") == "line") {
@@ -293,16 +294,16 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/switchLocale/{locale}", name="switchLocale")
+     * @Route("/switchLocale", name="switchLocale")
      */
-    public function switchLocalte(Request $request) 
+    public function switchLocale(Request $request) 
     {
-        $locale = $request->get("locale");
+        $locale = $request->get("_locale");
         $this->session->set("_locale", $locale);
         if($this->getUser()) {
-            $this->getUser()->setPreferedLanguage($locale);
+            $this->getUser()->setPreferedLanguage($this->session->get("_locale"));
             $this->userRepository->save($this->getUser());
         }
-        return $this->redirectToRoute("home");
+        return $this->redirectToRoute($this->session->get("lastRoute", "home"));
     }
 }
