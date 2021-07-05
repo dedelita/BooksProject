@@ -38,6 +38,11 @@ class UserController extends AbstractController
         $this->session = $session;
     }
 
+    public function locale(Request $request)
+    {
+        $request->attributes->set("_locale", "fr");
+        return $this->redirectToRoute("index");
+    }
     /**
      * @Route("/home", name="home")
      * @IsGranted("ROLE_USER")

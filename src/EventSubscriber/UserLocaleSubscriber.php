@@ -1,5 +1,4 @@
 <?php
-
 // src/EventSubscriber/UserLocaleSubscriber.php
 namespace App\EventSubscriber;
 
@@ -26,7 +25,7 @@ class UserLocaleSubscriber implements EventSubscriberInterface
         $user = $event->getAuthenticationToken()->getUser();
 
         if (null !== $user->getPreferredLanguage()) {
-            $this->requestStack->getSession()->set('_locale', $user->getPreferredLanguage());
+            $this->requestStack->getCurrentRequest()->getSession()->set('_locale', $user->getPreferredLanguage());
         }
     }
 

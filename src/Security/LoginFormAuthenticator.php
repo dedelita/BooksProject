@@ -23,7 +23,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'index';
 
     private $entityManager;
     private $urlGenerator;
@@ -87,8 +87,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
-        $user = $token->getUser();
-        $request->getSession()->set('_locale', $user->getPreferredLanguage());
+        //$user = $token->getUser();
+        //$request->getSession()->set('_locale', $user->getPreferredLanguage());
     }
 
     protected function getLoginUrl()

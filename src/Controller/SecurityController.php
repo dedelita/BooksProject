@@ -2,16 +2,18 @@
 
 namespace App\Controller;
 
+use Amp\Http\Client\Request;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/", name="app_login")
+     * @Route("/", name="index")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -31,5 +33,6 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      */
     public function logout()
-    {}
+    {
+    }
 }
