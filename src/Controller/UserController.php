@@ -24,23 +24,20 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Symfony\Component\CssSelector\XPath\TranslatorInterface;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 class UserController extends AbstractController
 {
     private $userRepository;
-    private $session;
 
-    public function __construct(UserRepository $userRepository, SessionInterface $session)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->session = $session;
     }
 
     public function locale(Request $request)
     {
-        $request->attributes->set("_locale", "fr");
+        $request->getSession()->set("_locale", "fr");
         return $this->redirectToRoute("index");
     }
     /**
@@ -51,7 +48,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $books = array_reverse($bookRepository->getUserBooks($user->getId()));
-        $this->session->set("lastRoute", "home");
+        $request->getSession()->set("lastRoute", "home");
         return $this->render('user/home.html.twig', ["books" => $books]);
     }
 
@@ -61,7 +58,7 @@ class UserController extends AbstractController
      */
     public function getAuthors(Request $request, BookRepository $bookRepository, PaginatorInterface $paginator) {
         $user = $this->getUser();
-        $this->session->set("lastRoute", "authors");
+        $request->getSession()->set("lastRoute", "authors");
         $query = $bookRepository->getUserAuthorsQuery(
             $user->getId())->setHint(
                 'knp_paginator.count', 
@@ -95,7 +92,7 @@ class UserController extends AbstractController
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
-        $this->session->set("lastRoute", "add_book");
+        $request->getSession()->set("lastRoute", "add_book");
         $gbooks = [];
         $formIsbn = $this->createForm(GBookIsbnType::class);
         $formIsbn->handleRequest($request);
@@ -183,11 +180,11 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $query = $bookRepository->getUserBooksQuery($user->getId());
-        $this->session->set("lastRoute", "get_books");
+        $request->getSession()->set("lastRoute", "get_books");
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 21);
         
         $selected = true;
-        if($this->session->get("booksList") == "line") {
+        if($request->getSession()->get("booksList") == "line") {
             $selected = false;
         }
         return $this->render('user/books.html.twig', [
@@ -201,7 +198,7 @@ class UserController extends AbstractController
      */
     public function setBooksList(Request $request) {
         $booksList = $request->get("list");
-        $this->session->set("booksList", $booksList);
+        $request->getSession()->set("booksList", $booksList);
         return new Response($booksList);
     }
 
@@ -305,11 +302,11 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $locale = $request->get("_locale");
-        $this->session->set("_locale", $locale);
+        $request->getSession()->set("_locale", $locale);
         if($user) {
-            $user->setPreferredLanguage($this->session->get("_locale"));
+            $user->setPreferredLanguage($request->getSession()->get("_locale"));
             $this->userRepository->save($user);
         }
-        return $this->redirectToRoute($this->session->get("lastRoute", "home"));
+        return $this->redirectToRoute($request->getSession()->get("lastRoute", "home"));
     }
 }

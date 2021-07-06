@@ -24,21 +24,11 @@ class LocaleSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         if (!$request->hasPreviousSession()) {
             return;
-        }
-        $oldUrl = $request->getPathInfo();
-        $exploded = explode("/", $oldUrl);
-        $locale = $request->attributes->get('_locale');
-        $session_locale = $request->getSession()->get('_locale', $this->defaultLocale);        
+        }   
         
-        if($locale && ($session_locale || !in_array($locale, $this->supportedLocales)))
-        {  // If no prefix or prefix not found in supported locales
-            if($locale != $session_locale)
-                $event->setResponse(new RedirectResponse("/" . $session_locale . "/" . $exploded[2]));
-        }
-
         // try to see if the locale has been set as a _locale routing parameter
         if ($locale = $request->attributes->get('_locale')) {
-            $request->getSession()->set('_locale', $session_locale);
+            $request->getSession()->set('_locale', $locale);
         } else {
             // if no explicit locale has been set on this request, use one from the session
             $request->setLocale($request->getSession()->get('_locale', $this->defaultLocale));

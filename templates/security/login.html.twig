@@ -1,4 +1,11 @@
 <div class="signin">
+    <div class="container text-right">
+        {% if app.request.locale == "fr" %}
+          {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
+        {% else %}
+          {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
+        {% endif %}
+    </div>
     <form method="post" class="form-signin">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
