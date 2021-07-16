@@ -1,6 +1,7 @@
 <div class="container">
 	<div class="row {{ page == "home" ? 'justify-content-md-center' : ''}}">
-        {% for book in books %}
+        {% for ubook in books %}
+			{% set book = ubook.book %}
    			{{ render(path('remove_book', {idBook: book.id, type: "grid" })) }}
             <div class="col book">
                 <a class="{{ book.image? 'cover' : 'no-cover center' }}"

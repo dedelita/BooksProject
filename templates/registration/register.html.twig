@@ -11,14 +11,16 @@
 
         {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
         {{ form_start(registrationForm) }}
-            <h3 class="mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
-    <div class="container text-right">
-        {% if app.request.locale == "fr" %}
-          {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
-        {% else %}
-          {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
-        {% endif %}
-    </div>
+        <div class="row">
+	        <h3 class="col mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
+            <div class="col mt-1 text-right">
+            {% if app.request.locale == "fr" %}
+                {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
+            {% else %}
+                {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
+            {% endif %}
+            </div>
+        </div>
             {% if formErrors|length > 0 %}
             <div class"alert alert-danger">
                 <ul>

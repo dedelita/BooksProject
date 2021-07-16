@@ -49,7 +49,7 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity=Book::class)
+     * @ORM\OneToMany(targetEntity=UserBook::class, mappedBy="user", orphanRemoval=true)
      * @Groups("listOfBooks")
      */
     private $books;
@@ -63,6 +63,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=2, options={"default" : "fr"})
      */
     private $preferredLanguage;
+
 
     public function __construct()
     {
@@ -136,26 +137,30 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Book[]
+     * @return Collection|UserBook[]
      */
     public function getBooks(): Collection
     {
         return $this->books;
     }
 
-    public function addBook(Book $book): self
+    public function addBook(UserBook $book): self
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
+            $book->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeBook(Book $book): self
+    public function removeBook(UserBook $book): self
     {
         $this->books->removeElement($book);
 
+        if($book->getUser() === $this) {
+            $book->setUser(null);
+        }
         return $this;
     }
 

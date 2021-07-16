@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,78 +46,6 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('author', $author)
             ->getQuery()
             ->getOneOrNullResult();
-    }
-
-    private function createGetUserBooks($userId) {
-        return $this->createQueryBuilder('b')
-            ->innerJoin('App:User', 'u', 'WITH', 'u.id = :id')
-            ->innerJoin('u.books', 'ub', 'WITH', 'b.id = ub.id')
-            ->setParameter('id', $userId);
-    }
-
-    public function getUserBooksQuery($userId, $orderBy = null) {
-        $q = $this->createGetUserBooks($userId);
-        switch($orderBy) {
-            case "author": 
-                $q->orderBy("b.author");
-                break;
-            case "author_desc": 
-                $q->orderBy("b.author", "DESC");
-                break;
-        }
-        return $q->getQuery();
-    }
-
-    public function getUserBooks($userId, $orderBy = null) {
-        return $this->getUserBooksQuery($userId, $orderBy)
-            ->getResult();
-    }
-
-    public function getUserBooksByAuthors($userId) {
-        return $this->createGetUserBooks($userId)
-                ->orderBy('b.author')
-                ->getQuery()
-                ->getResult();
-    }
-
-    public function countUserAuthors($userId) {
-        return $this->createGetUserBooks($userId)
-        ->select('count(distinct b.author)')
-        ->getQuery()
-        ->getSingleScalarResult();
-
-    }
-    public function getUserAuthorsQuery($userId) {
-        return $this->createGetUserBooks($userId)
-        ->select('b.author')
-        ->distinct()
-        ->groupBy('b.author')
-        ->getQuery();
-    }
-    /* public function getUserAuthors($userId)
-    {
-        $results = $this->createGetUserBooks($userId)
-            ->select('b.author')
-            ->distinct()
-            ->orderBy('b.author')
-            ->getQuery()
-            ->getResult();
-            
-        $authors = [];
-        foreach ($results as $res) {
-        foreach ($res as $r) 
-            $authors[] = $r;
-        }
-        return $authors;
-    } */
-
-    public function getUserBooksOfAuthor($userId, $author)
-    {
-        return $this->createGetUserBooks($userId)
-                ->andWhere("b.author like :author")
-                ->setParameter("author", "%".$author."%")
-                ->getQuery()
-                ->getResult();
     }
 
     public function deleteByIdUser($idUser) {

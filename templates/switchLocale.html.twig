@@ -1,3 +1,3 @@
 {% set session_locale = app.session.get("_locale") %}
-<a href="{{ session_locale == "fr" ? "" : path('switchLocale', {_locale: 'fr'}) }}"><i class="flag-icon big-icon flag-icon-fr"></i></a>
-<a href="{{ session_locale == "en" ? "" : path('switchLocale', {_locale: 'en'}) }}"><i class="flag-icon big-icon flag-icon-us"></i></a>
+<a href="{{ session_locale == "fr" ? "#" : path('switchLocale', {_locale: 'fr'}) }}"><i class="flag-icon big-icon flag-icon-fr"></i></a>
+<a href="{{ session_locale == "en" ? "#" : path('switchLocale', {_locale: 'en'}) }}"><i class="flag-icon big-icon flag-icon-us"></i></a>

@@ -16,6 +16,6 @@
       <h2 class="mt-3 mb-0 pb-0"><i class="bi bi-book"></i> {{ 'my.5last_books' | trans }}</h2>
       <h6 class="text-right"><a href="{{ path('get_books') }}">{{ 'see_more' | trans }}</a></h6>
     </div>
-    {% include "books/list_grid.html.twig" with {'books': books|slice(0, 5), 'page': "home"} %}
+    {% include "books/list_grid.html.twig" with {'books': books, 'page': "home"} %}
   </div>
 {% endblock %}

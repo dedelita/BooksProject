@@ -1,17 +1,18 @@
 <div class="signin">
-    <div class="container text-right">
-        {% if app.request.locale == "fr" %}
-          {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
-        {% else %}
-          {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
-        {% endif %}
-    </div>
     <form method="post" class="form-signin">
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">{{ "login" | trans }}</h1>
+        <div class="row">
+            <h3 class="col mb-3 font-weight-normal">{{ "login" | trans }}</h3>
+            <div class="col mt-1 text-right">
+            {% if app.request.locale == "fr" %}
+                {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
+            {% else %}
+                {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
+            {% endif %}
+            </div>
+        </div>
         <input type="text" value="{{ last_username }}" name="username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
         <input type="password" name="password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
 

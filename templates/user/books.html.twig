@@ -13,12 +13,8 @@
 		{% endif %}
 		{% set direction = app.request.get('direction') %}
 		<div class="col">
-			<button class="btn btn-pagination" {% if sort == 'items' or sort == 'items_desc' %}class="sorted"{% endif %}>
-				{% if sort == 'items' and direction == "desc" %}
-					<a href="{{ path('get_books') }}">{{ 'book.order' | trans }} <i class="fa fa-sort-asc"></i></a>
-				{% else %}
-					<a href="{{ sort!='items' ? path('get_books') : path('get_books', {'direction':'desc'}) }}">{{ 'book.order' | trans }} <i class="fa {{sort=='items' ? 'fa-sort-desc' : 'fa-sort'}}"></i></a>
-				{% endif %}
+			<button class="btn btn-pagination" {% if pagination.isSorted('ub.createdDate') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.order' | trans, 'ub.createdDate') }}
 			</button>
 			<button class="btn btn-pagination" {% if pagination.isSorted('b.title') %}class="sorted"{% endif %}>
 				{{ knp_pagination_sortable(pagination, 'book.title' | trans, 'b.title') }}

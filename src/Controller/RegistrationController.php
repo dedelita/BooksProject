@@ -37,6 +37,7 @@ class RegistrationController extends AbstractController
         GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator,
         TranslatorInterface $translator): Response
     {
+        $request->getSession()->set('lastRoute', 'app_register');
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

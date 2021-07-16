@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,8 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    private EntityManager $em;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
@@ -45,18 +41,6 @@ class CommentRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    
-    public function getBooksOfUserOrderByGenre($userId) {
-        return $this->createQueryBuilder('c')
-                ->select('b')
-                ->from('App:Book', 'b')
-                ->andWhere('c.book = b')
-                ->andWhere('c.writer = :id')
-                ->setParameter('id', $userId)
-                ->orderBy('b.genre', 'ASC')
-                ->getQuery()
-                ->getResult();
-    }
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

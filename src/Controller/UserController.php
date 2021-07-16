@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Entity\Comment;
+use App\Entity\UserBook;
 use App\Form\BookType;
 use App\Form\CommentType;
 use App\Form\GBookIsbnType;
@@ -11,6 +12,7 @@ use App\Form\CheckDeleteCommentType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Repository\BookRepository;
+use App\Repository\UserBookRepository;
 use App\Repository\CommentRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,10 +46,10 @@ class UserController extends AbstractController
      * @Route("/home", name="home")
      * @IsGranted("ROLE_USER")
      */
-    public function home(Request $request, BookRepository $bookRepository)
+    public function home(Request $request, UserBookRepository $userbookRepository)
     {
         $user = $this->getUser();
-        $books = array_reverse($bookRepository->getUserBooks($user->getId()));
+        $books = $userbookRepository->getLastUserBooks($user);
         $request->getSession()->set("lastRoute", "home");
         return $this->render('user/home.html.twig', ["books" => $books]);
     }
@@ -56,13 +58,13 @@ class UserController extends AbstractController
      * @Route("/authors",name="authors")
      * @IsGranted("ROLE_USER")
      */
-    public function getAuthors(Request $request, BookRepository $bookRepository, PaginatorInterface $paginator) {
+    public function getAuthors(Request $request, UserBookRepository $userbookRepository, PaginatorInterface $paginator) {
         $user = $this->getUser();
         $request->getSession()->set("lastRoute", "authors");
-        $query = $bookRepository->getUserAuthorsQuery(
-            $user->getId())->setHint(
+        $query = $userbookRepository->getUserAuthorsQuery($user)
+            ->setHint(
                 'knp_paginator.count', 
-                $bookRepository->countUserAuthors($user->getId())
+                $userbookRepository->countUserAuthors($user)
             );
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 3);
         return $this->render("user/authors.html.twig", [
@@ -73,11 +75,11 @@ class UserController extends AbstractController
      * @Route("/books_author/{author}", name="byAuthor")
      * @IsGranted("ROLE_USER")
      */
-    public function showBooksOfAuthors(Request $request, BookRepository $bookRepository)
+    public function showBooksOfAuthors(Request $request, UserBookRepository $userbookRepository)
     {
         $user = $this->getUser();
         $author = $request->get("author");
-        $books = $bookRepository->getUserBooksOfAuthor($user->getId(), $author);
+        $books = $userbookRepository->getUserBooksOfAuthor($user, $author);
         return $this->render("books/list_grid.html.twig", ["books" => $books, "page" => "authors"]);
     }
 
@@ -85,7 +87,8 @@ class UserController extends AbstractController
      * @Route("/addBook", name="add_book")
      * @IsGranted("ROLE_USER")
      */
-    public function addBook(Request $request, BookController $bookController, BookRepository $bookRepository, CommentRepository $commentRepository)
+    public function addBook(Request $request, BookController $bookController, BookRepository $bookRepository,
+                CommentRepository $commentRepository, UserBookRepository $userbookRepository)
     {
         $selected = false;
         $user = $this->getUser();
@@ -109,7 +112,8 @@ class UserController extends AbstractController
             if(!$b)
                 $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
             else {
-                $user->addBook($b);
+                $ub = $userbookRepository->add($user, $b);
+                $user->addBook($ub);
                 $this->userRepository->save($user);
                 return $this->redirectToRoute("add_com_book", ["idBook" => $b->getId()]);
             }
@@ -120,11 +124,12 @@ class UserController extends AbstractController
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
             if(!$res) {
+                $ub = $userbookRepository->add($user, $book);
                 $bookRepository->save($book);
-                $user->addBook($book);
             } else {
-                $user->addBook($res);
+                $ub = $userbookRepository->add($user, $res);
             }
+            $user->addBook($ub);
             $this->userRepository->save($user);
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
@@ -145,30 +150,26 @@ class UserController extends AbstractController
      * @Route("/addComment/{idBook}", name="add_com_book")
      * @IsGranted("ROLE_USER")
      */
-    public function addComment(Request $request, BookRepository $bookRepository, CommentRepository $commentRepository)
+    public function addComment(Request $request, UserBookRepository $userbookRepository, CommentRepository $commentRepository)
     {
         $idBook = $request->get('idBook');
-        $book = $bookRepository->find($idBook);
-        
         $user = $this->getUser();
-        $comment = $commentRepository->findOneBy([
-            'book' => $book->getId(),
-            'writer' => $user->getId(),
-        ]);
+        $userBook = $userbookRepository->findOneBy(["user" => $user, "book" => $idBook]);
+        
+        $comment = $commentRepository->findOneByUserBook($userBook);
         if(!$comment)
             $comment = new Comment();
         $formComment = $this->createForm(CommentType::class, $comment);
         $formComment->handleRequest($request);
         if($formComment->isSubmitted() && $formComment->isValid()) {
-            $comment->setBook($book);
-            $comment->setWriter($user);
+            $comment->setUserBook($userBook);
             $commentRepository->save($comment);
             return $this->redirectToRoute('home');
         }
         
         return $this->render("user/editComment.html.twig", [
             "form" => $formComment->createView(),
-            "book" => $book,
+            "book" => $userBook->getBook(),
             "new" => true
             ]);
     }
@@ -176,13 +177,12 @@ class UserController extends AbstractController
      * @Route("/myBooks", name="get_books")
      * @IsGranted("ROLE_USER")
      */
-    public function getBooks(BookRepository $bookRepository, CommentRepository $commentRepository, PaginatorInterface $paginator, Request $request)
+    public function getBooks(UserBookRepository $userbookRepository, CommentRepository $commentRepository, PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
-        $query = $bookRepository->getUserBooksQuery($user->getId());
+        $query = $userbookRepository->getUserBooksQuery($user);
         $request->getSession()->set("lastRoute", "get_books");
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 21);
-        
         $selected = true;
         if($request->getSession()->get("booksList") == "line") {
             $selected = false;
@@ -206,16 +206,15 @@ class UserController extends AbstractController
      * @Route("/removeBook/{idBook}", name="remove_book")
      * @IsGranted("ROLE_USER")
      */
-    public function removeBook(Request $request, BookRepository $bookRepository, CommentRepository $commentRepository)
+    public function removeBook(Request $request, UserBookRepository $userbookRepository, CommentRepository $commentRepository)
     {
         $idBook = $request->get('idBook');
         $type = $request->get('type');
-        $book = $bookRepository->find($idBook);
         $user = $this->getUser();
+        $userbook = $userbookRepository->findOneBy(["user" => $user, "book" => $idBook]);
 
         $comment = $commentRepository->findOneBy([
-            'book' => $book->getId(),
-            'writer' => $user->getId(),
+            'userBook' => $userbook
         ]);
         
         $form = $this->createForm(CheckDeleteCommentType::class);
@@ -225,14 +224,14 @@ class UserController extends AbstractController
             if($com) {
                 $commentRepository->delete($comment);
             }
-            $user->removeBook($book);
+            $user->removeUserBook($userbook);
             $this->userRepository->save($user);
             return $this->redirectToRoute("home");
         }
         return $this->render("modals/confRemoveBook.html.twig", [
             "form" => $form->createView(),
             "id" => $idBook,
-            "title" => $book->getTitle(),
+            "title" => $userbook->getBook()->getTitle(),
             "comment" => $comment,
             "type" => $type
         ]);
@@ -301,12 +300,14 @@ class UserController extends AbstractController
     public function switchLocale(Request $request) 
     {
         $user = $this->getUser();
-        $locale = $request->get("_locale");
+        $locale = $request->getLocale();
+        
         $request->getSession()->set("_locale", $locale);
+        $request->setLocale($locale);
         if($user) {
-            $user->setPreferredLanguage($request->getSession()->get("_locale"));
+            $user->setPreferredLanguage($locale);
             $this->userRepository->save($user);
         }
-        return $this->redirectToRoute($request->getSession()->get("lastRoute", "home"));
+        return $this->redirectToRoute($request->getSession()->get('lastRoute', 'index'));
     }
 }
