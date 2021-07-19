@@ -12,19 +12,7 @@
 			</div>
 			<div class="col-sm-6">{{ book.author }} - {{ book.title }}</div>
 			<div class="col-sm-3">
-				<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"
-					title="{{ 'book.show' | trans({'%book%': book.title }) }}">
-					<i class="bi bi-pencil-square"></i>
-				</a>
-				<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"
-					title="{{ 'comment.edit' | trans({'%book%': book.title }) }}">
-					<i class="bi bi-eye-fill"></i>
-				</a>
-				<a class="icon-link text-danger" data-toggle="modal"
-					data-target="#removeBookModal{{book.id}}line"
-					title="{{ 'book.delete' | trans({'%book%': book.title }) }}">
-					<i class="bi bi-trash-fill"></i>
-				</a>
+				{% include "book/actions.html.twig" with {'book': book, 'type': 'line'} %}
 			</div>
 		</div>
 	{% endfor %}

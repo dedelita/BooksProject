@@ -155,8 +155,9 @@ class BookController extends AbstractController
     {
         $book = $this->bookRepository->find($request->get('id'));
 
-        $coms = $commentRepository->findByBook($book->getId());
-        return $this->render("user/bookInfo.html.twig", [
+        $coms = $commentRepository->findByBook($book);
+
+        return $this->render("book/info.html.twig", [
             "book" => $book,
             "buttonText" => "read_more",
             "coms" => $coms

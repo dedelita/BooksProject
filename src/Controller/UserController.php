@@ -124,8 +124,8 @@ class UserController extends AbstractController
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
             if(!$res) {
-                $ub = $userbookRepository->add($user, $book);
                 $bookRepository->save($book);
+                $ub = $userbookRepository->add($user, $book);
             } else {
                 $ub = $userbookRepository->add($user, $res);
             }

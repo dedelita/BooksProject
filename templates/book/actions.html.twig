@@ -1,0 +1,13 @@
+<a class="btn btn-link icon-link" href="{{ path('book_info', {'id': book.id}) }}"
+    title="{{ 'book.show' | trans({'%book%': book.title }) }}">
+    <i class="bi bi-eye-fill"></i>
+</a>
+<a class="btn btn-link icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"
+    title="{{ 'comment.edit' | trans({'%book%': book.title }) }}">
+    <i class="bi bi-pencil-square"></i>
+</a>
+<a class="btn btn-link icon-link text-danger" data-toggle="modal"
+    data-target="#removeBookModal{{book.id}}{{type}}"
+    title="{{ 'book.delete' | trans({'%book%': book.title }) }}">
+    <i class="bi bi-trash-fill"></i>
+</a>

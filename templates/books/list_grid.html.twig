@@ -4,7 +4,7 @@
 			{% set book = ubook.book %}
    			{{ render(path('remove_book', {idBook: book.id, type: "grid" })) }}
             <div class="col book">
-                <a class="{{ book.image? 'cover' : 'no-cover center' }}"
+                <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
 				href="{{ path('book_info', {'id': book.id }) }}">
 				<div class="text-center text-dark">
 					<img class="{{ book.image ? 'cover' : '' }}" 
@@ -16,19 +16,7 @@
 					</div>
 				</a>
 				<div class="row center">
-					<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}" 
-						title="{{ 'book.show' | trans({'%book%': book.title }) }}">
-						<i class="bi bi-eye-fill"></i>
-					</a>
-					<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"
-						title="{{ 'comment.edit' | trans({'%book%': book.title }) }}">
-						<i class="bi bi-pencil-square"></i>
-					</a>
-					<a class="icon-link text-danger" data-toggle="modal"
-						data-target="#removeBookModal{{book.id}}grid"
-						title="{{ 'book.delete' | trans({'%book%': book.title }) }}">
-						<i class="bi bi-trash-fill"></i>
-					</a>
+					{% include "book/actions.html.twig" with {'book': book, 'type': 'grid'} %}
 				</div>
             </div>
         {% endfor %}

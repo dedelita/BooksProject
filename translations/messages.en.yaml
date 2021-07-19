@@ -51,9 +51,9 @@ book:
   show: Show %book%
   delete: Remove %book% 
 
-  comment:
-    add: Add a comment
-    edit: Edit comment of %book%
+comment:
+  add: Add a comment
+  edit: Edit comment of %book%
 
 my:
   books: My books

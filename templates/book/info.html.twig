@@ -6,11 +6,11 @@
 		<div class="col col-sm-4 center">
 			{% if not book.image %}
 				<img src="{{ asset('build/images/no_cover.svg') }}" 
-                    alt=" {{ 'book.no_cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    alt=" {{ 'book.no_cover' | trans }} {{ book.title }} {{ 'by' | trans }} {{ book.author }}"
                     width="125"/>
 			{% else %}
 				<img src="{{ book.image }}" 
-                    alt="{{ 'book.cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
+                    alt="{{ 'book.cover' | trans }} {{ book.title }} {{ 'by' | trans }} {{ book.author }}"
                     width="125"/>
 			{% endif %}
 		</div>
@@ -39,7 +39,7 @@
         <div class="comment {% if loop.index is even %}even{% else %}odd{% endif %} {% if not(loop.first) %}border-top-0{% endif %}">
             <div class="writer text-bold">
                 <span>
-                    <i class="bi bi-person-square"></i> {{ com.writer.username | capitalize }}
+                    <i class="bi bi-person-square"></i> {{ com.userbook.user.username | capitalize }}
                 </span>
                 <span class="text-muted float-right">
                     <i class="bi bi-clock"></i> {{ com.date | date("d/m/Y H:i") }}

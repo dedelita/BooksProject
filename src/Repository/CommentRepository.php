@@ -41,6 +41,18 @@ class CommentRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function findByBook($book) {
+        return $this->createQueryBuilder('c')
+            //->andWhere('c.userBook = ub')
+            ->join('c.userBook','ub')
+            ->addSelect('ub')
+            ->where('ub.book = :book')
+            ->setParameter('book', $book)
+            ->orderBy('c.date')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */
