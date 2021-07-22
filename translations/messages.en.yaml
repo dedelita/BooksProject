@@ -22,6 +22,7 @@ read:
   more: Read more
   less: Read less
 see_more: See more
+date: Date
 user:
   email: Email
   username: Username
@@ -35,6 +36,7 @@ password:
   forgot: Forgot password?
 
 book:
+  name: Book
   by: by
   genre: Genre
   author: Author
@@ -54,10 +56,11 @@ book:
 comment:
   add: Add a comment
   edit: Edit comment of %book%
+  stars: Stars
 
 my:
   books: My books
-  genres: My genres
+  comments: My comments
   authors: My authors
   5last_books: My 5 last books
 
@@ -68,8 +71,8 @@ edit:
 by: by
 
 list:
-  line: line
-  grid: grid
+  line: Line
+  grid: Grid
 
 link:
   expire: This link will expire in

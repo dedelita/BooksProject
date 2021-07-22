@@ -33,14 +33,14 @@
 				<button class="nav-link btn {{ not selected ? 'active' : ''}}" id="line-tab" data-toggle="tab" 
 				data-target="#line" role="tab" aria-controls="line" aria-selected="false"
 				 onClick="setBooksList('line')">
-					<i class="bi bi-list-ul"> {{ 'list.line' | trans }}</i>
+					<i class="bi bi-list-ul"></i> {{ 'list.line' | trans }}
 				</button>
 			</li>
 			<li class="list-inline-item grid" role="presentation">
 				<button class="nav-link btn {{ selected ? 'active' : ''}} list" id="grid-tab" data-toggle="tab"
 				 data-target="#grid" role="tab" aria-controls="grid" aria-selected="true"
 				 onClick="setBooksList('grid')">
-					<i class="bi bi-grid-3x3-gap-fill"> {{ 'list.grid' | trans }}</i>
+					<i class="bi bi-grid-3x3-gap-fill"></i> {{ 'list.grid' | trans }}
 				</button>
 			</li>
 		</ul>

@@ -31,11 +31,11 @@
             </div>
             {% endif %}
             {{ form_widget(registrationForm) }}
-            <button type="submit" class="btn btn-lg btn-block btn-dark">{{ 'register.button' | trans }}</button>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">{{ 'register.button' | trans }}</button>
         {{ form_end(registrationForm) }}
 
         <div class="right">
-            <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-dark" href="{{ path('index') }}">{{ "login.button" | trans }}</a>
+            <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-primary" href="{{ path('index') }}">{{ "login.button" | trans }}</a>
         </div>
         <span class="footer-log center">© 2021 - DMP</span>
     </div>

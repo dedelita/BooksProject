@@ -8,13 +8,13 @@
 	<h1 class="mt-3">{{ 'book.new' | trans }}</h1>
 	<ul class="nav nav-tabs" role="tablist">
 		<li class="nav-item" role="presentation">
-			<button class="nav-link {{ not selected ? 'active' : ''}}" id="isbn-tab" data-toggle="tab"
+			<button class="option nav-link {{ not selected ? 'active' : ''}}" id="isbn-tab" data-toggle="tab"
 			 data-target="#isbn" type="button" role="tab" aria-controls="isbn" aria-selected="true">
 				Isbn
 			</button>
 		</li>
 		<li class="nav-item" role="presentation">
-			<button class="nav-link {{ selected ? 'active' : ''}}" id="at-tab" data-toggle="tab"
+			<button class="option nav-link {{ selected ? 'active' : ''}}" id="at-tab" data-toggle="tab"
 			 data-target="#at" type="button" role="tab" aria-controls="at" aria-selected="false">
 				{{ 'book.author' | trans }} & {{ 'book.title' | trans }}
 			</button>
@@ -27,7 +27,7 @@
 					<div style="padding-top:25px" class="panel-body">
 						{{ form_start(formIsbn) }}
 						{{ form_widget(formIsbn) }}
-						<button type="submit" class="btn btn-dark">{{ 'search' | trans }}</button>
+						<button type="submit" class="btn btn-primary">{{ 'search' | trans }}</button>
 						{{ form_end(formIsbn) }}
 					</div>
 				</div>
@@ -39,7 +39,7 @@
 					<div style="padding-top:30px" class="panel-body">
 						{{ form_start(formBook) }}
 						{{ form_widget(formBook) }}
-						<button type="submit" class="btn btn-dark">{{ 'search' | trans }}</button>
+						<button type="submit" class="btn btn-primary">{{ 'search' | trans }}</button>
 						{{ form_end(formBook) }}
 					</div>
 				</div>
@@ -75,7 +75,7 @@
 								{% endif %}
 							</p>
 							<p class="card-text text-right">
-								<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-dark" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
+								<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-primary" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
 								<small class="text-muted"></small>
 							</p>
 						</div>

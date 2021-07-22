@@ -34,14 +34,14 @@
     {% endif %}
     </div>
     
-    <div class="container mt-3 d-flex justify-content-end">
+    <div class="container d-flex align-items-end flex-column mt-3">
     {% for com in coms %}
-        <div class="comment {% if loop.index is even %}even{% else %}odd{% endif %} {% if not(loop.first) %}border-top-0{% endif %}">
-            <div class="writer text-bold">
-                <span>
+        <div class="book comment {% if loop.index is even %}even{% else %}odd{% endif %} {% if not(loop.first) %}border-top-0{% endif %}">
+            <div class="writer text-bold row">
+                <span class="col">
                     <i class="bi bi-person-square"></i> {{ com.userbook.user.username | capitalize }}
                 </span>
-                <span class="text-muted float-right">
+                <span class="col text-muted text-right">
                     <i class="bi bi-clock"></i> {{ com.date | date("d/m/Y H:i") }}
                 </span>
             </div>

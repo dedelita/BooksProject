@@ -19,6 +19,7 @@ cancel: Annuler
 yes: Oui
 skip: Ignorer
 see_more: Voir plus
+date: Date
 user:
   email: Email
   username: Pseudo
@@ -32,6 +33,7 @@ password:
   forgot: Mot de passe oublié ?
 
 book:
+  name: Livre
   by: de
   genre: Genre
   author: Auteur
@@ -51,10 +53,11 @@ book:
 comment:
   add: Ajouter un commentaire
   edit: Modifier le commentaire de %book%
+  stars: Note
 
 my:
   books: Mes livres
-  genres: Mes genres
+  comments: Mes commentaires
   authors: Mes auteurs
   5last_books: Mes 5 derniers livres
 
@@ -65,8 +68,8 @@ edit:
 by: de
 
 list:
-  line: ligne
-  grid: grille
+  line: Ligne
+  grid: Grille
 
 link:
   expire: Ce lien expire dans

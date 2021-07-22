@@ -1,5 +1,5 @@
-
-$secondary: purple;
+$primary:#3b2b2b;
+$secondary: #ffbb33;
 
 @import "~bootstrap/scss/bootstrap";
 @import "~flag-icon-css/sass/flag-icon";
@@ -8,6 +8,10 @@ $secondary: purple;
 @import '~font-awesome/scss/font-awesome.scss';
 
 $book:#ffbb33;
+$background: #ffffcc;
+$disabled_background: #e5e6b8;
+$comment_background: #fff0a8;
+$star: #e6c315;
 
 html {
     position: relative;
@@ -15,7 +19,7 @@ html {
 }
 
 body {
-    background-color: #ffffcc;
+    background-color: $background;
     font-family: 'Noto Sans KR', sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -37,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 /* change the color of active or hovered links */
 .nav-color .nav-item.active .nav-link,
 .nav-color .nav-item:hover .nav-link {
-    color: #ffffff;
+    color: white;
 }
 
 
@@ -56,9 +60,7 @@ ul {
     padding: 0;
 }
 .container-fluid > .row.index {
-    background: #ffe4b5;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #ffffcc, #ffe4b5);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #ffffcc, #ffe4b5);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: $background;  /* fallback for old browsers */
     height: 100vh;
     margin: 0;
     padding: 0;
@@ -139,13 +141,15 @@ width: 250px;
 }
 
 .star {
-    color:#e6c315;
+    color:$star;
     font-size: 1.5em;
 }
 
 .star.mini {
     font-size: 1rem;
 }
+
+/* Books */
 .nav-books {
     border: none;
 }
@@ -153,7 +157,7 @@ width: 250px;
     margin: 0 !important;
 }
 .nav-books .nav-link {
-    background-color: #e5e6b8;
+    background-color: $disabled_background;
     border-radius: initial;
 }
 
@@ -170,11 +174,27 @@ width: 250px;
     margin: 0;
 }
 .nav-books .nav-link.active {
-    background-color: #ffffcc;
+    background-color: $background;
     border: $book 1px solid;
 }
+
+
+/* Add Book */
+.option.nav-link, .option.nav-link:hover {
+    background-color: $disabled_background;
+    border-bottom-color: $book;
+}
+
+.option.nav-link.active {
+    background-color: $background;
+    border-color: $book;
+}
+.nav-tabs {
+    border-color: $book;
+
+}
 .form-book.tab-content {
-    background-color: wheat;
+    background-color: $comment_background;
     margin-bottom: 10px;
     padding-bottom: 15px;
 }
@@ -212,19 +232,22 @@ width: 250px;
     font-size: x-large;
 }
 /* Comment */
-.comment {
+.book.comment {
     width: 550px;
-    border: #ff9500 1px solid;
+    padding: 0 8px;
+    border: $book 1px solid;
 }
+
 .comment.odd {
     background-color: white;
 }
 
 .comment.even {
-    background-color: #feffd9;
+    background-color: $comment_background;
 }
+
 .comment .writer {
-    padding: 0 8px;
+    padding: 0 16px;
     font-size: 15px;
 }
 
@@ -244,10 +267,29 @@ width: 250px;
     height: 79px;
 }
 
+.cover > img {
+    margin: 10px;
+}
+
 /* Pagination */
 .btn-pagination {
     padding: 1px 6px;
 }
 a.sortable, a.asc, a.desc {
     padding-right: 2px;
+}
+
+.navigation {
+    margin-top: 15px;
+    padding-bottom: 5px;
+}
+
+  .filled-in {
+    background-color: #D7B1D7;
+  }
+
+  [type="checkbox"]:not(:checked) + label::after,
+[type="checkbox"]:checked + label::after {
+    color: #CB22ED;
+    background-color: #D7B1D7;
 }

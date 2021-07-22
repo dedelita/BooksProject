@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block title %} {{ 'my.comments' | trans }} {% endblock %}
+{% block body %}
+<div class="row ml-2">
+	<div class="col mt-3 mb-3">
+		<h1 class=" m-0 p-0">
+			<i class="bi bi-card-text"></i> {{ 'my.comments' | trans }}
+		</h1>
+		{% set direction = app.request.get('direction') %}
+		<div class="col">
+			<button class="btn btn-pagination" {% if pagination.isSorted('c.date') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'date' | trans, 'c.date') }}
+			</button>
+			<button class="btn btn-pagination" {% if pagination.isSorted('c.stars') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'comment.stars' | trans, 'c.stars') }}
+			</button>
+			<button class="btn btn-pagination" {% if pagination.isSorted('b.title') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.name' | trans, 'b.title') }}
+			</button>
+		</div>
+	</div>
+	
+</div>
+<div class="container w-75">
+    {% for comment in pagination %}
+    <div class="row comment pt-2 pb-2 {% if loop.index is even %}even{% else %}odd{% endif %}">
+        <div class="col-sm-3">
+        {% set book = comment.userbook.book %}
+            <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
+				href="{{ path('book_info', {'id': book.id }) }}"
+                title="{{ 'book.show' | trans({'%book%': book.title }) }}">
+                <img src="{{ book.image }}" width="90"/>
+            </a>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+            <span class="col-7 star mini">
+                {% for i in 0..4 %}
+                    {% if i < comment.stars %}
+                        <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
+                    {% else %}
+                        <i id="{{ i }}" class="rating-star bi bi-star"></i>
+                    {% endif %}
+                {% endfor %}
+            </span>
+            <span class="col-5 text-right">{{ comment.date | date("d/m/Y H:i") }}</span>
+            </div>
+            <span class="row w-75 p-3">{{ comment.content}}</span>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+</div>
+{% endblock %}

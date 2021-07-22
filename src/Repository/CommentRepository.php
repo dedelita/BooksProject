@@ -43,7 +43,6 @@ class CommentRepository extends ServiceEntityRepository
 
     public function findByBook($book) {
         return $this->createQueryBuilder('c')
-            //->andWhere('c.userBook = ub')
             ->join('c.userBook','ub')
             ->addSelect('ub')
             ->where('ub.book = :book')
@@ -51,6 +50,15 @@ class CommentRepository extends ServiceEntityRepository
             ->orderBy('c.date')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findByUserQuery($user) {
+        return $this->createQueryBuilder('c')
+            ->join('c.userBook','ub')
+            ->addSelect('ub')
+            ->where('ub.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
     }
 
     // /**

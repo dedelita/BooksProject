@@ -67,6 +67,7 @@ class UserController extends AbstractController
                 $userbookRepository->countUserAuthors($user)
             );
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 3);
+        $pagination->setCustomParameters(['align' => 'center']);
         return $this->render("user/authors.html.twig", [
             "authors" => $pagination
         ]);
@@ -177,12 +178,14 @@ class UserController extends AbstractController
      * @Route("/myBooks", name="get_books")
      * @IsGranted("ROLE_USER")
      */
-    public function getBooks(UserBookRepository $userbookRepository, CommentRepository $commentRepository, PaginatorInterface $paginator, Request $request)
+    public function getBooks(UserBookRepository $userbookRepository, CommentRepository $commentRepository,
+            PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
         $query = $userbookRepository->getUserBooksQuery($user);
         $request->getSession()->set("lastRoute", "get_books");
         $pagination = $paginator->paginate($query, $request->query->getInt('page', 1), 21);
+        $pagination->setCustomParameters(['align' => 'center']);
         $selected = true;
         if($request->getSession()->get("booksList") == "line") {
             $selected = false;
@@ -193,6 +196,21 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/myComments", name="get_comments")
+     * @IsGranted("ROLE_USER")
+     */
+    public function getComments(UserBookRepository $userbookRepository, CommentRepository $commentRepository,
+            PaginatorInterface $paginator, Request $request)
+    {
+        $user = $this->getUser();
+        $commentsQuery = $commentRepository->findByUserQuery($user);
+        $pagination = $paginator->paginate($commentsQuery, $request->query->getInt('page', 1), 10);
+        $pagination->setCustomParameters(['align' => 'center']);
+        return $this->render("user/comments.html.twig", [
+            "pagination" => $pagination
+        ]);
+    }
     /**
      * @Route("/setBooksList", name="setBooksList")
      */

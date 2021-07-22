@@ -2,7 +2,7 @@
 {% block title %} {{ 'edit.profile' | trans }} {% endblock %}
 
 {% block body %}
-
+<div class="container mt-3">
 {{ form_start(form) }}
 <div class="form-error">
     <span>{{ form_errors(form) }}</span>
@@ -19,13 +19,14 @@
         {{ form_widget(form.email) }}
         </div>
     </div>
-    {{ form_row(form.changePassword) }}
+    {{ form_widget(form.changePassword, {'attr': {'class': 'filled-in'} }) }}
     <div id="showPassword" style="display:none">
         {{ form_row(form.currentPassword) }}
         {{ form_row(form.plainPassword) }}
     </div>
     <button type="submit" class="btn btn-primary">{{ 'save' | trans }}</button>
 {{ form_end(form) }}
+</div>
 {% endblock %}
 
 {% block js %}
