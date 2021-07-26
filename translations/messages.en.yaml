@@ -30,9 +30,9 @@ user:
 
 password:
   set: Set password ?
-  new: New password
-  current: Current password
-  conf: Confirm password
+  new: New
+  current: Current
+  conf: Confirm
   forgot: Forgot password?
 
 book:

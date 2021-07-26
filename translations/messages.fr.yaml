@@ -27,9 +27,9 @@ user:
 
 password:
   set: Modifier mon mot de passe ?
-  new: Nouveau mot de passe
-  current: Mot de passe actuel
-  conf: Confirmer le mot de passe
+  new: Nouveau
+  current: Actuel
+  conf: Confirmation
   forgot: Mot de passe oublié ?
 
 book:

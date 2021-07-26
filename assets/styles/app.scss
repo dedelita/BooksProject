@@ -284,12 +284,21 @@ a.sortable, a.asc, a.desc {
     padding-bottom: 5px;
 }
 
-  .filled-in {
-    background-color: #D7B1D7;
-  }
+#showPassword {
+    display: none;
+    margin-left: 15px;
+}
 
-  [type="checkbox"]:not(:checked) + label::after,
-[type="checkbox"]:checked + label::after {
-    color: #CB22ED;
-    background-color: #D7B1D7;
+#showPassword .col-sm-8 {
+    padding-left: 0;
+}
+
+.custom-switch {
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    background-color: $secondary;
+    border-color: $gray-500;
 }
