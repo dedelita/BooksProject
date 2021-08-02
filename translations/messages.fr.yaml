@@ -24,6 +24,7 @@ user:
   email: Email
   username: Pseudo
   password: Mot de passe
+  delete: Supprimer mon compte
 
 password:
   set: Modifier mon mot de passe ?

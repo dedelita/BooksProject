@@ -27,6 +27,7 @@ user:
   email: Email
   username: Username
   password: Password
+  delete: Delete account
 
 password:
   set: Set password ?

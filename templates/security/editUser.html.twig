@@ -54,6 +54,14 @@
     <button type="submit" class="btn btn-primary">{{ 'save' | trans }}</button>
 {{ form_end(form) }}
 </div>
+<div class="container mt-3">
+<h3>{{ 'user.delete' | trans }}</h3>
+<a class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal" 
+    title="{{ 'user.delete' | trans }}">
+    <i class="bi bi-trash-fill"></i> {{ 'user.delete' | trans }}
+</a>
+{% include "modals/confDeleteAccount.html.twig" %}
+</div>
 {% endblock %}
 
 {% block js %}

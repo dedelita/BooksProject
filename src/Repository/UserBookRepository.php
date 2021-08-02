@@ -45,8 +45,7 @@ class UserBookRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
            // ->innerJoin('App:Book', 'b', 'WITH', 'ub.book = b')
             ->leftJoin('ub.book', 'b')
-            ->addSelect('b')
-           ;
+            ->addSelect('b');
     }
     public function getUserBooksQuery($user) {
         return $this->createUserBookQuery($user)->getQuery();
@@ -60,7 +59,6 @@ class UserBookRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    
     public function getUserBooksByAuthors($user) {
         return $this->createUserBookQuery($user)
             ->orderBy('b.author')

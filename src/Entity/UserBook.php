@@ -18,7 +18,7 @@ class UserBook
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;

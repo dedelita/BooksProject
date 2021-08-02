@@ -36,7 +36,7 @@ class Comment
     private $date;
 
     /**
-     * @ORM\OneToOne(targetEntity=UserBook::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=UserBook::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $userBook;

@@ -61,6 +61,14 @@ class CommentRepository extends ServiceEntityRepository
             ->getQuery();
     }
 
+    public function deleteByUser($user) {
+        $list = $this->findByUserQuery($user)->getResult();
+        foreach($list as $comment) {
+            $this->_em->remove($comment);
+        }
+        $this->_em->flush();
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

@@ -43,6 +43,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPreferredLanguage($request->getLocale());
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(
@@ -51,7 +52,7 @@ class RegistrationController extends AbstractController
                 )
             );
             $this->userRepository->save($user);
-            $this->sendConfirmEmail();
+            $this->sendConfirmEmail($translator, $user);
             
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -69,9 +70,8 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/send/conf_email", name="send_conf_email")
      */
-    public function sendConfirmEmail(TranslatorInterface $translator)
+    public function sendConfirmEmail(TranslatorInterface $translator, User $user)
     {
-        $user = $this->getUser();
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
         (new TemplatedEmail())

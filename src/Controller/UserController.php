@@ -204,6 +204,7 @@ class UserController extends AbstractController
             PaginatorInterface $paginator, Request $request)
     {
         $user = $this->getUser();
+        $request->getSession()->set("lastRoute", "get_comments");
         $commentsQuery = $commentRepository->findByUserQuery($user);
         $pagination = $paginator->paginate($commentsQuery, $request->query->getInt('page', 1), 10);
         $pagination->setCustomParameters(['align' => 'center']);
@@ -231,9 +232,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
         $userbook = $userbookRepository->findOneBy(["user" => $user, "book" => $idBook]);
 
-        $comment = $commentRepository->findOneBy([
-            'userBook' => $userbook
-        ]);
+        $comment = $commentRepository->findOneBy(['userBook' => $userbook]);
         
         $form = $this->createForm(CheckDeleteCommentType::class);
         $form->handleRequest($request);
@@ -241,8 +240,12 @@ class UserController extends AbstractController
             $com = $form->get("deleteCom")->getData();
             if($com) {
                 $commentRepository->delete($comment);
+            } elseif(!$com && $comment) {
+                $userbook->setUser($this->userRepository->find(1));
+                $userbookRepository->save($userbook);
+            } else {
+                $userbookRepository->delete($userbook);
             }
-            $user->removeUserBook($userbook);
             $this->userRepository->save($user);
             return $this->redirectToRoute("home");
         }
@@ -262,6 +265,7 @@ class UserController extends AbstractController
     public function editUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $user = $this->getUser();
+        $request->getSession()->set("lastRoute", "edit_user");
         $form = $this->createForm(UserType::class, $user);
         
         $form->handleRequest($request);
@@ -302,14 +306,17 @@ class UserController extends AbstractController
      * @Route("/deleteUser", name="delete_user")
      * @IsGranted("ROLE_USER")
      */
-    public function delete(Request $request): JsonResponse
+    public function delete(Request $request, CommentRepository $commentRepository)
     {
         $user = $this->getUser();
         if ($user) {
+            //$this->get('security.token_storage')->setToken(null);
+            $commentRepository->deleteByUser($user);
             $this->userRepository->delete($user);
+            $request->getSession()->invalidate();
         }
 
-        return $this->redirectToRoute("app_login");
+        return $this->redirectToRoute("app_logout");
     }
 
     /**
