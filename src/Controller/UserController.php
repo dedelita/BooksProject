@@ -310,7 +310,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            //$this->get('security.token_storage')->setToken(null);
+            $this->get('security.token_storage')->setToken(null);
             $commentRepository->deleteByUser($user);
             $this->userRepository->delete($user);
             $request->getSession()->invalidate();

@@ -37,6 +37,9 @@ class RegistrationController extends AbstractController
         GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator,
         TranslatorInterface $translator): Response
     {
+        if($this->getUser()) {
+            return $this->redirectToRoute("home");
+        }
         $request->getSession()->set('lastRoute', 'app_register');
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -59,7 +62,7 @@ class RegistrationController extends AbstractController
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml
-            );
+            ) ?: $this->redirectToRoute("home");
         }
 
         return $this->render('registration/register.html.twig', [
@@ -70,8 +73,11 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/send/conf_email", name="send_conf_email")
      */
-    public function sendConfirmEmail(TranslatorInterface $translator, User $user)
+    public function sendConfirmEmail(TranslatorInterface $translator, User $user = null)
     {
+        if(!$user)
+            $user = $this->getUser();
+        
         // generate a signed url and email it to the user
         $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
         (new TemplatedEmail())

@@ -5,11 +5,6 @@
 {% block body %}
 <div class="row index">
     <div class="registration col login align-self-center">
-        {% for flashError in app.flashes('verify_email_error') %}
-            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-        {% endfor %}
-
-        {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
         {{ form_start(registrationForm) }}
         <div class="row">
 	        <h3 class="col mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
@@ -21,15 +16,6 @@
             {% endif %}
             </div>
         </div>
-            {% if formErrors|length > 0 %}
-            <div class"alert alert-danger">
-                <ul>
-                {% for error in formErrors %}
-                    <li class="{{ error.cause.constraint.payload.severity ?? '' }}">{{ error.message }}</li>
-                {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
             {{ form_widget(registrationForm) }}
             <button type="submit" class="btn btn-lg btn-block btn-primary">{{ 'register.button' | trans }}</button>
         {{ form_end(registrationForm) }}
