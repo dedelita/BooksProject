@@ -32,7 +32,7 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 8,
                         'minMessage' => "password.length",
-                        'max' => 4096
+                        'max' => 25
                     ]),]
             ])
         ;

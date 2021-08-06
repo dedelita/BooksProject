@@ -35,7 +35,8 @@ password:
   current: Current
   conf: Confirm
   forgot: Forgot password?
-
+  info: must have at least <ul class="info"><li>between 8 and 25 characters</li><li>1 upper case letter</li><li>1 digit</li></ul>
+  wrong: The password is not valid
 book:
   name: Book
   by: by

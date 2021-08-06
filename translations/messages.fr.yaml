@@ -32,7 +32,8 @@ password:
   current: Actuel
   conf: Confirmation
   forgot: Mot de passe oublié ?
-
+  info: doit contenir au moins <ul class="info"><li>entre 8 et 25 caractères</li><li>1 majuscule</li><li>1 chiffre</li></ol>
+  wrong: Le mot de passe n'est pas valide
 book:
   name: Livre
   by: de

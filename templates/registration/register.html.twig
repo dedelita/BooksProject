@@ -16,7 +16,18 @@
             {% endif %}
             </div>
         </div>
-            {{ form_widget(registrationForm) }}
+            {{ form_row(registrationForm.username) }}
+            {{ form_row(registrationForm.email) }}
+            <div class="form-group">
+            <label>
+                {{'user.password'|trans}}
+                <button type="button" class="btn btn-link icon-popover" data-toggle="popover" data-trigger="hover" 
+            data-html="true" data-content="{{ 'password.info' | trans }}"><i class="bi bi-info-circle small"></i></button>
+            {{ form_errors(registrationForm.plainPassword.first) }}
+            </label>
+            {{ form_widget(registrationForm.plainPassword.first) }}
+            </div>
+            {{ form_row(registrationForm.plainPassword.second) }}
             <button type="submit" class="btn btn-lg btn-block btn-primary">{{ 'register.button' | trans }}</button>
         {{ form_end(registrationForm) }}
 

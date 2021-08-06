@@ -7,6 +7,7 @@ use App\Repository\UserRepository;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Form\FormError;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -46,23 +47,28 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPreferredLanguage($request->getLocale());
-            // encode the plain password
-            $user->setPassword(
-                $passwordEncoder->encodePassword(
+            $password = $form->get('plainPassword')->getData();
+            $pattern = "/^(?=.*[0-9])(?=.*[A-Z]).{8,25}$/";
+            if(preg_match($pattern, $password)) {
+                $user->setPreferredLanguage($request->getLocale());
+                // encode the plain password
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+                $this->userRepository->save($user);
+                $this->sendConfirmEmail($translator, $user);
+                return $guardHandler->authenticateUserAndHandleSuccess(
                     $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            $this->userRepository->save($user);
-            $this->sendConfirmEmail($translator, $user);
-            
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            ) ?: $this->redirectToRoute("home");
+                    $request,
+                    $authenticator,
+                    'main' // firewall name in security.yaml
+                ) ?: $this->redirectToRoute("home");
+            } else {
+                $form->get('plainPassword')->get("first")->addError(new FormError($translator->trans('password.wrong')));
+            }
         }
 
         return $this->render('registration/register.html.twig', [

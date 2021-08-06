@@ -49,6 +49,10 @@ ul {
     list-style-type: none;
 }
 
+ul.info {
+    list-style-type: circle;
+}
+
 .container-fluid.app {
     min-height:90%;
     margin: 0 0 45px;
@@ -125,6 +129,10 @@ width: 250px;
   margin: 0 auto;
   margin-top: 15px;
   padding-bottom: 30px;
+}
+
+.registration .right {
+    padding-left: 5%;
 }
 
 .footer-log {
@@ -227,7 +235,15 @@ width: 250px;
 .icon-link .bi {
     vertical-align: super;
 }
+.bi .icon-small {
+    color: purple;
+    font-size: 15px;
+}
 
+.icon-popover {
+    padding: 0;
+    vertical-align: bottom;
+}
 .big-icon {
     font-size: x-large;
 }
