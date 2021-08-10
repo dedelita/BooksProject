@@ -24,28 +24,38 @@
 <div class="container w-75">
     {% for comment in pagination %}
     <div class="row comment pt-2 pb-2 {% if loop.index is even %}even{% else %}odd{% endif %}">
-        <div class="col-sm-3">
-        {% set book = comment.userbook.book %}
-            <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
-				href="{{ path('book_info', {'id': book.id }) }}"
-                title="{{ 'book.show' | trans({'%book%': book.title }) }}">
-                <img src="{{ book.image }}" width="90"/>
-            </a>
-        </div>
-        <div class="col-sm-9">
+        <div class="col-11">
             <div class="row">
-            <span class="col-7 star mini">
-                {% for i in 0..4 %}
-                    {% if i < comment.stars %}
-                        <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
-                    {% else %}
-                        <i id="{{ i }}" class="rating-star bi bi-star"></i>
-                    {% endif %}
-                {% endfor %}
-            </span>
-            <span class="col-5 text-right">{{ comment.date | date("d/m/Y H:i") }}</span>
+                <div class="col-sm-3">
+                    {% set book = comment.userbook.book %}
+                    <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
+                        href="{{ path('book_info', {'id': book.id }) }}"
+                        title="{{ 'book.show' | trans({'%book%': book.title }) }}">
+                        <img src="{{ book.image }}" width="90"/>
+                    </a>
+                </div>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <span class="col-sm-5 star mini">
+                            {% for i in 0..4 %}
+                                {% if i < comment.stars %}
+                                    <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
+                                {% else %}
+                                    <i id="{{ i }}" class="rating-star bi bi-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                        <span class="col-sm-7 text-right">
+                            <i class="bi bi-clock"></i> {{ comment.date | date("d/m/Y H:i") }}
+                        </span>
+                    </div>
+                    <span class="row w-75 p-3">{{ comment.content }}</span>
+                </div>
             </div>
-            <span class="row w-75 p-3">{{ comment.content}}</span>
+        </div>
+        <div class="col-1 align-self-center">
+            <a href="{{ path('edit_comment', {'id_book': book.id}) }}"
+    title="{{ 'comment.edit' | trans({'%book%': book.title }) }}" class="row btn btn-link"><i class="bi bi-pencil-square"></i></a>
         </div>
     </div>
     {% endfor %}

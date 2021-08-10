@@ -22,6 +22,7 @@ body {
     background-color: $background;
     font-family: 'Noto Sans KR', sans-serif;
 }
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
     padding-bottom: 15px;
@@ -49,6 +50,10 @@ ul {
     list-style-type: none;
 }
 
+ul.dropdown-menu {
+    padding: 0;
+}
+
 ul.info {
     list-style-type: circle;
 }
@@ -64,7 +69,7 @@ ul.info {
     padding: 0;
 }
 .container-fluid > .row.index {
-    background: $background;  /* fallback for old browsers */
+    background: $background;
     height: 100vh;
     margin: 0;
     padding: 0;
@@ -77,6 +82,7 @@ ul.info {
 .container.books {
     padding-bottom: 15px;
 }
+
 .welcome {
     background: no-repeat 10% url('../images/books.jpg');
     background-size: cover;
@@ -102,10 +108,6 @@ ul.info {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.alert .bi {
-    font-size: 20px;
 }
 
 .reset_password {
@@ -244,9 +246,15 @@ width: 250px;
     padding: 0;
     vertical-align: bottom;
 }
+
 .big-icon {
     font-size: x-large;
 }
+
+.alert .bi {
+    font-size: 20px;
+}
+
 /* Comment */
 .book.comment {
     width: 550px;

@@ -57,6 +57,8 @@ class CommentRepository extends ServiceEntityRepository
             ->join('c.userBook','ub')
             ->addSelect('ub')
             ->where('ub.user = :user')
+            ->andWhere('c.content IS NOT NULL')
+            ->join('ub.book', 'b')
             ->setParameter('user', $user)
             ->getQuery();
     }

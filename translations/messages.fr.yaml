@@ -6,7 +6,9 @@ register:
   button: S'inscrire
   not: Pas encore inscrit ? 
   already: Déjà inscrit ?
+
 save: Sauvegarder
+erase: Effacer
 search: Rechercher
 select: Selectionner
 unknown: Inconnu

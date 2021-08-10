@@ -41,7 +41,10 @@
 		{{ form_row(form.content) }}
 		{{ form_widget(form.stars) }}
 
-		<button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'save'|trans }}</button>
+		<div class="d-flex justify-content-end">
+			<button class="col-3 btn btn-lg btn-primary" type="button" id='eraseComment'>{{ 'erase'|trans }}</button>
+			<button class="col-3 btn btn-lg btn-primary mt-0 ml-1" type="submit" id="saveComment" disabled>{{ 'save'|trans }}</button>
+		</div>
 		{{ form_end(form) }}
 	</div>
 {% endblock %}
@@ -52,6 +55,7 @@
             $('#comment_stars').val(parseInt(rating)+1);
             $('.rating-star').addClass("selected"); $('.rating-star#' + rating 
             + ' ~.rating-star').removeClass("selected").removeClass('bi-star-fill').addClass('bi-star');
+			$('#saveComment').prop('disabled', false);
         } 
         $('.rating-star') .on('mouseover', function(e) { var rating = e.target.id;
         $('.rating-star').removeClass('bi-star').addClass('bi-star-fill');
@@ -61,6 +65,18 @@
             $('.rating-star.selected').removeClass('bi-star').addClass('bi-star-fill'); })
             .on('click', function(e) { setRating(e.target.id); 
         });
-        
+
+		$('#eraseComment').click(function() {
+			$('#comment_content').val("");
+			$('#eraseComment').prop('disabled', true);
+			$('#saveComment').prop('disabled', false);
+		});
+
+		$('#comment_content').keydown(function() {
+			$('#eraseComment').prop('disabled', false);
+			$('#saveComment').prop('disabled', false);
+
+		})
     })
+		
 {% endblock %}

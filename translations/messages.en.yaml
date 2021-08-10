@@ -10,6 +10,7 @@ register:
 
 
 save: Save
+erase: Erase
 search: Search
 select: Select
 unknown: Unknown
