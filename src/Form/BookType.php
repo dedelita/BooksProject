@@ -25,12 +25,10 @@ class BookType extends AbstractType
             ]])
             ->add('language', ChoiceType::class, ['label' => "book.lang", 'choices' =>[
                 'Français' => "fr",
-                'English' => "en"
+                'English' => "en",
+                'Español' => "es",
+                'Italiano' => "it"
             ]])
-            // ->add('genre', TextType::class, ['label' => false, 'attr' => [
-            //     "placeholder" => "book.genre"
-            // ]])
-            // ->add('comment', CommentType::class, ['label' => "comment.add", "mapped" => false])  
         ;
     }
 

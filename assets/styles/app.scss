@@ -189,6 +189,9 @@ width: 250px;
 
 
 /* Add Book */
+.btn-flag.selected {
+    background-color: $book;
+}
 .option.nav-link, .option.nav-link:hover {
     background-color: $disabled_background;
     border-bottom-color: $book;
