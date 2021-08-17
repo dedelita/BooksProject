@@ -39,7 +39,7 @@ class UserController extends AbstractController
 
     public function locale(Request $request)
     {
-        $request->getSession()->set("_locale", "fr");
+        $request->getSession()->set("_locale", $this->getParameter("locale"));
         return $this->redirectToRoute("index");
     }
     /**

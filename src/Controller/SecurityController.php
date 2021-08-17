@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SecurityController extends AbstractController
 {
@@ -17,8 +18,10 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if ($this->getUser()) {
-            return $this->redirectToRoute('home');
+        $user = $this->getUser();
+        if ($user) {
+            return new RedirectResponse($this->generateUrl('home', ['_locale' => $user->getPreferredLanguage()]));
+            //return $this->redirectToRoute('home');
         }
 
         // get the login error if there is one
