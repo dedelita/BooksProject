@@ -51,6 +51,21 @@ ul {
 
 ul.dropdown-menu {
     padding: 0;
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+ul.dropdown-menu li:first-child > a.dropdown-item {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+ul.dropdown-menu li:last-child > a.dropdown-item {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.dropdown-item:active {
+    background-color: $primary;
 }
 
 ul.info {
@@ -187,6 +202,9 @@ width: 250px;
     border: $book 1px solid;
 }
 
+.form-check-input {
+    margin-top: 0.45rem;
+}
 
 /* Add Book */
 .btn-flag.selected {

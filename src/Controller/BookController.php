@@ -70,7 +70,8 @@ class BookController extends AbstractController
             if($identifier['type'] == "ISBN_13")
                 $book->setIsbn($identifier['identifier']);
         }
-        $book->setLanguage($gbook['volumeInfo']['language']);
+        if($gbook['volumeInfo']['language'] != null)
+            $book->setLanguage($gbook['volumeInfo']['language']);
         return $book;
     }
 

@@ -29,6 +29,7 @@ class UserBookRepository extends ServiceEntityRepository
         $ub = new UserBook();
         $ub->setUser($user);
         $ub->setBook($book);
+        $ub->setDeleted(false);
         $this->save($ub);
 
         return $ub;
@@ -42,8 +43,8 @@ class UserBookRepository extends ServiceEntityRepository
     private function createUserBookQuery($user) {
         return $this->createQueryBuilder('ub')
             ->andWhere('ub.user = :user')
+            ->andWhere('ub.deleted = 0')
             ->setParameter('user', $user)
-           // ->innerJoin('App:Book', 'b', 'WITH', 'ub.book = b')
             ->leftJoin('ub.book', 'b')
             ->addSelect('b');
     }

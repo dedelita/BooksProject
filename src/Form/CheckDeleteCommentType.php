@@ -12,7 +12,17 @@ class CheckDeleteCommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('deleteCom', CheckboxType::class, ["label" =>'book.com.delete', "required" => false])
+            ->add('deleteCom', CheckboxType::class, [
+                "label" =>'book.com.delete',
+                "mapped" => false,
+                "required" => false,
+                "attr" => [
+                    "onClick" => "checkModalCustomCbx(id)",
+                ],
+                'label_attr' => [
+                    'class' => 'checkbox-custom',
+                ]
+            ])
         ;
     }
 

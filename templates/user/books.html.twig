@@ -71,4 +71,13 @@
 			success: function(res) {}
 		})
 	}
+
+	function checkModalCustomCbx(id) {
+        var check = $('#'+id).prop('checked');
+		if(check === true) {
+			$('#'+id+".custom-control-input").prop('checked', true);
+		} else {
+			$('#'+id+".custom-control-input").prop('checked', false);
+		}
+	}
 {% endblock %}

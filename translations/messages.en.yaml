@@ -19,6 +19,7 @@ index.return: Return to login
 cancel: Cancel
 yes: Yes
 skip: Skip
+other: Other
 read:
   more: Read more
   less: Read less

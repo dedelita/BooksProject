@@ -1,4 +1,4 @@
-<div class="modal fade" id="removeBookModal{{id}}{{type}}" tabindex="-1" role="dialog" aria-labelledby="removeBookModal">
+<div class="modal fade" id="removeBookModal{{id}}{{type}}" tabindex="1" role="dialog" aria-labelledby="removeBookModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -8,11 +8,10 @@
             {{ form_start(form, { 'action': path('remove_book', {'idBook': id }) }) }}
             <div class="pl-5">
             {% if comment %}
-                {{ form_widget(form.deleteCom, {id: form.deleteCom.vars.id ~ id}) }}
-                {{ form_label(form.deleteCom, {id: form.deleteCom.vars.id ~ id, attr: {class: 'form-check-label'} }) }}
-            {% else %}
+                {{ form_row(form.deleteCom, {id: form.deleteCom.vars.id ~ id}) }}
+                {% else %}
             <div class="not-displayed">
-                {{ form_row(form.deleteCom, {id: form.deleteCom.vars.id ~ id, label_attr: {class: 'form-check-label'} , disabled:'disabled'}) }}
+                {{ form_row(form.deleteCom, {id: form.deleteCom.vars.id ~ id , disabled:'disabled'}) }} {#, label_attr: {class: 'form-check-label'}#}
             </div>
             {% endif %}
             </div>

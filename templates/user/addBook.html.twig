@@ -40,7 +40,7 @@
 					<div class="not-displayed">
 						{{ form_widget(formBook.language) }}
 					</div>
-					<div>
+					<div class="form-group">
 						<button type="button" id="fr" class="btn btn-flag" onclick="setLanguage('fr')"><i class="flag-icon flag-icon-fr"></i></button>
 						<button type="button" id="en" class="btn btn-flag" onclick="setLanguage('en')"><i class="flag-icon flag-icon-us"></i></button>
 						<button type="button" id="es" class="btn btn-flag" onclick="setLanguage('es')"><i class="flag-icon flag-icon-es"></i></button>
@@ -58,39 +58,39 @@
 	{% if not gbooks and formBook.vars.submitted %}
 		<div class="alert alert-danger">{{ 'book.none' | trans }}</div>
 	{% endif %}
-		{% for book in gbooks %}
-			<div class="card mb-3 p-4">
-				<div class="row">
-					<div class="col-md-4">
-						{% if book.image %}
-							<img src="{{ book.image }}" alt="{{ book.title }}" width="100">
-						{% endif %}
-					</div>
-					<div class="col-md-8">
-						<div class="card-body">
-							<h5 class="card-title">{{ book.title }} - {{ book.author }}</h5>
-							<p class="card-text">
-    							{% set text = book.description | u.truncate(200, "...", false) %}
-								{% if book.description | length > 225 %}
-									<div id="part{{ loop.index }}">
-										{{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full', {{ loop.index }})">{{ "read.more" | trans }}</button>  
-									</div>
-									<div id="full{{ loop.index }}" style="display:none">
-										{{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part', {{ loop.index }})">{{ "read.less" | trans }}</button>  
-									</div>
-								{% else %}
-									{{ book.description }}
-								{% endif %}
-							</p>
-							<p class="card-text text-right">
-								<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-primary" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
-								<small class="text-muted"></small>
-							</p>
-						</div>
+	{% for book in gbooks %}
+		<div class="card mb-3 p-4">
+			<div class="row">
+				<div class="col-md-4">
+					{% if book.image %}
+						<img src="{{ book.image }}" alt="{{ book.title }}" width="100">
+					{% endif %}
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">{{ book.title }} - {{ book.author }}</h5>
+						<p class="card-text">
+							{% set text = book.description | u.truncate(200, "...", false) %}
+							{% if book.description | length > 225 %}
+								<div id="part{{ loop.index }}">
+									{{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full', {{ loop.index }})">{{ "read.more" | trans }}</button>  
+								</div>
+								<div id="full{{ loop.index }}" style="display:none">
+									{{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part', {{ loop.index }})">{{ "read.less" | trans }}</button>  
+								</div>
+							{% else %}
+								{{ book.description }}
+							{% endif %}
+						</p>
+						<p class="card-text text-right">
+							<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-primary" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
+							<small class="text-muted"></small>
+						</p>
 					</div>
 				</div>
 			</div>
-			{% endfor %}
+		</div>
+	{% endfor %}
 	</div>
 </div>
 {% endblock %}

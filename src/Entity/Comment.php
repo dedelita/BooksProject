@@ -37,7 +37,7 @@ class Comment
 
     /**
      * @ORM\OneToOne(targetEntity=UserBook::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $userBook;
 

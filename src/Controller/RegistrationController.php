@@ -65,7 +65,7 @@ class RegistrationController extends AbstractController
                     $request,
                     $authenticator,
                     'main' // firewall name in security.yaml
-                ) ?: $this->redirectToRoute("home");
+                ) ?: $this->redirectToRoute("add_book");
             } else {
                 $form->get('plainPassword')->get("first")->addError(new FormError($translator->trans('password.wrong')));
             }

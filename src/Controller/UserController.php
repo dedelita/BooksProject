@@ -58,7 +58,8 @@ class UserController extends AbstractController
      * @Route("/authors",name="authors")
      * @IsGranted("ROLE_USER")
      */
-    public function getAuthors(Request $request, UserBookRepository $userbookRepository, PaginatorInterface $paginator) {
+    public function getAuthors(Request $request, UserBookRepository $userbookRepository, PaginatorInterface $paginator)
+    {
         $user = $this->getUser();
         $request->getSession()->set("lastRoute", "authors");
         $query = $userbookRepository->getUserAuthorsQuery($user)
@@ -113,9 +114,7 @@ class UserController extends AbstractController
             if(!$b)
                 $gbooks = $bookController->getGBooks($book->getTitle(), $book->getAuthor(), $book->getLanguage());
             else {
-                $ub = $userbookRepository->add($user, $b);
-                $user->addBook($ub);
-                $this->userRepository->save($user);
+                $this->addUserBook($b, $userbookRepository);
                 return $this->redirectToRoute("add_com_book", ["idBook" => $b->getId()]);
             }
         }
@@ -126,12 +125,9 @@ class UserController extends AbstractController
             
             if(!$res) {
                 $bookRepository->save($book);
-                $ub = $userbookRepository->add($user, $book);
-            } else {
-                $ub = $userbookRepository->add($user, $res);
+                $res = $book;
             }
-            $user->addBook($ub);
-            $this->userRepository->save($user);
+            $this->addUserBook($res, $userbookRepository);
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
             
             return $this->redirectToRoute("add_com_book", ["idBook" => $res->getId()]);
@@ -147,6 +143,19 @@ class UserController extends AbstractController
         ]);
     }
 
+    private function addUserBook(Book $book, UserBookRepository $userbookRepository)
+    {
+        $user = $this->getUser();
+        $ub = $userbookRepository->findOneBy(["user" => $user, "book" => $book]);
+        if(!$ub) {
+            $ub = $userbookRepository->add($user, $book);
+            $user->addBook($ub);
+        } else {
+            $ub->setDeleted(false);
+            $userbookRepository->save($ub);
+        }
+        $this->userRepository->save($user);
+    }
     /**
      * @Route("/addComment/{idBook}", name="add_com_book")
      * @IsGranted("ROLE_USER")
@@ -240,14 +249,15 @@ class UserController extends AbstractController
             $com = $form->get("deleteCom")->getData();
             if($com) {
                 $commentRepository->delete($comment);
+                $userbookRepository->delete($userbook);
             } elseif(!$com && $comment) {
-                $userbook->setUser($this->userRepository->find(1));
+                $userbook->setDeleted(true);
                 $userbookRepository->save($userbook);
             } else {
                 $userbookRepository->delete($userbook);
             }
             $this->userRepository->save($user);
-            return $this->redirectToRoute("home");
+            return $this->redirectToRoute($request->getSession()->get('lastRoute', 'home'));
         }
         return $this->render("modals/confRemoveBook.html.twig", [
             "form" => $form->createView(),

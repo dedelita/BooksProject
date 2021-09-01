@@ -18,7 +18,7 @@ class UserBook
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="books")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -33,6 +33,11 @@ class UserBook
      * @ORM\Column(type="datetime")
      */
     private $createdDate;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $deleted;
 
     public function getId(): ?int
     {
@@ -71,6 +76,18 @@ class UserBook
     public function setCreatedDate(\DateTimeInterface $createdDate): self
     {
         $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    public function getDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): self
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }
