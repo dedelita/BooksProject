@@ -48,6 +48,7 @@ class CommentController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
             $comment->setUserBook($userbook);
             $this->commentRepository->save($comment);
+            return $this->redirectToRoute($request->getSession()->get("lastRoute", "home"));
         }
         return $this->render("user/editComment.html.twig", [
             'form' => $form->createView(), 

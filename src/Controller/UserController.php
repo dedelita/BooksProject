@@ -174,7 +174,7 @@ class UserController extends AbstractController
         if($formComment->isSubmitted() && $formComment->isValid()) {
             $comment->setUserBook($userBook);
             $commentRepository->save($comment);
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute($request->getSession()->get("lastRoute", "home"));
         }
         
         return $this->render("user/editComment.html.twig", [

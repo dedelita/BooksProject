@@ -10,6 +10,7 @@ register:
 
 
 save: Save
+save_short: Save
 erase: Erase
 search: Search
 select: Select

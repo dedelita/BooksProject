@@ -248,6 +248,9 @@ width: 250px;
 .card-header {
     padding: 5px 15px 0;
 }
+a.btn.btn-link {
+    box-shadow: none;
+}
 
 .icon-link {
     padding: 0;
@@ -346,4 +349,16 @@ a.sortable, a.asc, a.desc {
 .custom-control-input:checked~.custom-control-label::before {
     background-color: $secondary;
     border-color: $gray-500;
+}
+
+.short-text {
+    display: none;
+}
+@media screen and (max-width: 683.5px) {
+    .full-text {
+        display: none;
+    }
+    .short-text {
+        display: inline-block;
+    }
 }

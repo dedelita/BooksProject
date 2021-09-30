@@ -8,6 +8,7 @@ register:
   already: Déjà inscrit ?
 
 save: Sauvegarder
+save_short: Sauv.
 erase: Effacer
 search: Rechercher
 select: Selectionner
