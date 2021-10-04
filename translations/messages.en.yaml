@@ -8,7 +8,7 @@ register:
   not: Don't have an account? 
   already: Already have an account?
 
-
+home: Home
 save: Save
 save_short: Save
 erase: Erase

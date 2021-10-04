@@ -17,25 +17,29 @@
         {% endblock %}
     </head>
     <body>
+<div class="not-displayed">{% block page %}home{% endblock %}</div>
     {% if app.user %}
 <nav class="navbar navbar-expand-lg nav-color">
   <a class="navbar-brand" href="{{ path("home") }}">BooksProject</a>
    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon">
-    <i class="bi bi-list bold"></i></span>
+    <i class="fa fa-bars"></i></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
+      <li class="nav-item {% if block("page") == 'home' %}active{% endif %}">
+      <a class="nav-link" href="{{ path("home") }}">{{"home" | trans }}</a>
+      </li>
+      <li class="nav-item {% if block("page") == 'books' %}active{% endif %}">
       <a class="nav-link" href="{{ path("get_books") }}">{{"my.books" | trans }}</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item {% if block("page") == 'authors' %}active{% endif %}">
       <a class="nav-link" href="{{ path("authors") }}">{{"my.authors" | trans }}</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item {% if block("page") == 'comments' %}active{% endif %}">
       <a class="nav-link" href="{{ path("get_comments") }}">{{"my.comments" | trans }}</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item {% if block("page") == 'new_book' %}active{% endif %}">
         <a class="nav-link" href="{{ path("add_book") }}">{{"book.new" | trans }}</a>
       </li>
     </ul>
