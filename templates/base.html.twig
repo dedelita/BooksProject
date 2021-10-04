@@ -18,55 +18,56 @@
     </head>
     <body>
     {% if app.user %}
-<nav class="navbar navbar-expand nav-color">
+<nav class="navbar navbar-expand-lg nav-color">
   <a class="navbar-brand" href="{{ path("home") }}">BooksProject</a>
    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="navbar-toggler-icon">
+    <i class="bi bi-list bold"></i></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-  <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-    <a class="nav-link" href="{{ path("get_books") }}">{{"my.books" | trans }}</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link" href="{{ path("authors") }}">{{"my.authors" | trans }}</a>
-    </li>
-    <li class="nav-item">
-    <a class="nav-link" href="{{ path("get_comments") }}">{{"my.comments" | trans }}</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ path("add_book") }}">{{"book.new" | trans }}</a>
-    </li>
-  </ul>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+      <a class="nav-link" href="{{ path("get_books") }}">{{"my.books" | trans }}</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link" href="{{ path("authors") }}">{{"my.authors" | trans }}</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link" href="{{ path("get_comments") }}">{{"my.comments" | trans }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path("add_book") }}">{{"book.new" | trans }}</a>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item dropdown">
+      {% if app.request.locale == "fr" %}
+        <a class="nav-link dropdown-toggle" href="" id="switchLocale" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="flag-icon flag-icon-fr"></i>
+        </a>
+        <div class="dropdown-menu locale" aria-labelledby="switchLocale">
+            <a class="dropdown-item" href="{{ path("switchLocale", {_locale: 'en'}) }}"><i class="flag-icon flag-icon-us"></i></a>
+        </div>
+      {% else %}
+        <a class="nav-link dropdown-toggle" href="" id="switchLocale" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="flag-icon flag-icon-us"></i>
+        </a>
+        <div class="dropdown-menu locale" aria-labelledby="switchLocale">
+            <a class="dropdown-item" href="{{ path("switchLocale", {_locale: 'fr'}) }}"><i class="flag-icon flag-icon-fr"></i></a>
+        </div>
+      {% endif %}
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" type="button" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{app.user.username}}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="{{ path("edit_user") }}">{{"edit.profile"| trans }}</a></li>
+          <li><a class="dropdown-item" href="{{ path("app_logout") }}">{{ "logout"| trans }}</a></li>
+        </ul>
+      </li>
+    </ul>
   </div>
-  <ul class="nav navbar-nav navbar-right">
-    <li class="nav-item dropdown">
-    {% if app.request.locale == "fr" %}
-      <a class="nav-link dropdown-toggle" href="" id="switchLocale" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="flag-icon flag-icon-fr"></i>
-      </a>
-      <div class="dropdown-menu locale" aria-labelledby="switchLocale">
-          <a class="dropdown-item" href="{{ path("switchLocale", {_locale: 'en'}) }}"><i class="flag-icon flag-icon-us"></i></a>
-      </div>
-    {% else %}
-      <a class="nav-link dropdown-toggle" href="" id="switchLocale" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="flag-icon flag-icon-us"></i>
-      </a>
-      <div class="dropdown-menu locale" aria-labelledby="switchLocale">
-          <a class="dropdown-item" href="{{ path("switchLocale", {_locale: 'fr'}) }}"><i class="flag-icon flag-icon-fr"></i></a>
-      </div>
-    {% endif %}
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" type="button" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{app.user.username}}
-      </a>
-      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-        <li><a class="dropdown-item" href="{{ path("edit_user") }}">{{"edit.profile"| trans }}</a></li>
-        <li><a class="dropdown-item" href="{{ path("app_logout") }}">{{ "logout"| trans }}</a></li>
-      </ul>
-    </li>
-  </ul>
 </nav>
     {% endif %}
     <div class="container-fluid {{ app.user ? 'app' :'login' }}">

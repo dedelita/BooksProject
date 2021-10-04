@@ -36,13 +36,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* change the link color */
-.nav-color .navbar-nav .nav-item .nav-link {
+.nav-color .navbar-nav .nav-item .nav-link, .navbar-toggler-icon i {
     color: rgba(255,255,255,.5);
 }
 /* change the color of active or hovered links */
 .nav-color .nav-item.active .nav-link,
-.nav-color .nav-item:hover .nav-link {
+.nav-color .nav-item:hover .nav-link,
+.navbar-toggler-icon i:hover {
     color: white;
+}
+
+.navbar-right .nav-item:first-child {
+    padding-right: 15px;
+}
+
+.navbar-toggler-icon i {
+    font-size: 1.75rem;
 }
 
 ul {
