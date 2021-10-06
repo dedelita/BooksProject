@@ -29,12 +29,10 @@ class ChangePasswordFormType extends AbstractType
                             'max' => 4096,
                         ]),
                     ],
-                    'label' => 'New password',
+                    'label' => "user.password",
                 ],
-                'second_options' => [
-                    'label' => 'Repeat Password',
-                ],
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => "password.same",
+                'second_options' => ['label' => "password.conf"],
                 // Instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,

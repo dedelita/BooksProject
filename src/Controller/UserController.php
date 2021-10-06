@@ -24,7 +24,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
-use Symfony\Component\CssSelector\XPath\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Form\FormError;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -272,7 +272,8 @@ class UserController extends AbstractController
      * @Route("/edit", name="edit_user")
      * @IsGranted("ROLE_USER")
      */
-    public function editUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function editUser(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+    TranslatorInterface $translator)
     {
         $user = $this->getUser();
         $request->getSession()->set("lastRoute", "edit_user");
@@ -293,14 +294,21 @@ class UserController extends AbstractController
             $password = $form->get('currentPassword')->getData();
             if ($form->get('changePassword')->getData()) {
                 if ($passwordEncoder->isPasswordValid($user, $password)) {
-                    $user->setPassword(
-                        $passwordEncoder->encodePassword(
-                            $user,
-                            $form->get('plainPassword')->getData()
-                        )
-                    );
+                    
+                    $new = $form->get('plainPassword')->getData();
+                    $pattern = "/^(?=.*[0-9])(?=.*[A-Z]).{8,25}$/";
+                    if(preg_match($pattern, $new)) {
+                        $user->setPassword(
+                            $passwordEncoder->encodePassword(
+                                $user,
+                                $form->get('plainPassword')->getData()
+                            )
+                        );
+                    } else {
+                        $form->get('plainPassword')->get("first")->addError(new FormError($translator->trans('password.wrong')));
+                    }
                 } else {
-                    $form->addError(new FormError('Wrong Password'));
+                    $form->get('currentPassword')->addError(new FormError($translator->trans('password.bad')));
                 }
             }
             
