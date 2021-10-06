@@ -117,11 +117,11 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // A password reset token should be used only once, remove it.
-            $this->resetPasswordHelper->removeResetRequest($token);
             $password = $form->get('plainPassword')->getData();
             $pattern = "/^(?=.*[0-9])(?=.*[A-Z]).{8,25}$/";
             if(preg_match($pattern, $password)) {
+                // A password reset token should be used only once, remove it.
+                $this->resetPasswordHelper->removeResetRequest($token);
                 // Encode the plain password, and set it.
                 $encodedPassword = $passwordEncoder->encodePassword(
                     $user,
