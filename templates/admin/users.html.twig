@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block page %}admin_users{% endblock %}
+
+{% block title %}Users{% endblock %}
+
+{% block body %}
+    <h1>Users</h1>
+
+    <div class="row font-weight-bold align-items-center">
+        <div class="col-1">Id</div>
+        <div class="col-2">Username</div>
+        <div class="col-3">Email</div>
+        <div class="col-1">Preferred Language</div>
+        <div class="col-1">Is Verified</div>
+        <div class="col-2">Actions</div>
+    </div>
+    {% for user in users %}
+    <div class="row">
+        <div class="col-1">{{ user.id }}</div>
+        <div class="col-2">{{ user.username }}</div>
+        <div class="col-3">{{ user.email }}</div>
+        <div class="col-1">{{ user.preferredLanguage }}</div>
+        <div class="col-1">{{ user.isVerified }}</div>
+        <div class="col-2">
+            <a href="{{ path('app_admin_edituser', {id: user.id}) }}">edit</a>
+            <a class="btn text-danger" data-toggle="modal" data-target="#deleteAccountModal{{user.id}}">
+                delete
+            </a>
+        </div>
+    </div>
+        {% include "modals/confDeleteAccount.html.twig" with {id: user.id, text: "delete account of " ~ user.username } %}
+    {% endfor %}
+{% endblock %}

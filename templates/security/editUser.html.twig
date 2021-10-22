@@ -2,40 +2,40 @@
 {% block title %} {{ 'edit.profile' | trans }} {% endblock %}
 
 {% block body %}
-<div class="container mt-3">
+<div class="container">
 <h3>{{ 'edit.profile' | trans }}</h3>
 {{ form_start(form) }}
 <div class="form-error">
     <span>{{ form_errors(form) }}</span>
 </div>
     <div class="form-group row">
-        <div class="col-sm-2">
+        <div class="col-2">
             {{ form_label(form.username, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
         </div>
-        <div class="col-sm-6">
+        <div class="col-6">
             {{ form_widget(form.username) }}
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2">
+        <div class="col-2">
             {{ form_label(form.email, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
         </div>
-        <div class="col-sm-6">
+        <div class="col-6">
             {{ form_widget(form.email) }}
         </div>
     </div>
     {{ form_widget(form.changePassword) }}
     <div id="showPassword">
         <div class="form-group row">
-            <div class="col-sm-2">
+            <div class="col-2">
                 {{ form_label(form.currentPassword, '', {'label_attr': {'class': "col-form-label"}}) }}
             </div>
-            <div class="col-sm-6">
+            <div class="col-6">
                 {{ form_widget(form.currentPassword) }}
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-2">
+            <div class="col-2">
                 <label>
                     {{'user.password'|trans}}
                     <button type="button" class="btn btn-link icon-popover" data-toggle="popover" data-trigger="hover" 
@@ -43,15 +43,15 @@
                     {{ form_errors(form.plainPassword.first) }}
                 </label>
             </div>
-            <div class="col-sm-6">
+            <div class="col-6">
                 {{ form_widget(form.plainPassword.first) }}
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-sm-2">
+            <div class="col-2">
                 {{ form_label(form.plainPassword.second, '', {'label_attr': {'class': "col-form-label"}}) }}
             </div>
-            <div class="col-sm-6">
+            <div class="col-6">
                 {{ form_widget(form.plainPassword.second) }}
             </div>
         </div>
@@ -61,11 +61,11 @@
 </div>
 <div class="container mt-3">
 <h3>{{ 'user.delete' | trans }}</h3>
-<a class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal" 
+<a class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal{{app.user.id}}" 
     title="{{ 'user.delete' | trans }}">
     <i class="bi bi-trash-fill"></i> {{ 'user.delete' | trans }}
 </a>
-{% include "modals/confDeleteAccount.html.twig" %}
+{% include "modals/confDeleteAccount.html.twig" with {id: app.user.id, text: { 'user.delete' | trans }} %}
 </div>
 {% endblock %}
 
