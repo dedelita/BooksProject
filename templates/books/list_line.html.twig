@@ -3,15 +3,15 @@
 		{% set book = ubook.book %}
    		{{ render(path('remove_book', {"idBook": book.id, "type": "line" })) }}
 		<div class="row center mt-3">
-			<div class="col-sm-2 center cover">
+			<div class="col-2 center cover">
 				<a href="{{ path('book_info', {'id': book.id}) }}">
 					<img src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
 						title="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" 
 						alt="{{ book.title }} {{ "book.by" | trans }} {{ book.author }}" width="50"/>
 				</a>
 			</div>
-			<div class="col-sm-6">{{ book.author }} - {{ book.title }}</div>
-			<div class="col-sm-3">
+			<div class="col-6">{{ book.author }} - {{ book.title }}</div>
+			<div class="col-3">
 				{% include "book/actions.html.twig" with {'book': book, 'type': 'line'} %}
 			</div>
 		</div>

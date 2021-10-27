@@ -18,35 +18,32 @@
     </head>
     <body>
 <div class="not-displayed">{% block page %}home{% endblock %}</div>
-    {% if app.user and "ROLE_ADMIN" in app.user.roles %}
-    <nav class="navbar navbar-expand-lg nav-color">
-  <a class="navbar-brand" href="{{ path("app_admin_index") }}">BooksProject</a>
-   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon">
-    <i class="fa fa-bars"></i></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item {% if block("page") == 'admin' %}active{% endif %}">
-      <a class="nav-link" href="{{ path("app_admin_index") }}">{{"home" | trans }}</a>
-      </li>
-      <li class="nav-item {% if block("page") == 'admin_users' %}active{% endif %}">
-      <a class="nav-link" href="{{ path("app_admin_users") }}">{{"users" | trans }}</a>
-      </li>
-      <li class="nav-item {% if block("page") == 'admin_comments' %}active{% endif %}">
-      <a class="nav-link" href="{{ path("app_admin_comments") }}">{{"comments" | trans }}</a>
-      </li>
-    </ul>
-  </div>
-  </nav>
-  {% elseif app.user and "ROLE_USER" in app.user.roles %}
-    <nav class="navbar navbar-expand-lg nav-color">
-      <a class="navbar-brand" href="{{ path("home") }}">BooksProject</a>
+  {% if app.user %}
+  {% if "ROLE_ADMIN" in app.user.roles %}
+    {% set homePath = "app_admin_index" %}
+  {% else %}
+    {% set homePath = "home" %}
+  {% endif %}
+  <nav class="navbar navbar-expand-lg nav-color">
+      <a class="navbar-brand" href="{{ path(homePath) }}">BooksProject</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
         <i class="fa fa-bars"></i></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    {% if "ROLE_ADMIN" in app.user.roles %}
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item {% if block("page") == 'admin' %}active{% endif %}">
+        <a class="nav-link" href="{{ path("app_admin_index") }}">{{"home" | trans }}</a>
+        </li>
+        <li class="nav-item {% if block("page") == 'admin_users' %}active{% endif %}">
+        <a class="nav-link" href="{{ path("app_admin_users") }}">{{"users" | trans }}</a>
+        </li>
+        <li class="nav-item {% if block("page") == 'admin_comments' %}active{% endif %}">
+        <a class="nav-link" href="{{ path("app_admin_comments") }}">{{"comments" | trans }}</a>
+        </li>
+      </ul>
+    {% elseif "ROLE_USER" in app.user.roles %}
         <ul class="navbar-nav mr-auto">
           <li class="nav-item {% if block("page") == 'home' %}active{% endif %}">
           <a class="nav-link" href="{{ path("home") }}">{{"home" | trans }}</a>
@@ -64,6 +61,7 @@
             <a class="nav-link" href="{{ path("add_book") }}">{{"book.new" | trans }}</a>
           </li>
         </ul>
+    {% endif %}
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-item dropdown">
           {% if app.request.locale == "fr" %}
@@ -95,7 +93,7 @@
       </div>
     </nav>
   {% endif %}
-    <div class="container-fluid {{ app.user ? 'app' :'login' }} mt-3">
+    <div class="container-fluid {{ app.user ? 'app mt-3' :'login' }}">
     {% for message in app.flashes('success') %}
             <div class="mt-1 alert alert-success">
                 {{ message }}

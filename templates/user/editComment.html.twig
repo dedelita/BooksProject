@@ -3,7 +3,7 @@
 {% block title %}{{ 'edit.comment'|trans }} {{ book.title }}{% endblock %}
 {% block body %}
 	<div class="row mt-3">
-		<div class="col col-sm-3 center">
+		<div class="col-3 center">
 			{% if not book.image %}
 				<img src="{{ asset('build/images/no_cover.svg') }}" 
                     alt=" {{ 'book.no_cover'|trans }} {{ book.title }} {{ 'by'|trans }} {{ book.author }}"
@@ -20,7 +20,7 @@
 			</h2>
 		</div>
 		{% if new %}
-			<div class="col col-sm-2 text-right">
+			<div class="col-2 text-right">
 				<a href="{{ path('home') }}" class="btn btn-link" type="submit">{{ 'skip'|trans }}</a>
 			</div>
 		{% endif %}

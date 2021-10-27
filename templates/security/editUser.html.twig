@@ -59,34 +59,34 @@
     <button type="submit" class="btn btn-primary">{{ 'save' | trans }}</button>
 {{ form_end(form) }}
 </div>
-<div class="container mt-3">
+<div class="container mt-3 pb-3">
 <h3>{{ 'user.delete' | trans }}</h3>
 <a class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal{{app.user.id}}" 
     title="{{ 'user.delete' | trans }}">
     <i class="bi bi-trash-fill"></i> {{ 'user.delete' | trans }}
 </a>
-{% include "modals/confDeleteAccount.html.twig" with {id: app.user.id, text: { 'user.delete' | trans }} %}
+{% include "modals/confDeleteAccount.html.twig" with {id: app.user.id, text: ('user.delete' | trans)} %}
 </div>
 {% endblock %}
 
 {% block js %}
 $(document).ready(function () {
     function setShowPassword() {
-            if($("#user_changePassword")[0].checked) {
-                $('#showPassword').css("display", "block");
-                $('#user_currentPassword').prop('required', 'required');
-                $('#user_plainPassword_first').prop('required', 'required');
-                $('#user_plainPassword_second').prop('required', 'required');
-            } else {
-                $('#showPassword').css("display", "none");
-                $('#user_currentPassword').prop('required', false);
-                $('#user_plainPassword_first').prop('required', false);
-                $('#user_plainPassword_second').prop('required', false);
-            }
+        if($("#user_changePassword").prop('checked')) {
+            $('#showPassword').css("display", "block");
+            $('#user_currentPassword').prop('required', 'required');
+            $('#user_plainPassword_first').prop('required', 'required');
+            $('#user_plainPassword_second').prop('required', 'required');
+        } else {
+            $('#showPassword').css("display", "none");
+            $('#user_currentPassword').prop('required', false);
+            $('#user_plainPassword_first').prop('required', false);
+            $('#user_plainPassword_second').prop('required', false);
         }
+    }
 
-    setShowPassword();
-
+    setShowPassword()
+    
     $("#user_changePassword").change(function() {setShowPassword()})
 })
 {% endblock %}

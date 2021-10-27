@@ -27,7 +27,7 @@
     <div class="row comment pt-2 pb-2 {% if loop.index is even %}even{% else %}odd{% endif %}">
         <div class="col-11">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-3">
                     {% set book = comment.userbook.book %}
                     <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
                         href="{{ path('book_info', {'id': book.id }) }}"
@@ -35,9 +35,9 @@
                         <img src="{{ book.image }}" width="90"/>
                     </a>
                 </div>
-                <div class="col-sm-9">
+                <div class="col-9">
                     <div class="row">
-                        <span class="col-sm-5 star mini">
+                        <span class="col-5 star mini">
                             {% for i in 0..4 %}
                                 {% if i < comment.stars %}
                                     <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
@@ -46,7 +46,7 @@
                                 {% endif %}
                             {% endfor %}
                         </span>
-                        <span class="col-sm-7 text-right">
+                        <span class="col-7 text-right">
                             <i class="bi bi-clock"></i> {{ comment.date | date("d/m/Y H:i") }}
                         </span>
                     </div>
