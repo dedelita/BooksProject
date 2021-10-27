@@ -19,10 +19,9 @@
     <body>
 <div class="not-displayed">{% block page %}home{% endblock %}</div>
   {% if app.user %}
+    {% set homePath = "home" %}
   {% if "ROLE_ADMIN" in app.user.roles %}
     {% set homePath = "app_admin_index" %}
-  {% else %}
-    {% set homePath = "home" %}
   {% endif %}
   <nav class="navbar navbar-expand-lg nav-color">
       <a class="navbar-brand" href="{{ path(homePath) }}">BooksProject</a>
