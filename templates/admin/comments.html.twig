@@ -4,12 +4,12 @@
 {% block title %}Comments{% endblock %}
 
 {% block body %}
-<h1>Comments</h1>
+<h1>{{ 'comment.name' | trans }}s</h1>
 
 <div class="row font-weight-bold">
-    <div class="col">User</div>
-    <div class="col">Book</div>
-    <div class="col">Comment</div>
+    <div class="col">{{ 'user.name' | trans }}</div>
+    <div class="col">{{ 'book.name' | trans }}</div>
+    <div class="col">{{ 'comment.name' | trans }}</div>
     <div class="col">Action</div>
 </div>
 {% for comment in comments %}
@@ -22,9 +22,12 @@
         <div class="col">{{comment.content}}</div>
         <div class="col">
             <a class="btn btn-link icon-link" data-toggle="modal"
-             data-target="#editCommentModal{{comment.id}}">
-                edit
+             data-target="#editCommentModal{{comment.id}}"
+             title="{{ 'edit.word' | trans }}">
+                <i class="bi bi-pencil-square"></i>
             </a>
+    
+</a>
         </div>
     </div>
 {% endfor %}

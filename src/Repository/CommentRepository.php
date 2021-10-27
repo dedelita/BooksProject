@@ -71,6 +71,14 @@ class CommentRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    public function findAllNotNull() {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.content IS NOT NULL')
+        ->getQuery()
+        ->getResult();
+
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

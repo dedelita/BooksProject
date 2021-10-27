@@ -43,7 +43,7 @@ class AdminController extends AbstractController
      */
     public function comments(CommentRepository $commentRepository): Response
     {
-        $comments = $commentRepository->findAll();
+        $comments = $commentRepository->findAllNotNull();
         return $this->render('admin/comments.html.twig', [
             "comments" => $comments
         ]);

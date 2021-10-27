@@ -11,8 +11,8 @@
 
 <div class="example-wrapper">
     <ul>
-        <li><a href="{{ path('app_admin_users') }}">Users</a></li>
-        <li><a href="{{ path('app_admin_comments') }}">Comments</a></li>
+        <li><a href="{{ path('app_admin_users') }}">{{ 'user.name' | trans }}s</a></li>
+        <li><a href="{{ path('app_admin_comments') }}">{{ 'comment.name' | trans }}s</a></li>
     </ul>
 </div>
 {% endblock %}

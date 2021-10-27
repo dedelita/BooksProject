@@ -27,6 +27,7 @@ read:
 see_more: See more
 date: Date
 user:
+  name: User
   email: Email
   username: Username
   password: Password
@@ -44,7 +45,6 @@ password:
 book:
   name: Book
   by: by
-  genre: Genre
   author: Author
   title: Title
   new: New book
@@ -60,6 +60,7 @@ book:
   delete: Remove %book% 
 
 comment:
+  name: Comment
   add: Add a comment
   edit: Edit comment of %book%
   stars: Stars
@@ -71,6 +72,7 @@ my:
   5last_books: My 5 last books
 
 edit:
+  word: Edit
   profile: Edit profile
   comment: Edit my comment of
 

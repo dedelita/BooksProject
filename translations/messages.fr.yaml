@@ -26,6 +26,7 @@ other: Autre
 see_more: Voir plus
 date: Date
 user:
+  name: Utilisateur
   email: Email
   username: Pseudo
   password: Mot de passe
@@ -43,7 +44,6 @@ password:
 book:
   name: Livre
   by: de
-  genre: Genre
   author: Auteur
   title: Titre
   new: Nouveau livre
@@ -59,6 +59,7 @@ book:
   delete: Supprimer %book% 
 
 comment:
+  name: Commentaire
   add: Ajouter un commentaire
   edit: Modifier le commentaire de %book%
   stars: Note
@@ -70,6 +71,7 @@ my:
   5last_books: Mes 5 derniers livres
 
 edit:
+  word: Modifier
   profile: Modifier mon profil
   comment: Modifier mon comment sur
 
