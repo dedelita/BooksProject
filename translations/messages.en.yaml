@@ -13,6 +13,10 @@ save: Save
 search: Search
 select: Select
 unknown: Unknown
+read:
+  more: Read more
+  less: Read less
+
 user:
   email: Email
   username: Username

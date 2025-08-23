@@ -1,8 +1,8 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    
+
     enable_authenticator_manager: true
-    encoders:
+    password_hashers:
         App\Entity\User:
             algorithm: auto
         App\Security\Test:
@@ -21,9 +21,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
             logout:
                 path: app_logout
                 # where to redirect after logout

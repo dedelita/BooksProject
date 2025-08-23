@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -49,7 +49,7 @@ class UserController extends AbstractController
 
         $genres = $bookRepository->getMyGenres($user->getId());
         $authors = $bookRepository->getMyAuthors($user->getId());
-        
+
         return $this->render('user/home.html.twig', ["books" => $books, "genres" => $genres, "authors" => $authors]);
     }
 
@@ -95,7 +95,7 @@ class UserController extends AbstractController
         if($formIsbn->isSubmitted() && $formIsbn->isValid()) {
             $gbooks[] = $bookController->getGBooksByIsbn($formIsbn->get('isbn')->getData());
         }
-        
+
         $book = new Book();
         $formBook = $this->createForm(BookType::class, $book);
         $formBook->handleRequest($request);
@@ -114,7 +114,7 @@ class UserController extends AbstractController
         if(sizeof($gbooks) == 1) {
             $book = $gbooks[0];
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
-            
+
             if(!$res) {
                 $bookRepository->save($book);
                 $user->addBook($book);
@@ -123,16 +123,16 @@ class UserController extends AbstractController
             }
             $this->userRepository->save($user);
             $res = $bookRepository->findOneBy(["title" => $book->getTitle(), "author" => $book->getAuthor()]);
-            
+
             return $this->redirectToRoute("add_com_book", ["idBook" => $res->getId()]);
         } else {
             $selected = "true";
         }
-        
+
         return $this->render('user/addBook.html.twig', [
             'formBook' => $formBook->createView(),
             'formIsbn' => $formIsbn->createView(),
-            'gbooks' => $gbooks, 
+            'gbooks' => $gbooks,
             'selected' => $selected
         ]);
     }
@@ -145,7 +145,7 @@ class UserController extends AbstractController
     {
         $idBook = $request->get('idBook');
         $book = $bookRepository->find($idBook);
-        
+
         $user = $this->getUser();
         $comment = new Comment();
         $formComment = $this->createForm(CommentType::class, $comment);
@@ -156,7 +156,7 @@ class UserController extends AbstractController
             $commentRepository->save($comment);
             return $this->redirectToRoute('home');
         }
-        
+
 
         return $this->render("user/editComment.html.twig", [
             "form" => $formComment->createView(),
@@ -202,11 +202,11 @@ class UserController extends AbstractController
      * @Route("/edit", name="edit_user")
      * @IsGranted("ROLE_USER")
      */
-    public function editUser(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function editUser(Request $request, UserPasswordHasherInterface $passwordEncoder)
     {
         $user = $this->getUser();
         $form = $this->createForm(UserType::class, $user);
-        
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $u = $this->userRepository->findOneByEmail($user->getEmail());
@@ -223,7 +223,7 @@ class UserController extends AbstractController
             if ($form->get('changePassword')->getData()) {
                 if ($passwordEncoder->isPasswordValid($user, $password)) {
                     $user->setPassword(
-                        $passwordEncoder->encodePassword(
+                        $passwordEncoder->hashPassword(
                             $user,
                             $form->get('plainPassword')->getData()
                         )
@@ -232,7 +232,7 @@ class UserController extends AbstractController
                     $form->addError(new FormError('Wrong Password'));
                 }
             }
-            
+
             $this->userRepository->save($user);
         }
 

@@ -11,6 +11,10 @@ search: Rechercher
 select: Selectionner
 unknown: Inconnu
 
+read:
+  more: Voir plus
+  less: Voir moins
+
 user:
   email: Email
   username: Pseudo

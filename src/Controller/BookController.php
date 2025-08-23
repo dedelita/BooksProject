@@ -24,7 +24,7 @@ class BookController extends AbstractController
 {
     private $bookRepository;
     private $client;
-    
+
     public function __construct(BookRepository $bookRepository)
     {
         $this->client = new \Google\Client();
@@ -36,20 +36,20 @@ class BookController extends AbstractController
     {
         if($lang != null)
             return $service->volumes->listVolumes(['q' => $q], [
-                'maxResults' => $maxRes, 
+                'maxResults' => $maxRes,
                 'startIndex' => $startIndex,
                 'langRestrict' => $lang,
                 'printType' => "books"
             ]);
-        
+
         return $service->volumes->listVolumes(['q' => $q], [
-            'maxResults' => $maxRes, 
+            'maxResults' => $maxRes,
             'startIndex' => $startIndex,
             'printType' => "books"
         ]);
     }
 
-    private function getGBooksInfo($gbook) 
+    private function getGBooksInfo($gbook)
     {
         $book = new Book();
         $book->setTitle($gbook['volumeInfo']['title']);
@@ -69,21 +69,21 @@ class BookController extends AbstractController
     /**
      * @Route("/testGApiIsbn", name="gapi_isbn", methods="GET")
      */
-    public function getGBooksByIsbn($isbn) 
+    public function getGBooksByIsbn($isbn)
     {
         $this->client->setApplicationName($this->getParameter("app_name"));
         $this->client->setDeveloperKey($this->getParameter("api_key"));
         $service = new \Google_Service_Books($this->client);
         $results = $this->getResultsGB($service, "isbn:$isbn", 40, 0);
         $rgb = $results->getItems();
-        
+
         return $this->getGBooksInfo($rgb[0]);
     }
 
     /**
      * @Route("/testGApi", name="gapi", methods="GET")
      */
-    public function getGBooks($title, $author, $lang) 
+    public function getGBooks($title, $author, $lang)
     {
         //$title = "la cour des hiboux";
         //$author = "snyder";
@@ -100,15 +100,16 @@ class BookController extends AbstractController
 
         $results = $this->getResultsGB($service, $q, 40, $startIndex, $lang);
         $rgb = $results->getItems();
-        
+
         if($results['totalItems'] > 40) {
             $iteratorNb = intdiv($results['totalItems'], 40);
-            for ($i=0; $i < $iteratorNb; $i++) { 
+            for ($i=0; $i < $iteratorNb; $i++) {
                 $startIndex += 39;
                 $results = $this->getResultsGB($service, $q, 40, $startIndex, $lang);
                 $rgb = array_merge($rgb, $results->getItems());
             }
         }
+
         $books = [];
         foreach ($rgb as $item) {
             if(in_array($author, $item['volumeInfo']['authors'])
@@ -129,6 +130,7 @@ class BookController extends AbstractController
         $coms = $commentRepository->findByBook($book->getId());
         return $this->render("user/bookInfo.html.twig", [
             "book" => $book,
+            "buttonText" => "read_more",
             "coms" => $coms
         ]);
     }
