@@ -1,0 +1,24 @@
+<div class="container">
+	<div class="row {{ page == "home" ? 'justify-content-md-center' : ''}}">
+        {% for ubook in books %}
+			{% set book = ubook.book %}
+   			{{ render(path('remove_book', {idBook: book.id, type: "grid" })) }}
+            <div class="col book">
+                <a class="{{ book.image ? 'cover' : 'no-cover center' }}"
+				href="{{ path('book_info', {'id': book.id }) }}">
+				<div class="text-center text-dark">
+					<img class="{{ book.image ? 'cover' : '' }}" 
+						src="{{ book.image ? book.image : asset('build/images/no_cover.svg') }}" 
+						alt="{{ book.title }}" width="120px"/>
+					{% if not book.image %}
+						<span style="display:block; min-height:48px">{{ book.title }}</span>
+					{% endif %}
+					</div>
+				</a>
+				<div class="row center">
+					{% include "book/actions.html.twig" with {'book': book, 'type': 'grid'} %}
+				</div>
+            </div>
+        {% endfor %}
+	</div>
+</div>

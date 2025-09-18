@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+{% block page %}admin_comments{% endblock %}
+
+{% block title %}Comments{% endblock %}
+
+{% block body %}
+<h1>{{ 'comment.name' | trans }}s</h1>
+
+<div class="row font-weight-bold">
+    <div class="col">{{ 'user.name' | trans }}</div>
+    <div class="col">{{ 'book.name' | trans }}</div>
+    <div class="col">{{ 'comment.name' | trans }}</div>
+    <div class="col">Action</div>
+</div>
+{% for comment in comments %}
+    {{ render(path('app_admin_editcomment', {"id": comment.id })) }}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('app_admin_edituser', {id: comment.userbook.user.id}) }}">{{comment.userbook.user.id}} - {{comment.userbook.user.username}}</a>
+        </div>
+        <div class="col">{{comment.userbook.book.title}}</div>
+        <div class="col">{{comment.content}}</div>
+        <div class="col">
+            <a class="btn btn-link icon-link" data-toggle="modal"
+             data-target="#editCommentModal{{comment.id}}"
+             title="{{ 'edit.word' | trans }}">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+    
+</a>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

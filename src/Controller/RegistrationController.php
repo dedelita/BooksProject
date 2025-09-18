@@ -6,6 +6,11 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+<<<<<<< HEAD
+=======
+use App\Security\LoginFormAuthenticator;
+use Symfony\Component\Form\FormError;
+>>>>>>> 8091431f8414f0e338639dd8de280392b8a35759
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -35,6 +40,10 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $passwordEncoder,
         VerifyEmailHelperInterface $verifyEmailHelper, TranslatorInterface $translator): Response
     {
+        if($this->getUser()) {
+            return $this->redirectToRoute("home");
+        }
+        $request->getSession()->set('lastRoute', 'app_register');
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -66,6 +75,29 @@ class RegistrationController extends AbstractController
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * @Route("/send/conf_email", name="send_conf_email")
+     */
+    public function sendConfirmEmail(TranslatorInterface $translator, User $user = null)
+    {
+        if(!$user)
+            $user = $this->getUser();
+
+        // generate a signed url and email it to the user
+        $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+        (new TemplatedEmail())
+            ->from(new Address($this->getParameter("app_gmail"), $this->getParameter("app_gmail_name")))
+            ->to($user->getEmail())
+            ->subject($translator->trans('mail.confirm.subject'))
+            ->htmlTemplate('registration/confirmation_email.html.twig')
+        );
+        // do anything else you need here, like send an email
+        return $this->redirectToRoute("home");
+    }
+
+    /**
+>>>>>>> 8091431f8414f0e338639dd8de280392b8a35759
      * @Route("/verify/email", name="app_verify_email")
      */
     public function verifyUserEmail(Request $request): Response

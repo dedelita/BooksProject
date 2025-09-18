@@ -41,21 +41,6 @@ class UserRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    public function findAllBooksOrderByGenre($id) {
-        $query = $this->createQueryBuilder('u')
-        ->where("u.id = :id")
-        ->setParameter("id", $id)
-            //->select('b')
-            //->from(Book::class, 'b')
-            
-            ->leftJoin('u.books', 'b')
-
-            ->getQuery();
-            
-            return $query->getResult();
-    }
-
-
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

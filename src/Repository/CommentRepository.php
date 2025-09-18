@@ -4,9 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Comment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Comment|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,8 +14,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    private EntityManager $em;
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
@@ -45,18 +41,44 @@ class CommentRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-    
-    public function getBooksOfUserOrderByGenre($userId) {
+    public function findByBook($book) {
         return $this->createQueryBuilder('c')
-                ->select('b')
-                ->from('App:Book', 'b')
-                ->andWhere('c.book = b')
-                ->andWhere('c.writer = :id')
-                ->setParameter('id', $userId)
-                ->orderBy('b.genre', 'ASC')
-                ->getQuery()
-                ->getResult();
+            ->join('c.userBook','ub')
+            ->addSelect('ub')
+            ->where('ub.book = :book')
+            ->setParameter('book', $book)
+            ->orderBy('c.date')
+            ->getQuery()
+            ->getResult();
     }
+
+    public function findByUserQuery($user) {
+        return $this->createQueryBuilder('c')
+            ->join('c.userBook','ub')
+            ->addSelect('ub')
+            ->where('ub.user = :user')
+            ->andWhere('c.content IS NOT NULL')
+            ->join('ub.book', 'b')
+            ->setParameter('user', $user)
+            ->getQuery();
+    }
+
+    public function deleteByUser($user) {
+        $list = $this->findByUserQuery($user)->getResult();
+        foreach($list as $comment) {
+            $this->_em->remove($comment);
+        }
+        $this->_em->flush();
+    }
+
+    public function findAllNotNull() {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.content IS NOT NULL')
+        ->getQuery()
+        ->getResult();
+
+    }
+
     // /**
     //  * @return Comment[] Returns an array of Comment objects
     //  */

@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block page %}authors{% endblock %}
+{% block title %} {{ 'my.books' | trans }} {% endblock %}
+{% block body %}
+<div class="mt-3 pb-2">
+{% for author in authors %}
+    <h3>{{ author.author }}</h3>
+    {{ render(path("byAuthor", {"author": author.author}))}}
+{% endfor %}
+	<div class="navigation">
+		{{ knp_pagination_render(authors) }}
+	</div>
+</div>
+{% endblock %}

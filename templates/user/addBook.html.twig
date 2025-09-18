@@ -1,81 +1,125 @@
 {% extends 'base.html.twig' %}
-
+{% block page %}new_book{% endblock %}
 {% block title %}
 	{{ 'book.new' | trans }}
 {% endblock %}
 
 {% block body %}
-	<h1>{{ 'book.new' | trans }}</h1>
-	<ul class="nav nav-tabs" id="myTab0" role="tablist">
+	<h1 class="mt-3">{{ 'book.new' | trans }}</h1>
+	<ul class="nav nav-tabs col-md-8" role="tablist">
 		<li class="nav-item" role="presentation">
-			<button class="nav-link {{ not(selected) ? 'active' : ''}}" id="isbn-tab0" data-toggle="tab" data-target="#isbn" type="button" role="tab" aria-controls="isbn" aria-selected="true">
+			<button class="option nav-link {{ not selected ? 'active' : ''}}" id="isbn-tab" data-toggle="tab"
+			 data-target="#isbn" type="button" role="tab" aria-controls="isbn" aria-selected="true">
 				Isbn
 			</button>
 		</li>
 		<li class="nav-item" role="presentation">
-			<button class="nav-link {{ selected ? 'active' : ''}}" id="at-tab0" data-toggle="tab" data-target="#at" type="button" role="tab" aria-controls="at" aria-selected="false">
-				Author & Title
+			<button class="option nav-link {{ selected ? 'active' : ''}}" id="at-tab" data-toggle="tab"
+			 data-target="#at" type="button" role="tab" aria-controls="at" aria-selected="false">
+				{{ 'book.author' | trans }} & {{ 'book.title' | trans }}
 			</button>
 		</li>
 	</ul>
-	<div class="tab-content" id="myTabContent0">
-		<div class="tab-pane fade {{ not(selected) ? 'show active' : ''}}" id="isbn" role="tabpanel" aria-labelledby="isbn-tab0">
-			<div>
-				{{ form_start(formIsbn) }}
-				{{ form_widget(formIsbn) }}
-				<button type="submit" class="btn btn-dark">{{ 'search' | trans }}</button>
-				{{ form_end(formIsbn) }}
+	<div class="form-book tab-content col-md-8">
+		<div class="tab-pane fade {{ not selected ? 'show active' : ''}}" id="isbn" role="tabpanel" aria-labelledby="isbn-tab">
+			<div class="p-3 panel panel-info">
+				<div class="panel-body">
+					{{ form_start(formIsbn) }}
+					{{ form_widget(formIsbn) }}
+					<button type="submit" class="btn btn-primary">{{ 'search' | trans }}</button>
+					{{ form_end(formIsbn) }}
+				</div>
 			</div>
 		</div>
-		<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="at" role="tabpanel" aria-labelledby="at-tab0">
-			<div class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<div class="panel panel-info">
-					<div style="padding-top:30px" class="panel-body">
-						{{ form_start(formBook) }}
-						{{ form_widget(formBook) }}
-						<button type="submit" class="btn btn-dark">{{ 'search' | trans }}</button>
-						{{ form_end(formBook) }}
+		<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="at" role="tabpanel" aria-labelledby="at-tab">
+			<div class="p-3 panel panel-info">
+				<div class="panel-body">
+				{{ form_start(formBook) }}
+					{{ form_row(formBook.title) }}
+					{{ form_row(formBook.author) }}
+					<div class="not-displayed">
+						{{ form_widget(formBook.language) }}
 					</div>
+					<div class="form-group">
+						<button type="button" id="fr" class="btn btn-flag" onclick="setLanguage('fr')"><i class="flag-icon flag-icon-fr"></i></button>
+						<button type="button" id="en" class="btn btn-flag" onclick="setLanguage('en')"><i class="flag-icon flag-icon-us"></i></button>
+						<button type="button" id="es" class="btn btn-flag" onclick="setLanguage('es')"><i class="flag-icon flag-icon-es"></i></button>
+						<button type="button" id="it" class="btn btn-flag" onclick="setLanguage('it')"><i class="flag-icon flag-icon-it"></i></button>
+						<button type="button" id="other" class="btn btn-flag" onclick="setLanguage('other')">{{ "other" | trans }}</button>
+
+					</div>
+					<button type="submit" class="btn btn-primary">{{ 'search' | trans }}</button>
+				{{ form_end(formBook) }}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div>
-		{% for book in gbooks %}
-			<div class="card mb-3 p-4">
-				<div class="row">
-					<div class="col-md-4">
-						{% if book.image %}
-							<img src="{{ book.image }}" alt="{{ book.title }}" width="100">
-						{% endif %}
-					</div>
-					<div class="col-md-8">
-						<div class="card-body">
-							<h5 class="card-title">{{ book.title }}
-								-
-								{{ book.author }}</h5>
-							<p class="card-text">({{ book.language }})
-								{{ book.description | slice(0, 150) ~ '...' }}</p>
-							<p class="card-text">
-								<button id="{{ book.isbn }}" class="book btn btn-small" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
-								<small class="text-muted"></small>
-							</p>
-						</div>
+	<div class="pb-1">
+	{% if not gbooks and formBook.vars.submitted %}
+		<div class="alert alert-danger">{{ 'book.none' | trans }}</div>
+	{% endif %}
+	{% for book in gbooks %}
+		<div class="card mb-3 p-4">
+			<div class="row">
+				<div class="col-md-4">
+					{% if book.image %}
+						<img src="{{ book.image }}" alt="{{ book.title }}" width="100">
+					{% endif %}
+				</div>
+				<div class="col-md-8">
+					<div class="card-body">
+						<h5 class="card-title">{{ book.title }} - {{ book.author }}</h5>
+						<p class="card-text">
+							{% set text = book.description | u.truncate(200, "...", false) %}
+							{% if book.description | length > 225 %}
+								<div id="part{{ loop.index }}">
+									{{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full', {{ loop.index }})">{{ "read.more" | trans }}</button>  
+								</div>
+								<div id="full{{ loop.index }}" style="display:none">
+									{{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part', {{ loop.index }})">{{ "read.less" | trans }}</button>  
+								</div>
+							{% else %}
+								{{ book.description }}
+							{% endif %}
+						</p>
+						<p class="card-text text-right">
+							<button id="{{ book.isbn }}" class="book btn btn-small btn-outline-primary" onclick="chooseBook({{book.isbn}})">{{ "select" | trans }}</button>
+							<small class="text-muted"></small>
+						</p>
 					</div>
 				</div>
 			</div>
-			{% endfor %}
 		</div>
+	{% endfor %}
 	</div>
+</div>
 {% endblock %}
 
-
 {% block js %}
+	$(document).ready(function () {
+		$('.btn-flag#' + $('#book_language').val()).addClass('selected');
+	})
+
+	function setLanguage(lang) {
+		$('#book_language').val(lang).change();
+		$('.btn-flag').removeClass('selected');
+		$('.btn-flag#' + lang).addClass('selected');
+	} 
+
 	var formIsbn = $('#isbn_form');
 	
-	  function chooseBook(my_isbn) {
+	function chooseBook(my_isbn) {
 	    document.getElementById("g_book_isbn_isbn").value = my_isbn
-	   document.getElementById('isbn_form').submit();
-	    console.log(my_isbn)
-	  }
+		document.getElementById('isbn_form').submit();
+	}
+	  
+    function switchText(size, id) {
+        if(size == "full") {
+            $('#full' + id).css("display", "block")
+            $('#part' + id).css("display", "none")
+        } else {
+            $('#full' + id).css("display", "none");
+            $('#part' + id).css("display", "block");
+        }
+    }
 {% endblock %}

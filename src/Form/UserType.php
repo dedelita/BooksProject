@@ -27,12 +27,15 @@ class UserType extends AbstractType
             ->add('changePassword', CheckboxType::class, [
                 'label' => 'password.set',
                 'mapped' => false,
-                'required' => false
+                'required' => false,
+                'label_attr' => [
+                    'class' => 'switch-custom',
+                ]
             ])
             ->add('currentPassword', PasswordType::class, [
                 'label' => "password.current",
                 'mapped' => false,
-                'required' => false,
+                'required' => false
             ])
             ->add("plainPassword", RepeatedType::class, [
                 'type' => PasswordType::class,

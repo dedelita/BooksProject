@@ -3,10 +3,18 @@
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-
-        <h1 class="h3 mb-3 font-weight-normal">{{ "login" | trans }}</h1>
-        <input type="text" value="{{ last_username }}" name="_username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
-        <input type="password" name="_password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
+        <div class="row">
+            <h3 class="col mb-3 font-weight-normal">{{ "login" | trans }}</h3>
+            <div class="col mt-1 text-right">
+            {% if app.request.locale == "fr" %}
+                {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
+            {% else %}
+                {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
+            {% endif %}
+            </div>
+        </div>
+        <input type="text" value="{{ last_username }}" name="username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
+        <input type="password" name="password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" class="form-control">
         {#
@@ -20,14 +28,14 @@
             </div>
         #}
         <div class="forgot_password right">
-            <a class="text-dark" href="{{ path('app_forgot_password_request') }}"> {{ 'password.forgot' | trans }}</a>
+            <a class="text-primary" href="{{ path('app_forgot_password_request') }}"> {{ 'password.forgot' | trans }}</a>
         </div>
-        <button class="btn btn-lg btn-dark btn-block" type="submit">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
             {{ "login.button" | trans }}
         </button>
     </form>
 
     <div class="right">
-        <span class="font-italic"> {{ "register.not" | trans }}</span> <a class="text-dark" href="{{ path('app_register') }}">{{ "register.button" | trans }}</a>
+        <span class="font-italic"> {{ "register.not" | trans }}</span> <a class="text-primary" href="{{ path('app_register') }}">{{ "register.button" | trans }}</a>
     </div>
 </div>

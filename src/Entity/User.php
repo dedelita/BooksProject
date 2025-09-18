@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $roles = [];
 
     /**
-     * @ORM\ManyToMany(targetEntity=Book::class)
+     * @ORM\OneToMany(targetEntity=UserBook::class, mappedBy="user", orphanRemoval=true)
      * @Groups("listOfBooks")
      */
     private $books;
@@ -59,6 +59,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\Column(type="string", length=2, options={"default" : "fr"})
+     */
+    private $preferredLanguage;
+
 
     public function __construct()
     {
@@ -142,26 +148,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Book[]
+     * @return Collection|UserBook[]
      */
     public function getBooks(): Collection
     {
         return $this->books;
     }
 
-    public function addBook(Book $book): self
+    public function addBook(UserBook $book): self
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
+            $book->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeBook(Book $book): self
+    public function removeBook(UserBook $book): self
     {
         $this->books->removeElement($book);
 
+        if($book->getUser() === $this) {
+            $book->setUser(null);
+        }
         return $this;
     }
 
@@ -194,6 +204,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPreferredLanguage(): ?string
+    {
+        return $this->preferredLanguage;
+    }
+
+    public function setPreferredLanguage(string $preferredLanguage): self
+    {
+        $this->preferredLanguage = $preferredLanguage;
 
         return $this;
     }

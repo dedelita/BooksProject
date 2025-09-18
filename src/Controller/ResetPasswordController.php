@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/reset-password")
@@ -26,10 +28,12 @@ class ResetPasswordController extends AbstractController
     use ResetPasswordControllerTrait;
 
     private $resetPasswordHelper;
+    private $translator;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, TranslatorInterface $translator)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
+        $this->translator = $translator;
     }
 
     /**
@@ -68,7 +72,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'resetToken' => $resetToken,
-        ]);
+        ]); */
     }
 
     /**
@@ -88,15 +92,14 @@ class ResetPasswordController extends AbstractController
 
         $token = $this->getTokenFromSession();
         if (null === $token) {
-            throw $this->createNotFoundException($translator->trans('reset_password.not_found'));
+            throw $this->createNotFoundException($this->translator->trans('reset_password.not_found'));
         }
 
         try {
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
-            $this->addFlash('reset_password_error', sprintf(
-                $translator->trans('reset_password.error') . ' - %s',
-                $translator->trans($e->getReason())
+            $this->addFlash('reset_password_error', sprintf('%s',
+                $this->translator->trans($e->getReason())
             ));
 
             return $this->redirectToRoute('app_forgot_password_request');
@@ -138,7 +141,10 @@ class ResetPasswordController extends AbstractController
 
         // Do not reveal whether a user account was found or not.
         if (!$user) {
-            return $this->redirectToRoute('app_check_email');
+            $this->addFlash('reset_password_error', sprintf('%s',
+                $this->translator->trans('email.unknown')
+            ));
+            return $this->redirectToRoute('app_forgot_password_request');
         }
 
         try {
@@ -148,18 +154,17 @@ class ResetPasswordController extends AbstractController
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
             //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
+            $this->addFlash('reset_password_error', sprintf('%s',
+                $this->translator->trans($e->getReason())
+            ));
 
-            return $this->redirectToRoute('app_check_email');
+            return $this->redirectToRoute('app_forgot_password_request');
         }
 
         $email = (new TemplatedEmail())
             ->from(new Address($this->getParameter("app_gmail"), $this->getParameter("app_gmail_name")))
             ->to($user->getEmail())
-            ->subject('mail.reset_password.subject')
+            ->subject($this->translator->trans('mail.reset_password.subject'))
             ->htmlTemplate('reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,

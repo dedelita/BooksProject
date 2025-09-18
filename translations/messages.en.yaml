@@ -5,32 +5,46 @@ logout: Logout
 register:
   text: Register
   button: Register now
-  not: Don't have an account? 
-  already: already have an account?
+  not: Don't have an account?
+  already: Already have an account?
 
-
+home: Home
 save: Save
+save_short: Save
+erase: Erase
 search: Search
 select: Select
 unknown: Unknown
+email.unknown: Unknown email
+index.return: Return to login
+cancel: Cancel
+yes: Yes
+skip: Skip
+other: Other
 read:
   more: Read more
   less: Read less
-
+see_more: See more
+date: Date
 user:
+  name: User
   email: Email
   username: Username
   password: Password
+  delete: Delete account
 
 password:
   set: Set password ?
-  new: New password
-  current: Current password
-  conf: Confirm password
+  new: New
+  current: Current
+  conf: Confirm
   forgot: Forgot password?
-
+  info: must have at least <ul class="info"><li>between 8 and 25 characters</li><li>1 upper case letter</li><li>1 digit</li></ul>
+  wrong: The password is not valid
+  bad: Wrong password
 book:
-  genre: Genre
+  name: Book
+  by: by
   author: Author
   title: Title
   new: New book
@@ -38,20 +52,35 @@ book:
   lang: Language
   cover: Cover of
   no_cover: No cover for
+  remove: Remove
+  com.delete: Delete the associated comment
+  none: Book not found
+  order: Added
+  show: Show %book%
+  delete: Remove %book%
 
-  comment:
-    add: Add a comment
+comment:
+  name: Comment
+  add: Add a comment
+  edit: Edit comment of %book%
+  stars: Stars
 
 my:
   books: My books
-  genres: My genres
+  comments: My comments
   authors: My authors
+  5last_books: My 5 last books
 
 edit:
+  word: Edit
   profile: Edit profile
   comment: Edit my comment of
 
 by: by
+
+list:
+  line: Line
+  grid: Grid
 
 link:
   expire: This link will expire in
@@ -63,6 +92,8 @@ mail:
     title: Welcome to BooksProject
     content: Please confirm your email address by clicking the following link
     end: Thank you!
+    confirm: "Confirm your email. If you didn't receive the email:"
+    resend: resend mail
   reset_password:
     subject: Your password reset request
     title: Reset password

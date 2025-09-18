@@ -51,18 +51,27 @@ class BookController extends AbstractController
 
     private function getGBooksInfo($gbook)
     {
+        $authors = $gbook['volumeInfo']['authors'];
+        foreach ($authors as $author) {
+            $author = preg_replace("/([A-Z]{1})\-([A-Z]{1}) (.*)/", "$1.$2. $3", $author);
+            $author = preg_replace("/([A-Z]{1})\. ([A-Z]{1}\.)(.*)/", "$1.$2 $3", $author);
+            $authors_list[] = ucwords(strtolower($author));
+        }
         $book = new Book();
-        $book->setTitle($gbook['volumeInfo']['title']);
-        $book->setAuthor(implode(", ", $gbook['volumeInfo']['authors']));
+        if($gbook['volumeInfo']['subtitle']) {
+            $book->setTitle($gbook['volumeInfo']['title'] . " - " . $gbook['volumeInfo']['subtitle']);
+        } else {
+            $book->setTitle($gbook['volumeInfo']['title']);
+        }
+        $book->setAuthor(implode(", ", $authors_list));
         $book->setDescription($gbook['volumeInfo']['description']);
-        if($gbook['volumeInfo']['imageLinks'])
-            $book->setImage($gbook['volumeInfo']['imageLinks']['thumbnail']);
+        $book->setImage($gbook['volumeInfo']['imageLinks']['thumbnail']);
         foreach($gbook['volumeInfo']['industryIdentifiers'] as $identifier) {
             if($identifier['type'] == "ISBN_13")
                 $book->setIsbn($identifier['identifier']);
         }
-        $book->setLanguage($gbook['volumeInfo']['language']);
-        //var_dump($gbook);
+        if($gbook['volumeInfo']['language'] != null)
+            $book->setLanguage($gbook['volumeInfo']['language']);
         return $book;
     }
 
@@ -80,13 +89,18 @@ class BookController extends AbstractController
         return $this->getGBooksInfo($rgb[0]);
     }
 
+    private function checkBook($item, $author, $title) {
+        return $item['volumeInfo']['imageLinks'] && $item['volumeInfo']['authors'] 
+        && (($author && in_array(strtolower($author), array_map("strtolower", $item['volumeInfo']['authors']))) || ($author && preg_grep('/[*]*?' . strtolower($author) . '[*]*?/', array_map("strtolower", $item['volumeInfo']['authors']))) || (!$author))
+       && (str_contains(strtolower($item['volumeInfo']['title']), strtolower($title)) ||
+       str_contains(strtolower($item['volumeInfo']['subtitle']), strtolower($title)));
+    }
+
     /**
      * @Route("/testGApi", name="gapi", methods="GET")
      */
     public function getGBooks($title, $author, $lang)
     {
-        //$title = "la cour des hiboux";
-        //$author = "snyder";
         $this->client->setApplicationName($this->getParameter("app_name"));
         $this->client->setDeveloperKey($this->getParameter("api_key"));
         $service = new \Google_Service_Books($this->client);
@@ -112,10 +126,26 @@ class BookController extends AbstractController
 
         $books = [];
         foreach ($rgb as $item) {
-            if(in_array($author, $item['volumeInfo']['authors'])
-                && str_contains(strtolower($item['volumeInfo']['title']), strtolower($title))
-                && ($item['volumeInfo']['language'] == $lang))
+            if($this->checkBook($item, $author, $title) && $item['volumeInfo']['language'] == $lang)
                 $books[] = $this->getGBooksInfo($item);
+        }
+
+        if(!$books) {
+            foreach ($rgb as $item) {
+                if($this->checkBook($item, $author, $title)) {
+                    $item['volumeInfo']['language'] = $lang;
+                    $books[] = $this->getGBooksInfo($item);
+                   }
+            }
+        }
+        if(!$books) {
+            $q =  str_replace(' ', '+', $title) . "+inauthor:$author";
+            $results = $this->getResultsGB($service, $q, 40, $startIndex, $lang);
+            $rgb = $results->getItems();
+            foreach ($rgb as $item) {
+                if($this->checkBook($item, $author, $title) && $item['volumeInfo']['language'] == $lang)
+                    $books[] = $this->getGBooksInfo($item);
+            }
         }
         return $books;
     }
@@ -127,8 +157,9 @@ class BookController extends AbstractController
     {
         $book = $this->bookRepository->find($request->get('id'));
 
-        $coms = $commentRepository->findByBook($book->getId());
-        return $this->render("user/bookInfo.html.twig", [
+        $coms = $commentRepository->findByBook($book);
+
+        return $this->render("book/info.html.twig", [
             "book" => $book,
             "buttonText" => "read_more",
             "coms" => $coms

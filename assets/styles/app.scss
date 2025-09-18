@@ -1,11 +1,17 @@
-
-$secondary: purple;
+$primary:#3b2b2b;
+$secondary: #ffbb33;
 
 @import "~bootstrap/scss/bootstrap";
+@import "~flag-icon-css/sass/flag-icon";
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css");
 @import url('https://fonts.googleapis.com/css2?family=Lato&family=Noto+Sans+KR&family=Inter&display=swap');
+@import '~font-awesome/scss/font-awesome.scss';
 
 $book:#ffbb33;
+$background: #ffffcc;
+$disabled_background: #e5e6b8;
+$comment_background: #fff0a8;
+$star: #e6c315;
 
 html {
     position: relative;
@@ -13,9 +19,10 @@ html {
 }
 
 body {
-    background-color: #ffffcc;
+    background-color: $background;
     font-family: 'Noto Sans KR', sans-serif;
 }
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Inter', sans-serif;
     padding-bottom: 15px;
@@ -29,23 +36,54 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* change the link color */
-.nav-color .navbar-nav .nav-item .nav-link {
+.nav-color .navbar-nav .nav-item .nav-link, .navbar-toggler-icon i {
     color: rgba(255,255,255,.5);
 }
 /* change the color of active or hovered links */
 .nav-color .nav-item.active .nav-link,
-.nav-color .nav-item:hover .nav-link {
-    color: #ffffff;
+.nav-color .nav-item:hover .nav-link,
+.navbar-toggler-icon i:hover {
+    color: white;
 }
 
+.navbar-right .nav-item:first-child {
+    padding-right: 15px;
+}
+
+.navbar-toggler-icon i {
+    font-size: 1.75rem;
+}
 
 ul {
     list-style-type: none;
 }
 
+ul.dropdown-menu {
+    padding: 0;
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+ul.dropdown-menu li:first-child > a.dropdown-item {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+ul.dropdown-menu li:last-child > a.dropdown-item {
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.dropdown-item:active {
+    background-color: $primary;
+}
+
+ul.info {
+    list-style-type: circle;
+}
+
 .container-fluid.app {
     min-height:90%;
-    margin: 15px 0 45px;
+    margin: 0 0 45px;
     padding-left: 30px;
     padding-right: 30px;
 }
@@ -54,12 +92,18 @@ ul {
     padding: 0;
 }
 .container-fluid > .row.index {
-    background: #ffe4b5;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #ffffcc, #ffe4b5);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #ffffcc, #ffe4b5);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: $background;
     height: 100vh;
     margin: 0;
     padding: 0;
+}
+
+.not-displayed {
+    display: none;
+}
+
+.container.books {
+    padding-bottom: 15px;
 }
 
 .welcome {
@@ -78,8 +122,9 @@ ul {
     color: theme-color('light');
 }
 
-.right {
-    text-align: right;
+.heading {
+    margin: 0;
+    height: 75px;
 }
 
 .center {
@@ -88,10 +133,15 @@ ul {
     align-items: center;
 }
 
+.reset_password {
+    padding: 15px;
+}
+.reset_password form {
+    width: 500px;
+}
 
-.registration {
-    margin: 30px;
-    padding: 0;
+.reset_password form input {
+width: 250px;
 }
 
 .registration form {
@@ -103,24 +153,218 @@ ul {
   padding-bottom: 30px;
 }
 
+.registration .right {
+    padding-left: 5%;
+}
+
 .footer-log {
     margin-top: 15px;
 }
 
-.tab-content {
-    background-color: wheat;
+.dropdown-menu.show.locale {
+    padding: 0;
+    min-width: 40px;
+}
+
+.dropdown-menu.locale > a {
+    padding: 0.5rem;
+}
+
+.star {
+    color:$star;
+    font-size: 1.5em;
+}
+
+.star.mini {
+    font-size: 1rem;
+}
+
+/* Books */
+.nav-books {
+    border: none;
+}
+.nav-books > li {
+    margin: 0 !important;
+}
+.nav-books .nav-link {
+    background-color: $disabled_background;
+    border-radius: initial;
+}
+
+.line .nav-link {
+    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
+}
+
+.grid .nav-link {
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+.nav-books .nav-link, .nav-books .nav-link.active {
+    margin: 0;
+}
+.nav-books .nav-link.active {
+    background-color: $background;
+    border: $book 1px solid;
+}
+
+.form-check-input {
+    margin-top: 0.45rem;
+}
+
+/* Add Book */
+.btn-flag.selected {
+    background-color: $book;
+}
+.option.nav-link, .option.nav-link:hover {
+    background-color: $disabled_background;
+    border-bottom-color: $book;
+}
+
+.option.nav-link.active {
+    background-color: $background;
+    border-color: $book;
+}
+.nav-tabs {
+    border-color: $book;
+
+}
+.form-book.tab-content {
+    background-color: $comment_background;
     margin-bottom: 10px;
     padding-bottom: 15px;
 }
 
 .col.book {
+    max-width: 180px;
     padding-bottom: 20px;
 }
+.col.book img.cover {
+    height: 196px;
+}
 
+.col.book > a.cover {
+    width: 120px;
+}
+
+.col.book > a.no-cover > div {
+    width: 180px;
+    min-height: 196px;
+}
 .card-header {
     padding: 5px 15px 0;
 }
+a.btn.btn-link {
+    box-shadow: none;
+}
 
 .icon-link {
+    padding: 0;
     padding-right: 5px;
+    font-size: 20px;
+}
+.icon-link .bi {
+    vertical-align: super;
+}
+.bi .icon-small {
+    color: purple;
+    font-size: 15px;
+}
+
+.icon-popover {
+    padding: 0;
+    vertical-align: bottom;
+}
+
+.big-icon {
+    font-size: x-large;
+}
+
+.alert .bi {
+    font-size: 20px;
+}
+
+/* Comment */
+.book.comment {
+    width: 550px;
+    padding: 0 8px;
+    border: $book 1px solid;
+}
+
+.comment.odd {
+    background-color: white;
+}
+
+.comment.even {
+    background-color: $comment_background;
+}
+
+.comment .writer {
+    padding: 0 16px;
+    font-size: 15px;
+}
+
+.writer > span {
+    padding: 5px;
+}
+
+.writer .bi {
+    font-size: 20px;
+}
+
+.comment .content {
+    padding: 0 10px 10px;
+}
+
+.cover {
+    height: 79px;
+}
+
+.cover > img {
+    margin: 10px;
+}
+
+/* Pagination */
+.btn-pagination {
+    padding: 1px 6px;
+}
+a.sortable, a.asc, a.desc {
+    padding-right: 2px;
+}
+
+.navigation {
+    margin-top: 15px;
+    padding-bottom: 5px;
+}
+
+/* Edit profil */
+#showPassword {
+    display: none;
+    margin-left: 15px;
+}
+
+#showPassword .col-sm-8 {
+    padding-left: 0;
+}
+
+.custom-switch {
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    background-color: $secondary;
+    border-color: $gray-500;
+}
+
+.short-text {
+    display: none;
+}
+@media screen and (max-width: 683.5px) {
+    .full-text {
+        display: none;
+    }
+    .short-text {
+        display: inline-block;
+    }
 }

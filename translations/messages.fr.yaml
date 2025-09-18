@@ -1,55 +1,85 @@
 login: Connexion
 login.button: Se connecter
 logout: Déconnexion
-register: 
+register:
   text: Inscription
   button: S'inscrire
-  not: Pas encore inscrit ? 
+  not: Pas encore inscrit ?
   already: Déjà inscrit ?
+
+home: Accueil
 save: Sauvegarder
+save_short: Sauv.
+erase: Effacer
 search: Rechercher
 select: Selectionner
 unknown: Inconnu
-
+email.unknown: Email inconnu
 read:
   more: Voir plus
   less: Voir moins
-
+index.return: Retourner à l'accueil
+cancel: Annuler
+yes: Oui
+skip: Ignorer
+other: Autre
+see_more: Voir plus
+date: Date
 user:
+  name: Utilisateur
   email: Email
   username: Pseudo
   password: Mot de passe
+  delete: Supprimer mon compte
 
 password:
   set: Modifier mon mot de passe ?
-  new: Nouveau mot de passe
-  current: Mot de passe actuel
-  conf: Confirmer le mot de passe
+  new: Nouveau
+  current: Actuel
+  conf: Confirmation
   forgot: Mot de passe oublié ?
-
+  info: doit contenir au moins <ul class="info"><li>entre 8 et 25 caractères</li><li>1 majuscule</li><li>1 chiffre</li></ol>
+  wrong: Le mot de passe n'est pas valide
+  bad: Mauvais mot de passe
 book:
-  genre: Genre
+  name: Livre
+  by: de
   author: Auteur
   title: Titre
   new: Nouveau livre
   think: Que pensez-vous de ce livre ?
   lang: Langue
-  cover: Couverture de 
+  cover: Couverture de
   no_cover: Aucune image pour
+  remove: Supprimer
+  com.delete: Supprimer le commentaire associé
+  none: Pas de résultat pour le livre recherché
+  order: Ajout
+  show: Voir %book%
+  delete: Supprimer %book%
 
 comment:
+  name: Commentaire
   add: Ajouter un commentaire
+  edit: Modifier le commentaire de %book%
+  stars: Note
 
 my:
   books: Mes livres
-  genres: Mes genres
+  comments: Mes commentaires
   authors: Mes auteurs
+  5last_books: Mes 5 derniers livres
 
 edit:
+  word: Modifier
   profile: Modifier mon profil
   comment: Modifier mon comment sur
 
 by: de
+
+list:
+  line: Ligne
+  grid: Grille
 
 link:
   expire: Ce lien expire dans
@@ -61,20 +91,32 @@ mail:
     title: Bienvenue chez BooksProject
     content: Veuillez confirmer votre email en cliquant sur ce lien
     end: Merci !
+    confirm: "Veuillez confirmer votre email. Si vous n'avez pas reçu de mail, veuillez cliquer sur "
+    resend: renvoyer un mail
   reset_password:
-    subject: Votre demande de modification de votre mot de passe
+    subject: Votre demande de modification de mot de passe
     title: Modifier votre mot de passe
     content: Pour modifier votre mot de passe, veuillez suivre ce lien
     end: Merci !
 
 reset_password:
   title: Mot de passe oublié
-  error: Il y a eu un problème lors de la validation de votre requête
+  error: Il y a eu un problème lors de la validation de votre requête.
+  error_handling: Il y a eu un problème lors de votre requête.
   not_found: Aucun token n'a été trouvé dans le lien ou la session.
   button: Modifier
   request: Entrer votre email afin de recevoir un lien pour modifier votre mot de passe.
-  send: Envoyer le mail
+  send: Recevoir un mail
   check_email:
     title: Email de modification de mot de passe
-    content: Un email contenant un lien de modification de mot de passe vous a été envoyé.
+    content: Un mail contenant un lien de modification de mot de passe vous a été envoyé.
     not_received: Si vous n'avez pas reçu de mail, veuillez vérifier vos spams ou %link%.
+
+You have already requested a reset password email. Please check your email or try again soon.:
+  Vous avez déjà envoyé votre demande. Veuillez vérifier votre boîte mail ou réessayer plus tard.
+
+The link in your email is expired. Please try to reset your password again.:
+  Le lien de votre mail a expiré. Veuillez renvoyer une demande.
+
+The reset password link is invalid. Please try to reset your password again.:
+  Le lien est invalide. Veuillez renvoyer une demande.

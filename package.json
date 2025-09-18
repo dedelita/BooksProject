@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "bootstrap-icons": "^1.4.1",
-    "core-js": "^3.10.2"
+    "core-js": "^3.10.2",
+    "flag-icon-css": "^3.5.0",
+    "font-awesome": "^4.7.0"
   }
 }

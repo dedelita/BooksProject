@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,76 +46,6 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('author', $author)
             ->getQuery()
             ->getOneOrNullResult();
-    }
-
-    private function createGetUserBooks($userId) {
-        return $this->createQueryBuilder('b')
-            ->innerJoin('App:User', 'u', 'WITH', 'u.id = :id')
-            ->innerJoin('u.books', 'ub', 'WITH', 'b.id = ub.id')
-            ->setParameter('id', $userId);
-    }
-
-    public function getUserBooks($userId, $orderBy) {
-        $q = $this->createGetUserBooks($userId);
-        switch($orderBy) {
-            case "genre": 
-                $q->orderBy("b.genre");
-                break;
-            case "author": 
-                $q->orderBy("b.author");
-                break;
-        }
-        return $q->getQuery()
-                ->getResult();
-    }
-
-    public function getMyGenres($userId)
-    {
-        $results = $this->createGetUserBooks($userId)
-            ->select('b.genre')
-            ->distinct('b.genre')
-            ->getQuery()
-            ->getResult();
-            
-        $genres = [];
-        foreach ($results as $res) {
-        foreach ($res as $r) 
-            $genres[] = $r;
-        }
-        return $genres;
-    }
-
-    public function getMyAuthors($userId)
-    {
-        $results = $this->createGetUserBooks($userId)
-            ->select('b.author')
-            ->distinct('b.author')
-            ->getQuery()
-            ->getResult();
-            
-        $authors = [];
-        foreach ($results as $res) {
-        foreach ($res as $r) 
-            $authors[] = $r;
-        }
-        return $authors;
-    }
-
-    public function getUserBooksOfGenre($userId, $genre)
-    {
-        return $this->createGetUserBooks($userId)->andWhere("b.genre =  :genre")
-                ->setParameter("genre", $genre)
-                ->getQuery()
-                ->getResult();
-    }
-
-    public function getUserBooksOfAuthor($userId, $author)
-    {
-        return $this->createGetUserBooks($userId)
-                ->andWhere("b.author like :author")
-                ->setParameter("author", "%".$author."%")
-                ->getQuery()
-                ->getResult();
     }
 
     public function deleteByIdUser($idUser) {

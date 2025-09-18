@@ -1,0 +1,77 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block body %}
+    <div class="row center mt-3 mb-2">
+		<div class="col col-sm-4 center">
+			{% if not book.image %}
+				<img src="{{ asset('build/images/no_cover.svg') }}" 
+                    alt=" {{ 'book.no_cover' | trans }} {{ book.title }} {{ 'by' | trans }} {{ book.author }}"
+                    width="125"/>
+			{% else %}
+				<img src="{{ book.image }}" 
+                    alt="{{ 'book.cover' | trans }} {{ book.title }} {{ 'by' | trans }} {{ book.author }}"
+                    width="125"/>
+			{% endif %}
+		</div>
+		<div class="col">
+			<h2>
+				{{ book.title }} <br/> {{ 'by' | trans }} {{ book.author }}
+			</h2>
+		</div>
+	</div>
+    <div>
+    {% set text = book.description | u.truncate(200, "...", false) %}
+    {% if book.description | length > 225 %}
+        <div id="part">
+            {{ text }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('full')">{{ "read.more" | trans }}</button>  
+        </div>
+        <div id="full" style="display:none">
+            {{ book.description }} <button type="button" class="btn btn-link pt-0 pl-0 pr-0" onclick="switchText('part')">{{ "read.less" | trans }}</button>  
+        </div>
+    {% else %}
+        {{ book.description }}
+    {% endif %}
+    </div>
+    
+    <div class="container d-flex align-items-end flex-column mt-3">
+    {% for com in coms %}
+        <div class="book comment {% if loop.index is even %}even{% else %}odd{% endif %} 
+            {% if not(loop.first) %}border-top-0{% endif %} 
+            {% if loop.last %}mb-3{% endif %}">
+            <div class="writer text-bold row">
+                <span class="col">
+                    <i class="bi bi-person-square"></i> {{ com.userbook.user.username | capitalize }}
+                </span>
+                <span class="col text-muted text-right">
+                    <i class="bi bi-clock"></i> {{ com.date | date("d/m/Y H:i") }}
+                </span>
+            </div>
+            <div class="content">
+                <span class="star mini">
+                    {% for i in 0..4 %}
+                        {% if i < com.stars %}
+                            <i id="{{ i }}" class="rating-star bi bi-star-fill selected"></i>
+                        {% else %}
+                            <i id="{{ i }}" class="rating-star bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <p class="card-text">{{ com.content }}</p>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    function switchText(size) {
+        if(size == "full") {
+            $('#full').css("display", "block")
+            $('#part').css("display", "none")
+        } else {
+            $('#full').css("display", "none");
+            $('#part').css("display", "block");
+        }
+    }
+{% endblock %}

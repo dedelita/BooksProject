@@ -7,6 +7,7 @@ use App\Form\CommentType;
 use App\Repository\UserRepository;
 use App\Repository\BookRepository;
 use App\Repository\CommentRepository;
+use App\Repository\UserBookRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,28 +32,29 @@ class CommentController extends AbstractController
      * @Route("/{id_book}/editComment", name="edit_comment", methods={"GET", "POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function add(Request $request, UserRepository $userRepository, BookRepository $bookRepository)
+    public function add(Request $request, UserRepository $userRepository, BookRepository $bookRepository, UserBookRepository $userbookRepository)
     {
-        if(!$this->getUser()) {
-            return $this->redirectToRoute("index");
-        }
-
         $user = $this->getUser();
         $idBook = $request->get('id_book');
-        $book = $bookRepository->find($idBook);
-        if ($user && $book)
-            $comment = $this->commentRepository->findOneBy(["writer" => $user->getId(), "book" => $idBook]);
+        $userbook = $userbookRepository->findOneBy(["user" => $user, "book" => $idBook]);
+        if ($userbook)
+            $comment = $this->commentRepository->findOneByUserBook($userbook);
         
-        if(!$comment) {
+        if(!$comment)
             $comment = new Comment();
-        }
+        
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            $comment->setBook($book);
-            $comment->setWriter($user);
+            $comment->setUserBook($userbook);
             $this->commentRepository->save($comment);
+            return $this->redirectToRoute($request->getSession()->get("lastRoute", "home"));
         }
-        return $this->render("user/editComment.html.twig", ['form' => $form->createView(), "book" => $book, "com"=>$comment]);
+        return $this->render("user/editComment.html.twig", [
+            'form' => $form->createView(), 
+            "book" => $userbook->getBook(), 
+            "com" => $comment, 
+            "new" => false
+        ]);
     }
 }

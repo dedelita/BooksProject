@@ -1,40 +1,84 @@
 {% extends 'base.html.twig' %}
+{% block page %}books{% endblock %}
 {% block title %} {{ 'my.books' | trans }} {% endblock %}
 {% block body %}
-  <h1 class="mt-5">
-	<i class="bi bi-book"></i> {{ 'my.books' | trans }}
-  </h1>
-  <div class="container">
-	<div class="row">
-	  <div class="col-sm-2">{{ 'book.genre' | trans}}</div>
-	  <div class="col-sm-3">{{ 'book.author' | trans }}</div>
-	  <div class="col-sm-5">{{ 'book.title' | trans }}</div>
-	  <div class="col-sm-1"></div>
-	</div>
-	{% for book in books %}
-	  <div class="row">
-		<div class="col-sm-2">{{ book.genre }}</div>
-		<div class="col-sm-3">{{ book.author }}</div>
-		<div class="col-sm-5">{{ book.title }}</div>
-		<div class="col-sm-2">
-			<a class="icon-link" href="{{ path('edit_comment', {'id_book': book.id}) }}"><i class="bi bi-pencil-square"></i></a>
-			<a class="icon-link" href="{{ path('book_info', {'id': book.id}) }}"><i class="bi bi-eye-fill"></i></a>
+<div class="row ml-2">
+	<div class="col mt-3 mb-3">
+		<h1 class=" m-0 p-0">
+			<i class="bi bi-book"></i> {{ 'my.books' | trans }}
+		</h1>
+		{% if app.request.get('sort') %}
+			{% set sort = app.request.get('sort') %}
+		{% else %}
+			{% set sort = "items" %}
+		{% endif %}
+		{% set direction = app.request.get('direction') %}
+		<div class="col">
+			<button class="btn btn-pagination" {% if pagination.isSorted('ub.createdDate') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.order' | trans, 'ub.createdDate') }}
+			</button>
+			<button class="btn btn-pagination" {% if pagination.isSorted('b.title') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.title' | trans, 'b.title') }}
+			</button>
+			<button class="btn btn-pagination" {% if pagination.isSorted('b.author') %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.author' | trans, 'b.author') }}
+			</button>
+			<button class="btn btn-pagination" {% if pagination.isSorted(['b.language', 'b.id']) %}class="sorted"{% endif %}>
+				{{ knp_pagination_sortable(pagination, 'book.lang' | trans, ['b.language', 'b.id']) }}
+			</button>
 		</div>
-	  </div>
-	{% endfor %}
-  </div>
+	</div>
+	<div class="col align-self-center">
+		<ul class="list-inline nav nav-tabs nav-books justify-content-end" role="tablist">
+			<li class="list-inline-item line" role="presentation">
+				<button class="nav-link btn {{ not selected ? 'active' : ''}}" id="line-tab" data-toggle="tab"
+				data-target="#line" role="tab" aria-controls="line" aria-selected="false"
+				 onClick="setBooksList('line')">
+					<i class="bi bi-list-ul"></i> {{ 'list.line' | trans }}
+				</button>
+			</li>
+			<li class="list-inline-item grid" role="presentation">
+				<button class="nav-link btn {{ selected ? 'active' : ''}} list" id="grid-tab" data-toggle="tab"
+				 data-target="#grid" role="tab" aria-controls="grid" aria-selected="true"
+				 onClick="setBooksList('grid')">
+					<i class="bi bi-grid-3x3-gap-fill"></i> {{ 'list.grid' | trans }}
+				</button>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="tab-content">
+	{% if sort == "items" and direction == "desc" %}
+		{% set pagination = pagination|reverse %}
+	{% endif %}
+	{% set books = pagination %}
+	<div class="tab-pane fade {{ not selected ? 'show active' : ''}}" id="line" role="tabpanel" aria-labelledby="line-tab">
+		{% include "books/list_line.html.twig" %}
+	</div>
+	<div class="tab-pane fade {{ selected ? 'show active' : ''}}" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+		{% include "books/list_grid.html.twig" with {'page': "books"} %}
+	</div>
+	<div class="navigation">
+		{{ knp_pagination_render(pagination) }}
+	</div>
+</div>
 {% endblock %}
-{# 
-{% for comment in book.comments %}
-		  <div class="col-sm">{{ comment.content }}</div>
-		  <span style="color:#e6c315">
-			{% for i in 0..4 %}
-			  {% if i < comment.stars %}
-				<i class="bi bi-star-fill"></i>
-			  {% else %}
-				<i class="bi bi-star"></i>
-			  {% endif %}
-			{% endfor %}
-		  </span>
-		{% endfor %}
- #}
+
+{% block js %}
+	function setBooksList(list) {
+		$.ajax({
+			url: "{{ path("setBooksList") }}",
+			data: {"list": list},
+			success: function(res) {}
+		})
+	}
+
+	function checkModalCustomCbx(id) {
+        var check = $('#'+id).prop('checked');
+		if(check === true) {
+			$('#'+id+".custom-control-input").prop('checked', true);
+		} else {
+			$('#'+id+".custom-control-input").prop('checked', false);
+		}
+	}
+{% endblock %}

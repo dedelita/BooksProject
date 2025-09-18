@@ -31,22 +31,15 @@ class Comment
     private $stars;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Book::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $book;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(nullable=false)
-     * @Groups("infos_for_comment")
-     */
-    private $writer;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $date;
+
+    /**
+     * @ORM\OneToOne(targetEntity=UserBook::class)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $userBook;
 
     public function getId(): ?int
     {
@@ -77,30 +70,6 @@ class Comment
         return $this;
     }
 
-    public function getBook(): ?Book
-    {
-        return $this->book;
-    }
-
-    public function setBook(?Book $book): self
-    {
-        $this->book = $book;
-
-        return $this;
-    }
-
-    public function getWriter(): ?User
-    {
-        return $this->writer;
-    }
-
-    public function setWriter(?User $writer): self
-    {
-        $this->writer = $writer;
-
-        return $this;
-    }
-
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
@@ -109,6 +78,18 @@ class Comment
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getUserBook(): ?UserBook
+    {
+        return $this->userBook;
+    }
+
+    public function setUserBook(UserBook $userBook): self
+    {
+        $this->userBook = $userBook;
 
         return $this;
     }

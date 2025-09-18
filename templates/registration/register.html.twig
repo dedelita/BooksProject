@@ -4,30 +4,37 @@
 
 {% block body %}
 <div class="row index">
-<div class="registration col login align-self-center">
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
-
-    {% set formErrors = registrationForm.vars.errors.form.getErrors(true) %}
-    {{ form_start(registrationForm) }}
-    <h3 class="mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
-
-            {% if formErrors|length > 0 %}
-            <div class"alert alert-danger"><ul>
-        {% for error in formErrors %}
-            <li class="{{ error.cause.constraint.payload.severity ?? '' }}">{{ error.message }}</li>
-        {% endfor %}
-    </ul></div>
+    <div class="registration col login align-self-center">
+        {{ form_start(registrationForm) }}
+        <div class="row">
+	        <h3 class="col mb-3 font-weight-normal">{{ 'register.text' | trans }}</h3>
+            <div class="col mt-1 text-right">
+            {% if app.request.locale == "fr" %}
+                {% include "switchLocale.html.twig" with {"locale": "fr", "new":"en"} %}
+            {% else %}
+                {% include "switchLocale.html.twig" with {"locale": "us", "new":"fr"} %}
             {% endif %}
-        {{ form_widget(registrationForm) }}
-        <button type="submit" class="btn btn-lg btn-block btn-dark">{{ 'register.button' | trans }}</button>
-    {{ form_end(registrationForm) }}
+            </div>
+        </div>
+            {{ form_row(registrationForm.username) }}
+            {{ form_row(registrationForm.email) }}
+            <div class="form-group">
+            <label>
+                {{'user.password'|trans}}
+                <button type="button" class="btn btn-link icon-popover" data-toggle="popover" data-trigger="hover" 
+            data-html="true" data-content="{{ 'password.info' | trans }}"><i class="bi bi-info-circle small"></i></button>
+            {{ form_errors(registrationForm.plainPassword.first) }}
+            </label>
+            {{ form_widget(registrationForm.plainPassword.first) }}
+            </div>
+            {{ form_row(registrationForm.plainPassword.second) }}
+            <button type="submit" class="btn btn-lg btn-block btn-primary">{{ 'register.button' | trans }}</button>
+        {{ form_end(registrationForm) }}
 
-    <div class="right">
-        <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-dark" href="{{ path('app_login') }}">{{ "login.button" | trans }}</a>
-    </div>
-    <span class="footer-log center">© 2021 - DMP</span>
+        <div class="right">
+            <span class="font-italic"> {{ "register.already" | trans }}</span> <a class="text-primary" href="{{ path('index') }}">{{ "login.button" | trans }}</a>
+        </div>
+        <span class="footer-log center">© 2021 - DMP</span>
     </div>
     <div class="col welcome">
         WELCOME ET BIENVENUE

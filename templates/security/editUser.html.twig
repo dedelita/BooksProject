@@ -2,50 +2,91 @@
 {% block title %} {{ 'edit.profile' | trans }} {% endblock %}
 
 {% block body %}
-
+<div class="container">
+<h3>{{ 'edit.profile' | trans }}</h3>
 {{ form_start(form) }}
 <div class="form-error">
     <span>{{ form_errors(form) }}</span>
 </div>
     <div class="form-group row">
-        {{ form_label(form.username, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
-        <div class="col-sm-10">
-        {{ form_widget(form.username) }}
+        <div class="col-2">
+            {{ form_label(form.username, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
+        </div>
+        <div class="col-6">
+            {{ form_widget(form.username) }}
         </div>
     </div>
     <div class="form-group row">
-        {{ form_label(form.email, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
-        <div class="col-sm-10">
-        {{ form_widget(form.email) }}
+        <div class="col-2">
+            {{ form_label(form.email, '', {'label_attr': {'class': "col-sm-2 col-form-label"}}) }}
+        </div>
+        <div class="col-6">
+            {{ form_widget(form.email) }}
         </div>
     </div>
-    {{ form_row(form.changePassword) }}
-    <div id="showPassword" style="display:none">
-        {{ form_row(form.currentPassword) }}
-        {{ form_row(form.plainPassword) }}
+    {{ form_widget(form.changePassword) }}
+    <div id="showPassword">
+        <div class="form-group row">
+            <div class="col-2">
+                {{ form_label(form.currentPassword, '', {'label_attr': {'class': "col-form-label"}}) }}
+            </div>
+            <div class="col-6">
+                {{ form_widget(form.currentPassword) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label>
+                    {{'user.password'|trans}}
+                    <button type="button" class="btn btn-link icon-popover" data-toggle="popover" data-trigger="hover" 
+                    data-html="true" data-content="{{ 'password.info' | trans }}"><i class="bi bi-info-circle small"></i></button>
+                    {{ form_errors(form.plainPassword.first) }}
+                </label>
+            </div>
+            <div class="col-6">
+                {{ form_widget(form.plainPassword.first) }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                {{ form_label(form.plainPassword.second, '', {'label_attr': {'class': "col-form-label"}}) }}
+            </div>
+            <div class="col-6">
+                {{ form_widget(form.plainPassword.second) }}
+            </div>
+        </div>
     </div>
     <button type="submit" class="btn btn-primary">{{ 'save' | trans }}</button>
 {{ form_end(form) }}
+</div>
+<div class="container mt-3 pb-3">
+<h3>{{ 'user.delete' | trans }}</h3>
+<a class="btn btn-danger" data-toggle="modal" data-target="#deleteAccountModal{{app.user.id}}" 
+    title="{{ 'user.delete' | trans }}">
+    <i class="bi bi-trash-fill"></i> {{ 'user.delete' | trans }}
+</a>
+{% include "modals/confDeleteAccount.html.twig" with {id: app.user.id, text: ('user.delete' | trans)} %}
+</div>
 {% endblock %}
 
 {% block js %}
 $(document).ready(function () {
     function setShowPassword() {
-            if($("#user_changePassword")[0].checked) {
-                $('#showPassword').css("display", "block");
-                $('#user_currentPassword').prop('required', 'required');
-                $('#user_plainPassword_first').prop('required', 'required');
-                $('#user_plainPassword_second').prop('required', 'required');
-            } else {
-                $('#showPassword').css("display", "none");
-                $('#user_currentPassword').prop('required', false);
-                $('#user_plainPassword_first').prop('required', false);
-                $('#user_plainPassword_second').prop('required', false);
-            }
+        if($("#user_changePassword").prop('checked')) {
+            $('#showPassword').css("display", "block");
+            $('#user_currentPassword').prop('required', 'required');
+            $('#user_plainPassword_first').prop('required', 'required');
+            $('#user_plainPassword_second').prop('required', 'required');
+        } else {
+            $('#showPassword').css("display", "none");
+            $('#user_currentPassword').prop('required', false);
+            $('#user_plainPassword_first').prop('required', false);
+            $('#user_plainPassword_second').prop('required', false);
         }
+    }
 
-    setShowPassword();
-
+    setShowPassword()
+    
     $("#user_changePassword").change(function() {setShowPassword()})
 })
 {% endblock %}
