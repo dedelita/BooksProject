@@ -6,11 +6,8 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
-<<<<<<< HEAD
-=======
 use App\Security\LoginFormAuthenticator;
 use Symfony\Component\Form\FormError;
->>>>>>> 8091431f8414f0e338639dd8de280392b8a35759
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -75,8 +72,6 @@ class RegistrationController extends AbstractController
     }
 
     /**
-<<<<<<< HEAD
-=======
      * @Route("/send/conf_email", name="send_conf_email")
      */
     public function sendConfirmEmail(TranslatorInterface $translator, User $user = null)
@@ -97,7 +92,6 @@ class RegistrationController extends AbstractController
     }
 
     /**
->>>>>>> 8091431f8414f0e338639dd8de280392b8a35759
      * @Route("/verify/email", name="app_verify_email")
      */
     public function verifyUserEmail(Request $request): Response

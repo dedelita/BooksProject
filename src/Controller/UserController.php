@@ -49,12 +49,9 @@ class UserController extends AbstractController
     public function home(Request $request, UserBookRepository $userbookRepository)
     {
         $user = $this->getUser();
-        $books = $bookRepository->getUserBooks($user->getId(), 'author');
-
-        $genres = $bookRepository->getMyGenres($user->getId());
-        $authors = $bookRepository->getMyAuthors($user->getId());
-
-        return $this->render('user/home.html.twig', ["books" => $books, "genres" => $genres, "authors" => $authors]);
+        $books = $userbookRepository->getLastUserBooks($user);
+        $request->getSession()->set("lastRoute", "home");
+        return $this->render('user/home.html.twig', ["books" => $books]);
     }
 
     /**

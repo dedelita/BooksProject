@@ -13,8 +13,8 @@
             {% endif %}
             </div>
         </div>
-        <input type="text" value="{{ last_username }}" name="username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
-        <input type="password" name="password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
+        <input type="text" value="{{ last_username }}" name="_username" placeholder="{{ 'user.username' | trans }}" id="inputUsername" class="form-control" required autofocus>
+        <input type="password" name="_password" placeholder="{{ 'user.password' | trans }}" id="inputPassword" class="form-control" required>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" class="form-control">
         {#
